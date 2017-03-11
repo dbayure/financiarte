@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/defaultLogin.xhtml">
+	<ui:define name="content">
+
+		<div class="wrapper">
+			
+			<h:form id="login" onsubmit="document.getElementById('login').action='j_security_check';" prependId="false" class="form-signin">
+				
+				<h:panelGroup rendered="#{requestScope['javax.servlet.forward.servlet_path'] == '/paginas/principal/j_security_check'}">
+					<div class="alert alert-danger fade in">
+    					<a href="http://127.0.0.1:8080/financiarte-web/paginas/persona/principal.jsf" class="close" data-dismiss="alert" aria-label="close">x</a>
+    					<strong>Error</strong> Usuario o Contraseña incorrectos.
+  					</div>
+				</h:panelGroup>
+				
+				<div class="control-group warning">
+					<label class="control-label" for="j_username">Usuario</label>
+					<div class="controls">
+						<p:inputText id="j_username" name="j_username" required="required" type="text" class="form-control" /> 
+					</div>
+				</div>
+				
+				<div class="control-group warning">		
+					<label class="control-label" for="j_password">Contraseña</label>
+					<div class="controls">
+						<input id="j_password" name="j_password" type="password" required="required" class="form-control"/>
+					</div>
+				</div>
+				
+				<div class="control-group warning">
+					<div class="controls">
+						<button id="submit" value="Login" class="btn btn-lg btn-primary btn-block" >Iniciar Sesión</button>
+					</div>
+				</div>
+				
+			</h:form>
+			
+		</div>
+
+	</ui:define>
+</ui:composition>
