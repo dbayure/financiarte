@@ -6,6 +6,8 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.uy.nos.financiarte.controller.RegistroCliente;
@@ -75,5 +77,28 @@ public class ClienteBean {
 		}
 		  
 	}
+	
+	public void onCellEdit(CellEditEvent event) {  
+		Object oldValue = event.getOldValue();
+	    Object newValue = event.getNewValue();
+            try {
+            	if(newValue != null && !newValue.equals(oldValue)) {
+            	    DataTable d = (DataTable) event.getSource();
+            	    Cliente cliente = (Cliente) d.getRowData();
+            	    if ( event.getRowIndex() == 3){
+            	    	cliente.setNombre(newValue.toString());
+            	    }
+            	    else{
+            	    	cliente.setCorreo(newValue.toString());
+            	    }
+            		registroCliente.modificar(cliente);
+                }
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El rol fue modificado exitosamente" , "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg); 
+			} catch (Exception e) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el rol", "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg); 
+			}
+}
 	
 }

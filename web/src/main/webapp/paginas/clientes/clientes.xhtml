@@ -31,14 +31,44 @@
 						required="true"	requiredMessage="Debe ingresar un valor para el nombre"
 						autocomplete="false" />
 					
+					<label>Cedula: </label>
+					<p:inputText id="CI" value="#{newCliente.ci}" label="cedula"
+						required="true"	requiredMessage="Debe ingresar un valor para cedula"
+						autocomplete="false" />
+						
+					<label>Teléfono: </label>
+					<p:inputText id="Tel" value="#{newCliente.telefono}" label="telefono"
+						required="false" requiredMessage="Debe ingresar un valor para el telefono"
+						autocomplete="false" />
+					
 					<label>Correo: </label>
 					<p:inputText id="correo" value="#{newCliente.correo}" label="correo"
 						required="true"	requiredMessage="Debe ingresar un valor para el correo"
-						autocomplete="false" />
+						autocomplete="false" />						
 					
-					<label>Rut: </label>
-					<p:inputText id="rut" value="#{newCliente.rut}" label="rut"
-						required="true"	requiredMessage="Debe ingresar un valor para el rut"
+					<label>Usuario: </label>
+					<p:inputText id="Usr" value="#{newCliente.usuario}" label="usuario"
+						required="true"	requiredMessage="Debe ingresar un valor para el usuario"
+						autocomplete="false" />
+						
+					<label>Rol: </label>
+					<p:selectOneMenu id="roles" value="#{newCliente.rol}" required="true" 
+									 requiredMessage="Debe ingresar un valor para el rol">
+						<f:converter converterId="rolConverter" />
+						<f:selectItem itemLabel="Seleccione..." itemValue="" />
+						<f:selectItems value="#{roles}" var="_rol" itemLabel="#{_rol.rol}" itemValue="#{_rol}" />
+					</p:selectOneMenu>
+					
+					<label>Contraseña: </label>
+					<p:password id="password1" value="#{newCliente.password}" required="true" requiredMessage="Debe ingresar un valor para la contraseña"
+								match="password2" validatorMessage="Error de validación, las contraseñas no coinciden"/> 
+					
+					<label>Contraseña: </label>	
+					<p:password id="password2" value="#{newCliente.password}" required="true" />
+					
+					<label>Pin: </label>
+					<p:inputText id="Pin" value="#{newCliente.pin}" label="nombre"
+						required="true"	requiredMessage="Debe ingresar un valor para el pin"
 						autocomplete="false" />
 						
 					<label></label>
@@ -49,61 +79,92 @@
 
 			<hr color="blue" style="height: 30px" />
 
-			<p:dataTable id="clientes" var="_cliente" value="#{clientes}" style="text-align:center" rows="10" paginator="true"
-				emptyMessage="No existen datos a mostrar." editable="true" editMode="cell" reflow="true" >
-
-				<f:facet name="header">
-					<p class="text-muted">Administrar Clientes</p>
-				</f:facet>
-
-				<p:ajax event="cellEdit" listener="#{clienteBean.onCancel}" update=":form:messages" />
-
-				<p:column headerText="Id" style="width:10%; text-align: center;">
-					<h:outputText value="#{_cliente.id}" />
-				</p:column>
-
-				<p:column headerText="Nombre" style="text-align: center;">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{_cliente.nombre}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText id="modelInputNombre" value="#{_cliente.nombre}" required="true"
-								requiredMessage="Debe ingresar un valor para el nombre" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-				<p:column headerText="Correo" style="text-align: center;">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{_cliente.correo}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText id="modelInputCorreo" value="#{_cliente.correo}" required="true"
-								requiredMessage="Debe ingresar un valor para el correo" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="Rut" style="text-align: center;">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{_cliente.rut}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText id="modelInputRut" value="#{_cliente.rut}" required="true"
-								requiredMessage="Debe ingresar un valor para el rut" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="Eliminar" style="text-align: center;">
-					<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" 
-									 value="Eliminar" actionListener="#{clienteBean.eliminar(_cliente.id)}">
-						<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el cliente" icon="ui-icon-alert" />
-					</p:commandButton>
-				</p:column>
-		        
+		    <p:dataTable id="clientes" var="_cli" value="#{clientes}" editable="true" style="text-align:center; text-transform: capitalize;" 
+		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" >
+	       		<f:facet name="header">  
+	            	<p class="text-muted">Clientes</p>
+	        	</f:facet>
+	        	
+	        	<p:ajax event="cellEdit" listener="#{clienteBean.onCellEdit()}" update=":form:messages"/>  
+	        	 
+	        	 <p:column headerText="Id" >
+	        	 	<h:outputText value="#{_cli.id}" />
+	        	 </p:column>
+	        	 
+	        	 <p:column headerText="Nombre" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_cli.nombre}" />
+	                   	</f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputNom" value="#{_cli.nombre}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	        	 <p:column headerText="Cedula" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_cli.ci}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputCi" value="#{_cli.ci}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Teléfono" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_cli.telefono}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputTel" value="#{_cli.telefono}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column> 
+	           	 
+	           	 <p:column headerText="Correo" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_cli.correo}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputMail" value="#{_cli.correo}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>   
+	           	 
+	           	 <p:column headerText="Usuario" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_cli.usuario}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputUsr" value="#{_cli.usuario}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Rol" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_cli.rol.rol}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:selectOneMenu value="#{_cli.rol}" converter="rolConverter">
+								<f:selectItems value="#{roles}" var="_rol" itemLabel="#{_rol.rol}" itemValue="#{_rol}" />
+							</p:selectOneMenu>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	     
+		        <p:column headerText="Eliminar" >
+		        	<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        					 actionListener="#{clienteBean.eliminar(_cli.id)}">
+		        		<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el cliente" icon="ui-icon-alert" />
+		     		</p:commandButton>	        	
+		        </p:column>
 			</p:dataTable>
 			
 		</h:form>

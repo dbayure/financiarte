@@ -7,18 +7,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jboss.security.auth.spi.Util;
 
 @Entity
 @XmlRootElement
 @Table(name = "usuarios")
-//@JsonIgnoreProperties({"puestos","rol"})
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,8 +38,6 @@ public class Usuario implements Serializable {
 
 	private String correo;
 	
-//	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "usuarios")
-//	private Set<Puesto> puestos;
 	
     @OneToOne(orphanRemoval = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "rol", unique = false)
@@ -96,14 +95,6 @@ public class Usuario implements Serializable {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-
-//	public Set<Puesto> getPuestos() {
-//		return puestos;
-//	}
-//
-//	public void setPuestos(Set<Puesto> puestos) {
-//		this.puestos = puestos;
-//	}
 
 	public void setRol(Rol rol) {
 		this.rol = rol;

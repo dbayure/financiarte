@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import com.uy.nos.financiarte.data.UsuarioListProducer;
 import com.uy.nos.financiarte.model.Usuario;
 
 
@@ -24,6 +25,9 @@ public class RegistroUsuario {
 
 	   @Inject
 	   private EntityManager em;
+	   
+	   @Inject
+	   private  UsuarioListProducer ulp;;
 
 	   @Inject
 	   private Event<Usuario> usuarioEventSrc;
@@ -64,5 +68,11 @@ public class RegistroUsuario {
 	   @PostConstruct
 	   public void initNewUsuario() {
 		   newUsuario = new Usuario();
+	   }
+	   
+	   public Usuario buscarUsuarioPorNombre(String usuario){
+		   log.info("Buscar " + usuario);
+		   Usuario u = ulp.buscarUsuarioPorNombre(usuario);
+		   return u;
 	   }
 }

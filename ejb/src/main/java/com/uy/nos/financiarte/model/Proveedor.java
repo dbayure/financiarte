@@ -10,43 +10,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @Entity
 @XmlRootElement
-@Table(name = "clientes")
-public class Cliente extends Usuario implements Serializable {
+@Table(name = "proveedores")
+public class Proveedor extends Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private long ci;
+	private long rut;
 	
-	private int pin;
-    
-	@OneToMany(mappedBy="cliente", cascade={CascadeType.ALL})
-	private Set<Comercio> comercios;
-	
-	@OneToMany(mappedBy="cliente", cascade={CascadeType.ALL})
+	@OneToMany(mappedBy="proveedor", cascade={CascadeType.ALL})
 	private Set<Contrato> contratos;
 	
-	public Cliente (){
-		comercios = new HashSet<Comercio>();
+	public Proveedor (){
 		contratos = new HashSet<Contrato>();
 	}
 
-	public long getCi() {
-		return ci;
+	public long getRut() {
+		return rut;
 	}
 
-	public void setCi(long ci) {
-		this.ci = ci;
-	}
-
-	public int getPin() {
-		return pin;
-	}
-
-	public void setPin(int pin) {
-		this.pin = pin;
+	public void setRut(long rut) {
+		this.rut = rut;
 	}
 
 	public static long getSerialversionuid() {
@@ -57,10 +42,8 @@ public class Cliente extends Usuario implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + (int) (ci ^ (ci >>> 32));
-		result = prime * result + ((comercios == null) ? 0 : comercios.hashCode());
 		result = prime * result + ((contratos == null) ? 0 : contratos.hashCode());
-		result = prime * result + pin;
+		result = prime * result + (int) (rut ^ (rut >>> 32));
 		return result;
 	}
 
@@ -72,20 +55,13 @@ public class Cliente extends Usuario implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cliente other = (Cliente) obj;
-		if (ci != other.ci)
-			return false;
-		if (comercios == null) {
-			if (other.comercios != null)
-				return false;
-		} else if (!comercios.equals(other.comercios))
-			return false;
+		Proveedor other = (Proveedor) obj;
 		if (contratos == null) {
 			if (other.contratos != null)
 				return false;
 		} else if (!contratos.equals(other.contratos))
 			return false;
-		if (pin != other.pin)
+		if (rut != other.rut)
 			return false;
 		return true;
 	}

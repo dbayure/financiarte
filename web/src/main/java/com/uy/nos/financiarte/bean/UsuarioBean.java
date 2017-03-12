@@ -5,6 +5,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+
+import org.jboss.security.SecurityContextAssociation;
 import org.primefaces.event.RowEditEvent;
 
 import com.uy.nos.financiarte.controller.RegistroUsuario;
@@ -19,6 +21,27 @@ public class UsuarioBean {
 	@Inject
 	private RegistroUsuario registroUsuario;
 	
+	private String usuario;
+	private String rol;
+	
+	public String getUsuario() {
+		usuario = SecurityContextAssociation.getPrincipal().getName();
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getRol() {
+		obtenerRolUsuarioLogueado();
+		return rol;
+	}
+
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
+
 	public void registrar() {
 		try {
 			registroUsuario.registro();
@@ -73,6 +96,11 @@ public class UsuarioBean {
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 		  
+	}
+	
+	public void obtenerRolUsuarioLogueado(){
+		Usuario u = registroUsuario.buscarUsuarioPorNombre(usuario);
+		setRol(u.getRol().getRol());
 	}
 	
 }

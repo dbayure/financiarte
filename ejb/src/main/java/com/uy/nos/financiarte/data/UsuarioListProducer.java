@@ -47,4 +47,17 @@ public class UsuarioListProducer {
       criteria.select(usuario).orderBy(cb.asc(usuario.get("usuario")));
       usuarios = em.createQuery(criteria).getResultList();
    }
+   
+   public Usuario buscarUsuarioPorNombre(String usuario){
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Usuario> criteria = cb.createQuery(Usuario.class);
+      Root<Usuario> usr = criteria.from(Usuario.class);
+      
+      criteria.select(usr);
+      criteria.where(cb.equal(usr.get("usuario"), usuario));
+	  Usuario u = new Usuario();
+	  u = em.createQuery(criteria).getSingleResult();
+	  return u;
+	   
+   }
 }
