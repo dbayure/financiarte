@@ -12,6 +12,7 @@ public class SessionBean {
 	public void logout() throws IOException {
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		ec.invalidateSession();
-		ec.redirect(ec.getRequestContextPath() + "/paginas/principal");
+		System.out.println("Estado de la session : " + ec.getContext().toString());
+		ec.redirect(ec.getRequestContextPath() + "/paginas/principal/principal.jsf");
 	}
 }

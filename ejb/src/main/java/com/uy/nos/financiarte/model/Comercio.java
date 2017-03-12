@@ -111,7 +111,6 @@ public class Comercio implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + ((cuentaBancaria == null) ? 0 : cuentaBancaria.hashCode());
 		result = prime * result + ((direccion == null) ? 0 : direccion.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -131,11 +130,6 @@ public class Comercio implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Comercio other = (Comercio) obj;
-		if (cliente == null) {
-			if (other.cliente != null)
-				return false;
-		} else if (!cliente.equals(other.cliente))
-			return false;
 		if (cuentaBancaria == null) {
 			if (other.cuentaBancaria != null)
 				return false;
@@ -167,5 +161,6 @@ public class Comercio implements Serializable {
 			return false;
 		return true;
 	}
+
 	
 }

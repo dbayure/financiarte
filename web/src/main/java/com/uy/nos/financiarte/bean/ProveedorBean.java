@@ -10,21 +10,21 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
-import com.uy.nos.financiarte.controller.RegistroCliente;
-import com.uy.nos.financiarte.model.Cliente;
+import com.uy.nos.financiarte.controller.RegistroProveedor;
+import com.uy.nos.financiarte.model.Proveedor;
 
 
 
 @ManagedBean
 @RequestScoped
-public class ClienteBean {
+public class ProveedorBean {
 
 	@Inject
-	private RegistroCliente registroCliente;
+	private RegistroProveedor registroProveedor;
 	
 	public void registrar() {
 		try {
-			registroCliente.registro();
+			registroProveedor.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -35,26 +35,26 @@ public class ClienteBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-		Cliente cliente = ((Cliente) event.getObject());
+		Proveedor proveedor = ((Proveedor) event.getObject());
            
             try {
-            	registroCliente.modificar(cliente);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", cliente.getNombre());  
+            	registroProveedor.modificar(proveedor);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", proveedor.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", cliente.getNombre());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", proveedor.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Cliente) event.getObject()).getNombre());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Proveedor) event.getObject()).getNombre());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
 	public void eliminar(Long id) {
 		try {
-			registroCliente.eliminar(id);
+			registroProveedor.eliminar(id);
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -67,7 +67,7 @@ public class ClienteBean {
 	
 	public void buscar(Long id) {
 		try {
-			registroCliente.buscar(id);
+			registroProveedor.buscar(id);
 			FacesMessage msg = new FacesMessage("Se encontró ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -84,13 +84,13 @@ public class ClienteBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    Cliente cliente = (Cliente) d.getRowData();
-            		registroCliente.modificar(cliente);
+            	    Proveedor proveedor = (Proveedor) d.getRowData();
+            	    registroProveedor.modificar(proveedor);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El Cliente fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El proveedor fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el Cliente", "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el proveedor", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 }

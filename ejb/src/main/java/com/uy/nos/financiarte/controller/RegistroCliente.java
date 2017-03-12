@@ -12,6 +12,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import com.uy.nos.financiarte.model.Cliente;
+import com.uy.nos.financiarte.model.Rol;
 
 
 
@@ -38,6 +39,9 @@ public class RegistroCliente {
 
 	   public void registro() throws Exception {
 	      log.info("Registro " + newCliente.getNombre());
+	      Long idRol = 3L;
+	      Rol rol = em.find(Rol.class, idRol);
+	      newCliente.setRol(rol);
 	      em.persist(newCliente);
 	      clienteEventSrc.fire(newCliente);
 	      initNewCliente();
