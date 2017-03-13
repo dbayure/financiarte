@@ -10,12 +10,14 @@ import javax.inject.Inject;
 
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.uy.nos.financiarte.controller.RegistroContrato;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Comercio;
 import com.uy.nos.financiarte.model.Contrato;
+import com.uy.nos.financiarte.model.Proveedor;
 
 
 @ManagedBean
@@ -26,32 +28,25 @@ public class ContratoBean {
 	private RegistroContrato registroContrato;
 	
 	private Cliente clienteSeleccionado;
+	private Proveedor proveedorSeleccionado;
 	private List<Cliente> clientesFiltrados;
-	private List<Comercio> comerciosCliente;
-	private boolean mostrarComerciosCliente = false;
+	private List<Proveedor> proveedoresFiltrados;
+	private boolean skip;
 	
-	public boolean isMostrarComerciosCliente() {
-		return mostrarComerciosCliente;
-	}
-
-	public void setMostrarComerciosCliente(boolean mostrarComerciosCliente) {
-		this.mostrarComerciosCliente = mostrarComerciosCliente;
-	}
-
-	public List<Comercio> getComerciosCliente() {
-		return comerciosCliente;
-	}
-
-	public void setComerciosCliente(List<Comercio> comerciosCliente) {
-		this.comerciosCliente = comerciosCliente;
-	}
-
 	public Cliente getClienteSeleccionado() {
 		return clienteSeleccionado;
 	}
 
 	public void setClienteSeleccionado(Cliente clienteSeleccionado) {
 		this.clienteSeleccionado = clienteSeleccionado;
+	}
+
+	public Proveedor getProveedorSeleccionado() {
+		return proveedorSeleccionado;
+	}
+
+	public void setProveedorSeleccionado(Proveedor proveedorSeleccionado) {
+		this.proveedorSeleccionado = proveedorSeleccionado;
 	}
 
 	public List<Cliente> getClientesFiltrados() {
@@ -62,9 +57,25 @@ public class ContratoBean {
 		this.clientesFiltrados = clientesFiltrados;
 	}
 
+	public List<Proveedor> getProveedoresFiltrados() {
+		return proveedoresFiltrados;
+	}
+
+	public void setProveedoresFiltrados(List<Proveedor> proveedoresFiltrados) {
+		this.proveedoresFiltrados = proveedoresFiltrados;
+	}
+	
+    public boolean isSkip() {
+        return skip;
+    }
+ 
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
 	public void registrar() {
 		try {
-			registroContrato.registro();
+			registroContrato.registro(clienteSeleccionado, proveedorSeleccionado);
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -135,5 +146,14 @@ public class ContratoBean {
 			}
 	}
 	
+    public String onFlowProcess(FlowEvent event) {
+        if(skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        }
+        else {
+            return event.getNewStep();
+        }
+    }
 	
 }

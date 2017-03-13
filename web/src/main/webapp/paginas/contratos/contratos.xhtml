@@ -9,7 +9,7 @@
 		<h:form id="form" prependId="false">
 		
 		<h3 class="text-muted">Administrar Contratos</h3>
-			<hr color="blue" style="height: 30px" />
+			<hr color="blue" style="height: 1px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
@@ -20,19 +20,14 @@
 
 			<p:messages id="messages" showDetail="false" autoUpdate="true"	closable="true" />
 			
-		
-				<p:panelGrid columns="2" layout="grid"  columnClasses="ui-grid-col-6,ui-grid-col-6," 
-							 styleClass="ui-panelgrid-blank">
-							 
-					<p:dataTable id="clientes" var="_cli" value="#{clientes}" editable="false" style="text-align:center; text-transform: capitalize;" 
-		    			  reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" rowKey="#{_cli.id}" 
-		    			  rowIndexVar="#{_cli.id}" selectionMode="single" selection="#{comercioBean.clienteSeleccionado}"
-						  filteredValue="#{comercioBean.clientesFiltrados}" >
-						  
-			       		<f:facet name="header">  
-			            	<p class="text-muted">Clientes</p>
-			        	</f:facet>
-			        	
+				<p:wizard flowListener="#{contratoBean.onFlowProcess}" id="tabContrato">
+        			<p:tab title="Seleccionar el Cliente">
+			     		<hr color="blue" style="height: 1px" />
+			     		<p:dataTable id="clientes" var="_cli" value="#{clientes}" editable="false"  
+		    				reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" rowKey="#{_cli.id}" 
+		    			  	rowIndexVar="#{_cli.id}" selectionMode="single" selection="#{contratoBean.clienteSeleccionado}"
+						  	filteredValue="#{contratoBean.clientesFiltrados}" style="text-align:center; text-transform: capitalize;">
+
 			        	 <p:column headerText="Nombre" filterBy="#{_cli.nombre}" filterMatchMode="contains" >  
 			             	<h:outputText value="#{_cli.nombre}" />
 			           	 </p:column>  
@@ -48,14 +43,17 @@
 			           	 <p:column headerText="Usuario" filterBy="#{_cli.usuario}" filterMatchMode="contains" >  
 			             	<h:outputText value="#{_cli.usuario}" />
 			           	 </p:column>  
-	       	
+			           	 
 					</p:dataTable>
-				
-				 	<p:dataTable id="proveedores" var="_pro" value="#{proveedores}" editable="false" style="text-align:center; text-transform: capitalize;" 
-		    			      reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_pro.id}" >
-			       		<f:facet name="header">  
-			            	<p class="text-muted">Proveedores</p>
-			        	</f:facet>
+					<hr color="blue" style="height: 1px" />
+        			<br/>
+        			</p:tab>
+        			<p:tab title="Seleccionar el Proveedor">
+						<hr color="blue" style="height: 1px" />
+						<p:dataTable id="proveedores" var="_pro" value="#{proveedores}" editable="false"  
+		    				reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_pro.id}" rowKey="#{_pro.id}" 
+		    			  	rowIndexVar="#{_pro.id}" selectionMode="single" selection="#{contratoBean.proveedorSeleccionado}"
+						  	filteredValue="#{contratoBean.proveedoresFiltrados}" style="text-align:center; text-transform: capitalize;">
 			        	
 			        	 <p:column headerText="Nombre" filterBy="#{_pro.nombre}" filterMatchMode="contains" >  
 			             	<h:outputText value="#{_pro.nombre}" />
@@ -72,11 +70,130 @@
 			           	 <p:column headerText="Usuario" filterBy="#{_pro.usuario}" filterMatchMode="contains" >  
 			             	<h:outputText value="#{_pro.usuario}" />
 			           	 </p:column>  
-	           	 
+			        	 
 					</p:dataTable>
-							 
-				</p:panelGrid>
+					<br/>
+					<hr color="blue" style="height: 1px" />
+        			</p:tab>
+        			<p:tab title="Condiciones del Contrato">
+        				<hr color="blue" style="height: 1px" />
+						<p:panelGrid columns="4" layout="grid" id="panelContrato"
+							 		 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+						 			 styleClass="ui-panelgrid-blank">
+									
+							<label>Monto Prestamo: </label>
+							<p:inputText id="nombre" value="#{newContrato.montoPrestamo}" label="monto"
+								required="true"	requiredMessage="Debe ingresar un valor para el monto"
+								autocomplete="false" />
+							
+							<label>Días de Gracia: </label>
+							<p:inputText id="CI" value="#{newContrato.diasInteres}" label="plazo"
+								required="true"	requiredMessage="Debe ingresar un valor para el plazo"
+								autocomplete="false" />
+								
+							<label>Pago Mínimo: </label>
+							<p:inputText id="Tel" value="#{newContrato.pagoMinimo}" label="pago"
+								required="false" requiredMessage="Debe ingresar un valor para el telefono"
+								autocomplete="false" />
+							
+							<label>Plazo de Pago: </label>
+							<p:inputText id="correo" value="#{newContrato.plazoPago}" label="plazo pago"
+								required="true"	requiredMessage="Debe ingresar un valor para el plazo de pago"
+								autocomplete="false" />						
+							
+							<label>Interés: </label>
+							<p:selectOneMenu id="intereses" value="#{newContrato.interes}"	required="true"
+											 requiredMessage="Campo requerido, debe ingresar un valor para el interés">
+								<f:converter converterId="interesConverter" />
+								<f:selectItem itemLabel="Seleccione..." itemValue="" />
+								<f:selectItems value="#{intereses}" var="_int" itemLabel="#{_int.nombre}" itemValue="#{_int}" />
+							</p:selectOneMenu>			
+						
+						</p:panelGrid>
+						<hr color="blue" style="height: 1px" />
+						<br/>
+        			</p:tab>
+        			<p:tab id="confirm" title="Confirmación">
+					<hr color="blue" style="height: 1px" />
+					
+              			<h:panelGrid id="confirmacion" columns="3"  layout="grid" 
+              						columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
+				 			 		styleClass="ui-panelgrid-blank">
+				 			 		
+				 			 		<div class="col-md-3" align="left">
+										<h5 class="text-success">Nombre:
+											#{contratoBean.clienteSeleccionado.nombre}</h5>
+										<h5 class="text-success">correo: #{contratoBean.clienteSeleccionado.correo}</h5>
+										<h5 class="text-success">Cedula:
+											#{contratoBean.clienteSeleccionado.ci}</h5>
+									</div>
 
+									<div class="col-md-3" align="left">
+										<h5 class="text-warning">Nombre:
+											#{contratoBean.proveedorSeleccionado.nombre}</h5>
+										<h5 class="text-warning">Correo:
+											#{contratoBean.proveedorSeleccionado.nombre}</h5>
+										<h5 class="text-warning">Rut:
+											#{contratoBean.proveedorSeleccionado.rut}</h5>
+									</div>
+									
+									<div class="col-md-3" align="left">
+										<h5 class="text-danger">Prestamo:
+											#{newContrato.montoPrestamo}</h5>
+										<h5 class="text-danger">Interés:
+											#{newContrato.interes.monto}</h5>
+										<h5 class="text-danger">Pago Mínimo:
+											#{newContrato.pagoMinimo} </h5>
+									</div>
+							
+						</h:panelGrid>
+						<br/>
+						<hr color="blue" style="height: 1px" />
+						<h:panelGrid id="guardar" columns="2"  layout="grid" 
+              						columnClasses="ui-grid-col-11,ui-grid-col-1" 
+				 			 		styleClass="ui-panelgrid-blank">
+				 			<label></label>
+				 			<p:commandButton value="Confirmar" actionListener="#{contratoBean.registrar}" update="form" process="@this"/>
+				 		</h:panelGrid>
+
+            	</p:tab>
+    		 </p:wizard>
+			
+			<br/>
+			<p:dataTable id="contratos" var="_con" value="#{contratos}" editable="true" 
+						 style="text-align:center; text-transform: capitalize;" 
+		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_con.id}" >
+		    			  
+			       		<f:facet name="header">  
+			            	<p class="text-muted">Contratos</p>
+			        	</f:facet>
+			        	
+	        			<p:ajax event="cellEdit" listener="#{clienteBean.onCellEdit}" update=":form:messages"/>  
+			        	
+			        	 <p:column headerText="Cliente" filterBy="#{_con.cliente.nombre}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_con.cliente.nombre}" />
+			           	 </p:column>  
+			           	 
+			        	 <p:column headerText="Proveedor" filterBy="#{_con.proveedor.nombre}" filterMatchMode="contains" >  
+			              	<h:outputText value="#{_con.proveedor.nombre}" />
+			           	 </p:column>  
+			           	 
+			           	 <p:column headerText="Monto" filterBy="#{_con.montoPrestamo}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_con.montoPrestamo}" />
+			           	 </p:column>   
+			           	 
+			           	 <p:column headerText="Interés" filterBy="#{_con.interes.monto}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_con.interes}" />
+			           	 </p:column>  
+	           	 
+	           	 		 <p:column headerText="Eliminar" >
+		        			<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        					 actionListener="#{contratoBean.eliminar(_con.id)}">
+		        			<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el contrato" icon="ui-icon-alert" />
+		     				</p:commandButton>	        	
+		       			 </p:column>
+			        	 
+					</p:dataTable>
 		</h:form>
 	</ui:define>
 </ui:composition>

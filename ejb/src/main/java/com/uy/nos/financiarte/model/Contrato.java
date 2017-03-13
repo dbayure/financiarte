@@ -31,6 +31,10 @@ public class Contrato implements Serializable {
 	
 	private Date fecha;
 	
+	private long pagoMinimo;
+	
+	private int plazoPago;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="interes")
 	private Interes interes;
@@ -75,6 +79,22 @@ public class Contrato implements Serializable {
 		this.fecha = fecha;
 	}
 
+	public long getPagoMinimo() {
+		return pagoMinimo;
+	}
+
+	public void setPagoMinimo(long pagoMinimo) {
+		this.pagoMinimo = pagoMinimo;
+	}
+
+	public int getPlazoPago() {
+		return plazoPago;
+	}
+
+	public void setPlazoPago(int plazoPago) {
+		this.plazoPago = plazoPago;
+	}
+
 	public Interes getInteres() {
 		return interes;
 	}
@@ -107,13 +127,12 @@ public class Contrato implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + diasInteres;
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((interes == null) ? 0 : interes.hashCode());
 		result = prime * result + (int) (montoPrestamo ^ (montoPrestamo >>> 32));
-		result = prime * result + ((proveedor == null) ? 0 : proveedor.hashCode());
+		result = prime * result + (int) (pagoMinimo ^ (pagoMinimo >>> 32));
+		result = prime * result + plazoPago;
 		return result;
 	}
 
@@ -126,11 +145,6 @@ public class Contrato implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Contrato other = (Contrato) obj;
-		if (cliente == null) {
-			if (other.cliente != null)
-				return false;
-		} else if (!cliente.equals(other.cliente))
-			return false;
 		if (diasInteres != other.diasInteres)
 			return false;
 		if (fecha == null) {
@@ -143,20 +157,13 @@ public class Contrato implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (interes == null) {
-			if (other.interes != null)
-				return false;
-		} else if (!interes.equals(other.interes))
-			return false;
 		if (montoPrestamo != other.montoPrestamo)
 			return false;
-		if (proveedor == null) {
-			if (other.proveedor != null)
-				return false;
-		} else if (!proveedor.equals(other.proveedor))
+		if (pagoMinimo != other.pagoMinimo)
+			return false;
+		if (plazoPago != other.plazoPago)
 			return false;
 		return true;
 	}
-
 	
 }

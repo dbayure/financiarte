@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:form id="form" prependId="false">
+			<h3 class="text-muted">Administrar Tasas de Interés</h3>
+			<hr color="blue" style="height: 30px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+
+			<div class="ui-fluid">
+			
+				<p:panelGrid columns="4" layout="grid" 
+							 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+							 styleClass="ui-panelgrid-blank">
+					
+					<label>Nombre: </label>
+					<p:inputText id="nombre" value="#{newInteres.nombre}" label="nombre"
+						required="true"	requiredMessage="Debe ingresar un valor para el nombre"
+						autocomplete="false" />
+					
+					<label>Monto: </label>
+					<p:inputText id="monto" value="#{newInteres.monto}" label="monto"
+						required="true"	requiredMessage="Debe ingresar un valor para el monto"
+						autocomplete="false" />
+					
+					<label></label>
+					<p:commandButton id="register" action="#{interesBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
+					</p:panelGrid>
+								
+			</div>
+
+			<hr color="blue" style="height: 30px" />
+
+		    <p:dataTable id="interes" var="_int" value="#{intereses}" editable="true" style="text-align:center; text-transform: capitalize;" 
+		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_int.id}" >
+	       		<f:facet name="header">  
+	            	<p class="text-muted">Clientes</p>
+	        	</f:facet>
+	        	
+	        	<p:ajax event="cellEdit" listener="#{interesBean.onCellEdit}" update=":form:messages"/>  
+	        	 
+	        	 <p:column headerText="Id" >
+	        	 	<h:outputText value="#{_int.id}" />
+	        	 </p:column>
+	        	 
+	        	 <p:column headerText="Nombre" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_int.nombre}" />
+	                   	</f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputNom" value="#{_int.nombre}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	        	 <p:column headerText="Monto" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_int.monto}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputCi" value="#{_int.monto}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>
+	           	 
+		        <p:column headerText="Eliminar" >
+		        	<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        					 actionListener="#{interesBean.eliminar(_int.id)}">
+		        		<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el Interés" icon="ui-icon-alert" />
+		     		</p:commandButton>	        	
+		        </p:column>
+			</p:dataTable>
+			
+		</h:form>
+	
+	</ui:define>
+</ui:composition>

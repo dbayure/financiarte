@@ -11,7 +11,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
+import com.uy.nos.financiarte.model.Proveedor;
 
 
 
@@ -36,8 +38,10 @@ public class RegistroContrato {
 	      return newContrato;
 	   }
 
-	   public void registro() throws Exception {
+	   public void registro(Cliente clienteSeleccionado, Proveedor proveedorSeleccionado) throws Exception {
 	      log.info("Registro " + newContrato.getId());
+	      newContrato.setCliente(clienteSeleccionado);
+	      newContrato.setProveedor(proveedorSeleccionado);
 	      em.persist(newContrato);
 	      contratoEventSrc.fire(newContrato);
 	      initNewComercio();
