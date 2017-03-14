@@ -1,5 +1,6 @@
 package com.uy.nos.financiarte.controller;
 
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -40,8 +41,12 @@ public class RegistroContrato {
 
 	   public void registro(Cliente clienteSeleccionado, Proveedor proveedorSeleccionado) throws Exception {
 	      log.info("Registro " + newContrato.getId());
+	      Calendar today = Calendar.getInstance();
+	      today.set(Calendar.HOUR_OF_DAY, 0);
+	      newContrato.setFecha(today);
 	      newContrato.setCliente(clienteSeleccionado);
 	      newContrato.setProveedor(proveedorSeleccionado);
+	      newContrato.setInteres(newContrato.getInteres());
 	      em.persist(newContrato);
 	      contratoEventSrc.fire(newContrato);
 	      initNewComercio();

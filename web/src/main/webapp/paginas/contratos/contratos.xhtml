@@ -120,30 +120,32 @@
               						columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
 				 			 		styleClass="ui-panelgrid-blank">
 				 			 		
-				 			 		<div class="col-md-3" align="left">
-										<h5 class="text-success">Nombre:
-											#{contratoBean.clienteSeleccionado.nombre}</h5>
-										<h5 class="text-success">correo: #{contratoBean.clienteSeleccionado.correo}</h5>
-										<h5 class="text-success">Cedula:
-											#{contratoBean.clienteSeleccionado.ci}</h5>
+				 			 		<div class="col-md-4" align="left">
+				 			 			<h3><kbd>Cliente</kbd></h3>
+										<h4 >Nombre: #{contratoBean.clienteSeleccionado.nombre}</h4>
+										<h4 >Usuario: #{contratoBean.clienteSeleccionado.usuario}</h4>
+										<h4	>correo: #{contratoBean.clienteSeleccionado.correo}</h4>
+										<h4 >Cedula: #{contratoBean.clienteSeleccionado.ci}</h4>
+										<h4 >Teléfono: #{contratoBean.clienteSeleccionado.telefono}</h4>
 									</div>
 
-									<div class="col-md-3" align="left">
-										<h5 class="text-warning">Nombre:
-											#{contratoBean.proveedorSeleccionado.nombre}</h5>
-										<h5 class="text-warning">Correo:
-											#{contratoBean.proveedorSeleccionado.nombre}</h5>
-										<h5 class="text-warning">Rut:
-											#{contratoBean.proveedorSeleccionado.rut}</h5>
+									<div class="col-md-4" align="left">
+										<h3><kbd>Proveedor</kbd></h3>
+										<h4 >Nombre: #{contratoBean.proveedorSeleccionado.nombre}</h4>
+										<h4 >Usuario: #{contratoBean.proveedorSeleccionado.usuario}</h4>
+										<h4 >Correo: #{contratoBean.proveedorSeleccionado.correo}</h4>
+										<h4 >Rut: #{contratoBean.proveedorSeleccionado.rut}</h4>
+										<h4 >Teléfono: #{contratoBean.proveedorSeleccionado.telefono}</h4>
 									</div>
 									
-									<div class="col-md-3" align="left">
-										<h5 class="text-danger">Prestamo:
-											#{newContrato.montoPrestamo}</h5>
-										<h5 class="text-danger">Interés:
-											#{newContrato.interes.monto}</h5>
-										<h5 class="text-danger">Pago Mínimo:
-											#{newContrato.pagoMinimo} </h5>
+									<div class="col-md-4" align="left">
+										<h3><kbd>Contrato</kbd></h3>
+										<h4 >Prestamo: #{newContrato.montoPrestamo}</h4>
+										<h4 >Interés: #{newContrato.interes.monto}</h4>
+										<h4 >Pago Mínimo: #{newContrato.pagoMinimo}</h4>
+										<h4 >Fecha: #{newContrato.fecha}</h4>
+										<h4 >Pago Mínimo: #{newContrato.pagoMinimo}</h4>
+										<h4 >Plazo Pago: #{newContrato.plazoPago}</h4>
 									</div>
 							
 						</h:panelGrid>

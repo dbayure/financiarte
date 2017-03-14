@@ -11,7 +11,6 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.uy.nos.financiarte.controller.RegistroInteres;
-import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Interes;
 
 

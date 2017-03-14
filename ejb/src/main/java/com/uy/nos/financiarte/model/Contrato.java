@@ -1,7 +1,7 @@
 package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +29,7 @@ public class Contrato implements Serializable {
 	
 	private int diasInteres;
 	
-	private Date fecha;
+	private Calendar fecha;
 	
 	private long pagoMinimo;
 	
@@ -71,11 +71,11 @@ public class Contrato implements Serializable {
 		this.diasInteres = diasInteres;
 	}
 
-	public Date getFecha() {
+	public Calendar getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Calendar fecha) {
 		this.fecha = fecha;
 	}
 
