@@ -10,20 +10,21 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
-import com.uy.nos.financiarte.controller.RegistroInteres;
-import com.uy.nos.financiarte.model.Interes;
+import com.uy.nos.financiarte.controller.RegistroPagoMedioPago;
+import com.uy.nos.financiarte.model.PagoMedioPago;
+
 
 
 @ManagedBean
 @RequestScoped
-public class InteresBean {
+public class PagoMedioPagoBean {
 
 	@Inject
-	private RegistroInteres registroInteres;
+	private RegistroPagoMedioPago registroPagoMedioPago;
 	
 	public void registrar() {
 		try {
-			registroInteres.registro();
+			registroPagoMedioPago.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -34,26 +35,26 @@ public class InteresBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-            Interes interes = ((Interes) event.getObject());
+		PagoMedioPago pagoMedioPago = ((PagoMedioPago) event.getObject());
            
             try {
-            	registroInteres.modificar(interes);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", interes.getNombre());  
+            	registroPagoMedioPago.modificar(pagoMedioPago);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", pagoMedioPago.getMedioPago().getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", interes.getNombre());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", pagoMedioPago.getMedioPago().getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Interes) event.getObject()).getNombre());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((PagoMedioPago) event.getObject()).getMedioPago().getNombre());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
 	public void eliminar(Long id) {
 		try {
-			registroInteres.eliminar(id);
+			registroPagoMedioPago.eliminar(id);
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -66,7 +67,7 @@ public class InteresBean {
 	
 	public void buscar(Long id) {
 		try {
-			registroInteres.buscar(id);
+			registroPagoMedioPago.buscar(id);
 			FacesMessage msg = new FacesMessage("Se encontró ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -83,13 +84,13 @@ public class InteresBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    Interes interes = (Interes) d.getRowData();
-            		registroInteres.modificar(interes);
+            	    PagoMedioPago pagoMedioPago = (PagoMedioPago) d.getRowData();
+            		registroPagoMedioPago.modificar(pagoMedioPago);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El interes fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El Pago por Medio de Pago fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el interes", "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el Pago por Medio de Pago", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 	}

@@ -1,7 +1,5 @@
 package com.uy.nos.financiarte.bean;
 
-import java.util.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -17,6 +15,7 @@ import com.uy.nos.financiarte.controller.RegistroContrato;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Comercio;
 import com.uy.nos.financiarte.model.Contrato;
+import com.uy.nos.financiarte.model.Interes;
 import com.uy.nos.financiarte.model.Proveedor;
 
 
@@ -29,8 +28,11 @@ public class ContratoBean {
 	
 	private Cliente clienteSeleccionado;
 	private Proveedor proveedorSeleccionado;
-	private List<Cliente> clientesFiltrados;
-	private List<Proveedor> proveedoresFiltrados;
+	private long montoPrestamo;
+	private int diasInteres;
+	private long pagoMinimo;
+	private int plazoPago;
+	private Interes interes;
 	private boolean skip;
 	
 	public Cliente getClienteSeleccionado() {
@@ -48,24 +50,48 @@ public class ContratoBean {
 	public void setProveedorSeleccionado(Proveedor proveedorSeleccionado) {
 		this.proveedorSeleccionado = proveedorSeleccionado;
 	}
-
-	public List<Cliente> getClientesFiltrados() {
-		return clientesFiltrados;
-	}
-
-	public void setClientesFiltrados(List<Cliente> clientesFiltrados) {
-		this.clientesFiltrados = clientesFiltrados;
-	}
-
-	public List<Proveedor> getProveedoresFiltrados() {
-		return proveedoresFiltrados;
-	}
-
-	public void setProveedoresFiltrados(List<Proveedor> proveedoresFiltrados) {
-		this.proveedoresFiltrados = proveedoresFiltrados;
-	}
 	
-    public boolean isSkip() {
+	public long getMontoPrestamo() {
+		return montoPrestamo;
+	}
+
+	public void setMontoPrestamo(long montoPrestamo) {
+		this.montoPrestamo = montoPrestamo;
+	}
+
+	public int getDiasInteres() {
+		return diasInteres;
+	}
+
+	public void setDiasInteres(int diasInteres) {
+		this.diasInteres = diasInteres;
+	}
+
+	public long getPagoMinimo() {
+		return pagoMinimo;
+	}
+
+	public void setPagoMinimo(long pagoMinimo) {
+		this.pagoMinimo = pagoMinimo;
+	}
+
+	public int getPlazoPago() {
+		return plazoPago;
+	}
+
+	public void setPlazoPago(int plazoPago) {
+		this.plazoPago = plazoPago;
+	}
+
+	public Interes getInteres() {
+		return interes;
+	}
+
+	public void setInteres(Interes interes) {
+		this.interes = interes;
+	}
+
+	public boolean isSkip() {
         return skip;
     }
  
@@ -75,7 +101,7 @@ public class ContratoBean {
 
 	public void registrar() {
 		try {
-			registroContrato.registro(clienteSeleccionado, proveedorSeleccionado);
+			registroContrato.registro(clienteSeleccionado, proveedorSeleccionado, montoPrestamo, diasInteres, pagoMinimo, plazoPago, interes);
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
