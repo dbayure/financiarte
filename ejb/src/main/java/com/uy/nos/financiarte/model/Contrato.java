@@ -2,7 +2,9 @@ package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -46,6 +49,22 @@ public class Contrato implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="proveedor")
 	private Proveedor proveedor;
+	
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<solicitudCredito> solicitudes;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<Devolucion> devoluciones;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<Factura> facturas;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<NotaCredito> notas;  
+
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<PagoMedioPago> pagos;  
+
 
 	public Long getId() {
 		return id;

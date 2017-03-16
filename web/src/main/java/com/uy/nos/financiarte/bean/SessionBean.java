@@ -13,6 +13,6 @@ public class SessionBean {
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		ec.invalidateSession();
 		System.out.println("Estado de la session : " + ec.getContext().toString());
-		ec.redirect(ec.getRequestContextPath() + "/paginas/principal/principal.jsf");
+		ec.redirect(ec.getRequestContextPath() + "/principal/principal.jsf");
 	}
 }

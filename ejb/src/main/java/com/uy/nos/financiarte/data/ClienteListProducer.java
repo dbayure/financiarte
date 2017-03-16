@@ -45,4 +45,5 @@ public class ClienteListProducer {
       criteria.select(cliente).orderBy(cb.asc(cliente.get("id")));
       clientes = em.createQuery(criteria).getResultList();
    }
+   
 }

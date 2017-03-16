@@ -1,5 +1,7 @@
 package com.uy.nos.financiarte.bean;
 
+import java.util.List;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -9,8 +11,10 @@ import javax.inject.Inject;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 
 import com.uy.nos.financiarte.controller.RegistroFactura;
+import com.uy.nos.financiarte.model.Contrato;
 import com.uy.nos.financiarte.model.Factura;
 
 
@@ -22,6 +26,34 @@ public class FacturaBean {
 	@Inject
 	private RegistroFactura registroFactura;
 	
+	private Contrato contratoSeleccionado;
+	private List<Factura> facturasContrato;
+	private boolean mostrarFacturasContratos = false;
+	
+	public Contrato getContratoSeleccionado() {
+		return contratoSeleccionado;
+	}
+
+	public void setContratoSeleccionado(Contrato contratoSeleccionado) {
+		this.contratoSeleccionado = contratoSeleccionado;
+	}
+
+	public List<Factura> getFacturasContrato() {
+		return facturasContrato;
+	}
+
+	public void setFacturasContrato(List<Factura> facturasContrato) {
+		this.facturasContrato = facturasContrato;
+	}
+
+	public boolean isMostrarFacturasContratos() {
+		return mostrarFacturasContratos;
+	}
+
+	public void setMostrarFacturasContratos(boolean mostrarFacturasContratos) {
+		this.mostrarFacturasContratos = mostrarFacturasContratos;
+	}
+
 	public void registrar() {
 		try {
 			registroFactura.registro();
@@ -94,5 +126,11 @@ public class FacturaBean {
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 	}
+	
+    public void onRowSelect(SelectEvent event) {
+        Long idContrato = ((Contrato) event.getObject()).getId();
+//        setFacturasContrato(registroFactura);
+        setMostrarFacturasContratos(true);
+    }
 	
 }

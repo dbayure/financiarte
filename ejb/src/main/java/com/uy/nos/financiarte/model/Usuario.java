@@ -38,7 +38,6 @@ public class Usuario implements Serializable {
 
 	private String correo;
 	
-	
     @OneToOne(orphanRemoval = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "rol", unique = false)
     private Rol rol;

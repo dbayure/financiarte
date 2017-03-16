@@ -1,8 +1,11 @@
 package com.uy.nos.financiarte.bean;
 
+import java.io.IOException;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -104,6 +107,7 @@ public class ContratoBean {
 			registroContrato.registro(clienteSeleccionado, proveedorSeleccionado, montoPrestamo, diasInteres, pagoMinimo, plazoPago, interes);
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
+	        recargarPagina();
 		}
 		catch (Exception e) {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al registrar ", "");  
@@ -180,6 +184,11 @@ public class ContratoBean {
         else {
             return event.getNewStep();
         }
+    }
+    
+    public void recargarPagina() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+	    ec.redirect(ec.getRequestContextPath() + "/proveedor/contratos/contratos.jsf");
     }
 	
 }
