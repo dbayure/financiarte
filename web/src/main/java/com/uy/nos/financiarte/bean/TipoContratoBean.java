@@ -1,7 +1,5 @@
 package com.uy.nos.financiarte.bean;
 
-import java.util.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -12,50 +10,21 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
-import com.uy.nos.financiarte.controller.RegistroFactura;
-import com.uy.nos.financiarte.model.Contrato;
-import com.uy.nos.financiarte.model.Factura;
+import com.uy.nos.financiarte.controller.RegistroTipoContrato;
+import com.uy.nos.financiarte.model.TipoContrato;
 
 
 
 @ManagedBean
 @RequestScoped
-public class FacturaBean {
+public class TipoContratoBean {
 
 	@Inject
-	private RegistroFactura registroFactura;
+	private RegistroTipoContrato registroTipoContrato;
 	
-	private Contrato contratoSeleccionado;
-	private List<Factura> facturasContrato;
-	private boolean mostrarFacturasContratos = false;
-	
-	public Contrato getContratoSeleccionado() {
-		return contratoSeleccionado;
-	}
-
-	public void setContratoSeleccionado(Contrato contratoSeleccionado) {
-		this.contratoSeleccionado = contratoSeleccionado;
-	}
-
-	public List<Factura> getFacturasContrato() {
-		return facturasContrato;
-	}
-
-	public void setFacturasContrato(List<Factura> facturasContrato) {
-		this.facturasContrato = facturasContrato;
-	}
-
-	public boolean isMostrarFacturasContratos() {
-		return mostrarFacturasContratos;
-	}
-
-	public void setMostrarFacturasContratos(boolean mostrarFacturasContratos) {
-		this.mostrarFacturasContratos = mostrarFacturasContratos;
-	}
-
 	public void registrar() {
 		try {
-			registroFactura.registro();
+			registroTipoContrato.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -66,26 +35,26 @@ public class FacturaBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-		Factura factura = ((Factura) event.getObject());
+		TipoContrato tipoContrato = ((TipoContrato) event.getObject());
            
             try {
-            	registroFactura.modificar(factura);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", factura.getDescripcion());  
+            	registroTipoContrato.modificar(tipoContrato);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", tipoContrato.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", factura.getDescripcion());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", tipoContrato.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Factura) event.getObject()).getDescripcion());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((TipoContrato) event.getObject()).getNombre());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
 	public void eliminar(Long id) {
 		try {
-			registroFactura.eliminar(id);
+			registroTipoContrato.eliminar(id);
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -98,7 +67,7 @@ public class FacturaBean {
 	
 	public void buscar(Long id) {
 		try {
-			registroFactura.buscar(id);
+			registroTipoContrato.buscar(id);
 			FacesMessage msg = new FacesMessage("Se encontró ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -115,16 +84,15 @@ public class FacturaBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    Factura factura = (Factura) d.getRowData();
-            		registroFactura.modificar(factura);
+            	    TipoContrato tipoContrato = (TipoContrato) d.getRowData();
+            		registroTipoContrato.modificar(tipoContrato);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La Factura fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El Tipo de Contrato fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar la Factura", "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el Tipo de Contrato", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 	}
-
 	
 }

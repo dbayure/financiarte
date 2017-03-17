@@ -1,7 +1,5 @@
 package com.uy.nos.financiarte.bean;
 
-import java.util.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -11,51 +9,21 @@ import javax.inject.Inject;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
-
-import com.uy.nos.financiarte.controller.RegistroFactura;
-import com.uy.nos.financiarte.model.Contrato;
-import com.uy.nos.financiarte.model.Factura;
+import com.uy.nos.financiarte.controller.RegistroMedioPago;
+import com.uy.nos.financiarte.model.MedioPago;
 
 
 
 @ManagedBean
 @RequestScoped
-public class FacturaBean {
+public class MedioPagoBean {
 
 	@Inject
-	private RegistroFactura registroFactura;
-	
-	private Contrato contratoSeleccionado;
-	private List<Factura> facturasContrato;
-	private boolean mostrarFacturasContratos = false;
-	
-	public Contrato getContratoSeleccionado() {
-		return contratoSeleccionado;
-	}
-
-	public void setContratoSeleccionado(Contrato contratoSeleccionado) {
-		this.contratoSeleccionado = contratoSeleccionado;
-	}
-
-	public List<Factura> getFacturasContrato() {
-		return facturasContrato;
-	}
-
-	public void setFacturasContrato(List<Factura> facturasContrato) {
-		this.facturasContrato = facturasContrato;
-	}
-
-	public boolean isMostrarFacturasContratos() {
-		return mostrarFacturasContratos;
-	}
-
-	public void setMostrarFacturasContratos(boolean mostrarFacturasContratos) {
-		this.mostrarFacturasContratos = mostrarFacturasContratos;
-	}
+	private RegistroMedioPago registroMedioPago;
 
 	public void registrar() {
 		try {
-			registroFactura.registro();
+			registroMedioPago.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -66,26 +34,26 @@ public class FacturaBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-		Factura factura = ((Factura) event.getObject());
+		MedioPago medioPago = ((MedioPago) event.getObject());
            
             try {
-            	registroFactura.modificar(factura);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", factura.getDescripcion());  
+            	registroMedioPago.modificar(medioPago);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", medioPago.getDescripcion());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", factura.getDescripcion());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", medioPago.getDescripcion());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((Factura) event.getObject()).getDescripcion());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((MedioPago) event.getObject()).getDescripcion());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
 	public void eliminar(Long id) {
 		try {
-			registroFactura.eliminar(id);
+			registroMedioPago.eliminar(id);
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -98,7 +66,7 @@ public class FacturaBean {
 	
 	public void buscar(Long id) {
 		try {
-			registroFactura.buscar(id);
+			registroMedioPago.buscar(id);
 			FacesMessage msg = new FacesMessage("Se encontró ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -115,13 +83,13 @@ public class FacturaBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    Factura factura = (Factura) d.getRowData();
-            		registroFactura.modificar(factura);
+            	    MedioPago medioPago = (MedioPago) d.getRowData();
+            		registroMedioPago.modificar(medioPago);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La Factura fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La MedioPago fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar la Factura", "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar la MedioPago", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 	}

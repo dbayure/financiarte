@@ -11,8 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import com.uy.nos.financiarte.model.Cliente;
-import com.uy.nos.financiarte.model.Rol;
+import com.uy.nos.financiarte.model.MedioPago;
 
 
 
@@ -27,46 +26,43 @@ public class RegistroMedioPago {
 	   private EntityManager em;
 
 	   @Inject
-	   private Event<Cliente> clienteEventSrc;
+	   private Event<MedioPago> medioPagoEventSrc;
 
-	   private Cliente newCliente;
+	   private MedioPago newMedioPago;
 
 	   @Produces
 	   @Named
-	   public Cliente getNewCliente() {
-	      return newCliente;
+	   public MedioPago getNewMedioPago() {
+	      return newMedioPago;
 	   }
 
 	   public void registro() throws Exception {
-	      log.info("Registro " + newCliente.getNombre());
-	      Long idRol = 3L;
-	      Rol rol = em.find(Rol.class, idRol);
-	      newCliente.setRol(rol);
-	      em.persist(newCliente);
-	      clienteEventSrc.fire(newCliente);
-	      initNewCliente();
+	      log.info("Registro " + newMedioPago.getNombre());
+	      em.persist(newMedioPago);
+	      medioPagoEventSrc.fire(newMedioPago);
+	      initNewMedioPago();
 	   }
 	   
-	   public void modificar(Cliente cliente) throws Exception {
-		   log.info("Modifico " + cliente);
-		   em.merge(cliente);
+	   public void modificar(MedioPago medioPago) throws Exception {
+		   log.info("Modifico " + medioPago);
+		   em.merge(medioPago);
 	   }
 	   
 	   public void eliminar(Long id) throws Exception {
 		   log.info("Elimino " + id);
-		   Cliente cliente = em.find(Cliente.class, id);
-		   em.remove(cliente);
-		   clienteEventSrc.fire(newCliente);
+		   MedioPago medioPago = em.find(MedioPago.class, id);
+		   em.remove(medioPago);
+		   medioPagoEventSrc.fire(newMedioPago);
 	   }
 
-	   public Cliente buscar(Long id) throws Exception {
+	   public MedioPago buscar(Long id) throws Exception {
 		   log.info("Buscar " + id);
-		   Cliente cliente = em.find(Cliente.class, id);
-		   return cliente;
+		   MedioPago medioPago = em.find(MedioPago.class, id);
+		   return medioPago;
 	   }
 	   
 	   @PostConstruct
-	   public void initNewCliente() {
-		   newCliente = new Cliente();
+	   public void initNewMedioPago() {
+		   newMedioPago = new MedioPago();
 	   }
 }

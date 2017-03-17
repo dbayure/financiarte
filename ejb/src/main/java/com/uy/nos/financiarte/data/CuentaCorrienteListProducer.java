@@ -15,7 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import com.uy.nos.financiarte.model.Banco;
+import com.uy.nos.financiarte.model.CuentaCorriente;
 
 
 @RequestScoped
@@ -24,26 +24,26 @@ public class CuentaCorrienteListProducer {
    @Inject
    private EntityManager em;
 
-   private List<Banco> bancos;
+   private List<CuentaCorriente> cuentasCorriente;
 
 
    @Produces
    @Named
-   public List<Banco> getBancos() {
-      return bancos;
+   public List<CuentaCorriente> getCuentasCorriente() {
+      return cuentasCorriente;
    }
 
-   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Banco banco) {
+   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final CuentaCorriente cuentaCorriente) {
 	      retrieveAllOrderedByName();
    }
 
    @PostConstruct
    public void retrieveAllOrderedByName() {
       CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Banco> criteria = cb.createQuery(Banco.class);
-      Root<Banco> banco = criteria.from(Banco.class);
-      criteria.select(banco).orderBy(cb.asc(banco.get("id")));
-      bancos = em.createQuery(criteria).getResultList();
+      CriteriaQuery<CuentaCorriente> criteria = cb.createQuery(CuentaCorriente.class);
+      Root<CuentaCorriente> cuentaCorriente = criteria.from(CuentaCorriente.class);
+      criteria.select(cuentaCorriente).orderBy(cb.asc(cuentaCorriente.get("id")));
+      cuentasCorriente = em.createQuery(criteria).getResultList();
    }
    
 }

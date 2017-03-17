@@ -10,21 +10,21 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
-import com.uy.nos.financiarte.controller.RegistroSolicitudCredito;
-import com.uy.nos.financiarte.model.solicitudCredito;
+import com.uy.nos.financiarte.controller.RegistroCuentaCorriente;
+import com.uy.nos.financiarte.model.CuentaCorriente;
 
 
 
 @ManagedBean
 @RequestScoped
-public class PagoClienteBean {
+public class CuentaCorrienteBean {
 
 	@Inject
-	private RegistroSolicitudCredito registroPagoCliente;
+	private RegistroCuentaCorriente registroCuentaCorriente;
 	
 	public void registrar() {
 		try {
-			registroPagoCliente.registro();
+			registroCuentaCorriente.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -35,27 +35,26 @@ public class PagoClienteBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-		solicitudCredito pagoCliente = ((solicitudCredito) event.getObject());
-		Long pago = ((solicitudCredito) event.getObject()).getId();
+		CuentaCorriente cuentaCorriente = ((CuentaCorriente) event.getObject());
+           
             try {
-            	registroPagoCliente.modificar(pagoCliente);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", Long.toString(pago));  
+            	registroCuentaCorriente.modificar(cuentaCorriente);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", cuentaCorriente.getId().toString());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", Long.toString(pago));  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", cuentaCorriente.getId().toString());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-		Long pago = ((solicitudCredito) event.getObject()).getId();
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", Long.toString(pago));  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((CuentaCorriente) event.getObject()).getId().toString());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
 	public void eliminar(Long id) {
 		try {
-			registroPagoCliente.eliminar(id);
+			registroCuentaCorriente.eliminar(id);
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -68,7 +67,7 @@ public class PagoClienteBean {
 	
 	public void buscar(Long id) {
 		try {
-			registroPagoCliente.buscar(id);
+			registroCuentaCorriente.buscar(id);
 			FacesMessage msg = new FacesMessage("Se encontró ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -85,13 +84,13 @@ public class PagoClienteBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    solicitudCredito pagoCliente = (solicitudCredito) d.getRowData();
-            		registroPagoCliente.modificar(pagoCliente);
+            	    CuentaCorriente cuentaCorriente = (CuentaCorriente) d.getRowData();
+            		registroCuentaCorriente.modificar(cuentaCorriente);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El Pago de Cliente fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La CuentaCorriente fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el Pago de Cliente", "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar la CuentaCorriente", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 	}

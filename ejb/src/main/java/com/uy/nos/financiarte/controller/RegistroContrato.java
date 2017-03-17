@@ -1,7 +1,6 @@
 package com.uy.nos.financiarte.controller;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -14,14 +13,8 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import com.uy.nos.financiarte.data.ContratoListProducer;
-import com.uy.nos.financiarte.data.DevolucionListProducer;
-import com.uy.nos.financiarte.data.FacturaListProducer;
-import com.uy.nos.financiarte.data.NotaCreditoListProducer;
-import com.uy.nos.financiarte.data.SolicitudCreditoListProducer;
-import com.uy.nos.financiarte.data.PagoMedioPagoListProducer;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
-import com.uy.nos.financiarte.model.Devolucion;
 import com.uy.nos.financiarte.model.Interes;
 import com.uy.nos.financiarte.model.Proveedor;
 

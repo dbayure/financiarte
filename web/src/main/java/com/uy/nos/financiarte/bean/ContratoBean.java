@@ -198,15 +198,31 @@ public class ContratoBean {
 			}
 	}
 	
-    public String onFlowProcess(FlowEvent event) {
-        if(skip) {
+	public String onFlowProcess(FlowEvent event) {
+	    if(skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
         }
         else {
+        	if(clienteSeleccionado == null){
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un cliente para proseguir", "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg);
+	            return "cliente";
+	    	}
+        	if(proveedorSeleccionado == null){
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un proveedor para proseguir", "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg);
+	            return "proveedor";
+	    	}
+        	if(montoPrestamo == 0){
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el prestamo", "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg);
+	            return "contrato";
+	    	}
             return event.getNewStep();
+            
         }
-    }
+	}
     
     public void recargarPagina() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

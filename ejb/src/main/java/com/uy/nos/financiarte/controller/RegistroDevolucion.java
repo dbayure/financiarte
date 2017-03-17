@@ -13,7 +13,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import com.uy.nos.financiarte.data.ContratoListProducer;
-import com.uy.nos.financiarte.data.DevolucionListProducer;
 import com.uy.nos.financiarte.data.FacturaListProducer;
 import com.uy.nos.financiarte.data.UsuarioListProducer;
 import com.uy.nos.financiarte.model.Contrato;

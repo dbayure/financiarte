@@ -10,8 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import com.uy.nos.financiarte.data.SolicitudCreditoListProducer;
-import com.uy.nos.financiarte.model.solicitudCredito;
+import com.uy.nos.financiarte.data.BancoListProducer;
+import com.uy.nos.financiarte.model.Banco;
 
 
 
@@ -20,19 +20,19 @@ import com.uy.nos.financiarte.model.solicitudCredito;
  * 
  * This class produces a RESTful service to read the contents of the members table.
  */
-@Path("/pagosCliente")
+@Path("/bancos")
 @RequestScoped
-public class PagoClienteResourceRESTService2 {
+public class CuentaCorrienteResourceRESTService {
 	
    @Inject
    private EntityManager em;
    
    @Inject
-   private SolicitudCreditoListProducer pagos;
+   private BancoListProducer bancos;
 
    @GET
    @Produces("application/json")
-   public List<solicitudCredito> listAll() {
+   public List<Banco> listAll() {
       // Use @SupressWarnings to force IDE to ignore warnings about "genericizing" the results of
       // this query
       @SuppressWarnings("unchecked")
@@ -40,14 +40,14 @@ public class PagoClienteResourceRESTService2 {
       // the @Entity class
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
-      final List<solicitudCredito> results = pagos.getPagosCliente();
+      final List<Banco> results = bancos.getBancos();
       return results;
    }
 
    @GET
    @Path("/{id:[0-9][0-9]*}")
    @Produces("application/json")
-   public solicitudCredito lookupById(@PathParam("id") long id) {
-      return em.find(solicitudCredito.class, id);
+   public Banco lookupById(@PathParam("id") long id) {
+      return em.find(Banco.class, id);
    }
 }
