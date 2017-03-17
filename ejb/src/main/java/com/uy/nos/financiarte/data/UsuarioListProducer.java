@@ -1,4 +1,3 @@
-
 package com.uy.nos.financiarte.data;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import com.uy.nos.financiarte.model.Usuario;
-
 
 
 
@@ -52,7 +50,6 @@ public class UsuarioListProducer {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Usuario> criteria = cb.createQuery(Usuario.class);
       Root<Usuario> usr = criteria.from(Usuario.class);
-      
       criteria.select(usr);
       criteria.where(cb.equal(usr.get("usuario"), usuario));
 	  Usuario u = new Usuario();

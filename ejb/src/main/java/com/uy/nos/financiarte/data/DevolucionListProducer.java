@@ -1,3 +1,4 @@
+
 package com.uy.nos.financiarte.data;
 
 import java.util.List;
@@ -15,7 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import com.uy.nos.financiarte.model.Devolucion;
-
 
 
 @RequestScoped
@@ -42,18 +42,8 @@ public class DevolucionListProducer {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Devolucion> criteria = cb.createQuery(Devolucion.class);
       Root<Devolucion> devolucion = criteria.from(Devolucion.class);
-      criteria.select(devolucion).orderBy(cb.asc(devolucion.get("devolucion")));
+      criteria.select(devolucion).orderBy(cb.asc(devolucion.get("id")));
       devoluciones = em.createQuery(criteria).getResultList();
    }
    
-   public List<Devolucion> getDevolucionPorContrato(Long idContrato) {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Devolucion> criteria = cb.createQuery(Devolucion.class);
-      Root<Devolucion> devolucion = criteria.from(Devolucion.class);
-      criteria.select(devolucion);
-      criteria.where(cb.equal(devolucion.get("contrato"), idContrato));
-      List<Devolucion> devs = em.createQuery(criteria).getResultList();
-      return devs;
-   }
-
 }

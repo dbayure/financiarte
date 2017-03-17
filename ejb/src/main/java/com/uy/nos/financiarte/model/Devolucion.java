@@ -1,7 +1,7 @@
 package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +28,7 @@ public class Devolucion implements Serializable {
 	
 	private long monto;
 	
-	private Date fecha;
+	private Calendar fecha;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="contrato")
@@ -62,11 +62,11 @@ public class Devolucion implements Serializable {
 		this.monto = monto;
 	}
 
-	public Date getFecha() {
+	public Calendar getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Calendar fecha) {
 		this.fecha = fecha;
 	}
 

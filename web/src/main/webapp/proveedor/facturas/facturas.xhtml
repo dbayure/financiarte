@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:form id="form" prependId="false">
+			<h3 class="text-muted">Administrar Facturas</h3>
+			<hr color="blue" style="height: 30px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+
+			
+			 <p:dataTable id="contratos" var="_con" value="#{contratos}" editable="false" style="text-align:center; text-transform: capitalize;" 
+		    			  reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_con.id}" rowKey="#{_con.id}" 
+		    			  rowIndexVar="#{_con.id}" selectionMode="single" selection="#{facturaBean.contratoSeleccionado}">
+						  
+	       		<f:facet name="header">  
+	            	<p class="text-muted">Contratos</p>
+	        	</f:facet>
+	        		        	 
+	        	 <p:ajax event="rowSelect" listener="#{facturaBean.onRowSelect}" update=":form" />
+	        		        	 
+	        	 <p:column headerText="Id" filterBy="#{_con.id}" filterMatchMode="contains" >
+	        	 	<h:outputText value="#{_con.id}" />
+	        	 </p:column>
+	        	 
+	        	 <p:column headerText="Cliente" filterBy="#{_con.cliente.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_con.cliente.nombre}" />
+	           	 </p:column>  
+	           	 
+	        	 <p:column headerText="Proveedor" filterBy="#{_con.proveedor.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_con.proveedor.nombre}" />
+	             </p:column>  
+	           	 
+	           	 <p:column headerText="Interés" >  
+	             	<h:outputText value="#{_con.interes}" />
+	           	 </p:column> 
+	           	 
+	           	 <p:column headerText="Monto" >  
+	             	<h:outputText value="#{_con.montoPrestamo}" />
+	           	 </p:column>   
+	           	 
+	           	 <p:column headerText="Plazo"  >  
+	             	<h:outputText value="#{_con.plazoPago}" />
+	           	 </p:column>  
+	       	
+			</p:dataTable>
+			<br/>
+			<p:fieldset id="conFac" rendered="#{facturaBean.mostrarFacturasContratos}">
+						
+			<h4 class="text-muted">Agregar facturas al contrato</h4>
+			<br/>
+			
+				<p:panelGrid columns="4" layout="grid" 
+							 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+							 styleClass="ui-panelgrid-blank">
+					
+					<label>Fecha: </label>
+					<p:calendar id="fini" value="#{newFactura.fecha}" />
+					
+					<label>Serie: </label>
+					<p:inputText id="serie" value="#{newFactura.numeroSerie}" label="serie"
+						required="true"	requiredMessage="Debe ingresar un valor para el número de serie"
+						autocomplete="false" />
+						
+					<label>Descripción: </label>
+					<p:inputText id="desc" value="#{newFactura.descripcion}" label="descripción"
+						required="false" requiredMessage="Debe ingresar un valor para la descripción"
+						autocomplete="false" />
+						
+					<label>Monto: </label>
+					<p:inputText id="Tel" value="#{newComercio.telefono}" label="telefono"
+						required="false" requiredMessage="Debe ingresar un valor para el telefono"
+						autocomplete="false" />
+					
+					<label>Articulos: </label>
+					<p:inputText id="art" value="#{newFactura.cantidadArticulos}" label="articulos"
+						required="false" requiredMessage="Debe ingresar un valor para el rut"
+						autocomplete="false" />						
+								
+					<label></label>
+						<p:commandButton id="register" action="#{facturaBean.registrar}" value="Registrar" update="@form @this conFac" icon="ui-icon-plus" />
+					</p:panelGrid>
+							
+
+			<hr color="blue" style="height: 30px" />
+
+		    <p:dataTable id="facturas" var="_fac" value="#{facturas}" editable="true" style="text-align:center; text-transform: capitalize;" 
+		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}"  >
+	       		<f:facet name="header">  
+	            	<p class="text-muted">Facturas</p>
+	        	</f:facet>
+	        	
+	        	<p:ajax event="cellEdit" listener="#{facturaBean.onCellEdit}" update=":form:messages"/>  
+	        	 
+	        	 <p:column headerText="Id" >
+	        	 	<h:outputText value="#{_fac.id}" />
+	        	 </p:column>
+	        	 
+	        	 <p:column headerText="Fecha" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<p:calendar id="fini" value="#{_fac.fecha}" />
+	                   	</f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputFec" value="#{_fac.fecha}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	        	 <p:column headerText="Serie" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_fac.numeroSerie}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInpuSerie" value="#{_fac.numeroSerie}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Descripción" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_fac.descripcion}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputDesc" value="#{_fac.descripcion}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Monto" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_fac.monto}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputMonto" value="#{_fac.monto}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Aticulos" >  
+	               <p:cellEditor>  
+	                   <f:facet name="output">
+	                   		<h:outputText value="#{_fac.cantidadArticulos}" />
+	                   </f:facet>  
+	                   <f:facet name="input">
+	                   		<p:inputText id="modelInputArt" value="#{_fac.cantidadArticulos}"/>
+	                   </f:facet>  
+	               </p:cellEditor>  
+	           	 </p:column>  
+	           	 
+		        <p:column headerText="Eliminar" >
+		        	<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        					 actionListener="#{facturaBean.eliminar(_com.id)}">
+		        		<p:confirm header="Confirmación" message="Esta seguro que desea eliminar la factura" icon="ui-icon-alert" />
+		     		</p:commandButton>	        	
+		        </p:column>
+		        
+			</p:dataTable>
+			
+			</p:fieldset>
+		</h:form>
+	
+	</ui:define>
+</ui:composition>

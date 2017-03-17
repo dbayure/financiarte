@@ -2,7 +2,10 @@ package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,18 +30,22 @@ public class Contrato implements Serializable {
 	private Long id;
 	
 	private long montoPrestamo;
-	
-	private int diasInteres;
-	
-	private Calendar fecha;
-	
 	private long pagoMinimo;
-	
+	private int diasSinInteres;
+	private Calendar fecha;
 	private int plazoPago;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="interes")
 	private Interes interes;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="estados")
+	private Estado estados;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="tiposContrato")
+	private TipoContrato tiposContrato;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="cliente")
@@ -46,7 +54,30 @@ public class Contrato implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="proveedor")
 	private Proveedor proveedor;
+	
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<solicitudCredito> solicitudes;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<Devolucion> devoluciones;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<Factura> facturas;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<NotaCredito> notas;  
 
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<PagoMedioPago> pagos;
+
+    public Contrato (){
+    	solicitudes = new HashSet<solicitudCredito>();
+    	devoluciones = new HashSet<Devolucion>();
+    	facturas = new HashSet<Factura>();
+    	notas = new HashSet<NotaCredito>();
+    	pagos = new HashSet<PagoMedioPago>();
+    }
+    
 	public Long getId() {
 		return id;
 	}
@@ -63,12 +94,20 @@ public class Contrato implements Serializable {
 		this.montoPrestamo = montoPrestamo;
 	}
 
-	public int getDiasInteres() {
-		return diasInteres;
+	public long getPagoMinimo() {
+		return pagoMinimo;
 	}
 
-	public void setDiasInteres(int diasInteres) {
-		this.diasInteres = diasInteres;
+	public void setPagoMinimo(long pagoMinimo) {
+		this.pagoMinimo = pagoMinimo;
+	}
+
+	public int getDiasSinInteres() {
+		return diasSinInteres;
+	}
+
+	public void setDiasSinInteres(int diasSinInteres) {
+		this.diasSinInteres = diasSinInteres;
 	}
 
 	public Calendar getFecha() {
@@ -77,14 +116,6 @@ public class Contrato implements Serializable {
 
 	public void setFecha(Calendar fecha) {
 		this.fecha = fecha;
-	}
-
-	public long getPagoMinimo() {
-		return pagoMinimo;
-	}
-
-	public void setPagoMinimo(long pagoMinimo) {
-		this.pagoMinimo = pagoMinimo;
 	}
 
 	public int getPlazoPago() {
@@ -103,6 +134,22 @@ public class Contrato implements Serializable {
 		this.interes = interes;
 	}
 
+	public Estado getEstados() {
+		return estados;
+	}
+
+	public void setEstados(Estado estados) {
+		this.estados = estados;
+	}
+
+	public TipoContrato getTiposContrato() {
+		return tiposContrato;
+	}
+
+	public void setTiposContrato(TipoContrato tiposContrato) {
+		this.tiposContrato = tiposContrato;
+	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -119,6 +166,46 @@ public class Contrato implements Serializable {
 		this.proveedor = proveedor;
 	}
 
+	public Set<solicitudCredito> getSolicitudes() {
+		return solicitudes;
+	}
+
+	public void setSolicitudes(Set<solicitudCredito> solicitudes) {
+		this.solicitudes = solicitudes;
+	}
+
+	public Set<Devolucion> getDevoluciones() {
+		return devoluciones;
+	}
+
+	public void setDevoluciones(Set<Devolucion> devoluciones) {
+		this.devoluciones = devoluciones;
+	}
+
+	public Set<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(Set<Factura> facturas) {
+		this.facturas = facturas;
+	}
+
+	public Set<NotaCredito> getNotas() {
+		return notas;
+	}
+
+	public void setNotas(Set<NotaCredito> notas) {
+		this.notas = notas;
+	}
+
+	public Set<PagoMedioPago> getPagos() {
+		return pagos;
+	}
+
+	public void setPagos(Set<PagoMedioPago> pagos) {
+		this.pagos = pagos;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -127,12 +214,17 @@ public class Contrato implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + diasInteres;
+		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
+		result = prime * result + diasSinInteres;
+		result = prime * result + ((estados == null) ? 0 : estados.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((interes == null) ? 0 : interes.hashCode());
 		result = prime * result + (int) (montoPrestamo ^ (montoPrestamo >>> 32));
 		result = prime * result + (int) (pagoMinimo ^ (pagoMinimo >>> 32));
 		result = prime * result + plazoPago;
+		result = prime * result + ((proveedor == null) ? 0 : proveedor.hashCode());
+		result = prime * result + ((tiposContrato == null) ? 0 : tiposContrato.hashCode());
 		return result;
 	}
 
@@ -145,7 +237,17 @@ public class Contrato implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Contrato other = (Contrato) obj;
-		if (diasInteres != other.diasInteres)
+		if (cliente == null) {
+			if (other.cliente != null)
+				return false;
+		} else if (!cliente.equals(other.cliente))
+			return false;
+		if (diasSinInteres != other.diasSinInteres)
+			return false;
+		if (estados == null) {
+			if (other.estados != null)
+				return false;
+		} else if (!estados.equals(other.estados))
 			return false;
 		if (fecha == null) {
 			if (other.fecha != null)
@@ -157,13 +259,29 @@ public class Contrato implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (interes == null) {
+			if (other.interes != null)
+				return false;
+		} else if (!interes.equals(other.interes))
+			return false;
 		if (montoPrestamo != other.montoPrestamo)
 			return false;
 		if (pagoMinimo != other.pagoMinimo)
 			return false;
 		if (plazoPago != other.plazoPago)
 			return false;
+		if (proveedor == null) {
+			if (other.proveedor != null)
+				return false;
+		} else if (!proveedor.equals(other.proveedor))
+			return false;
+		if (tiposContrato == null) {
+			if (other.tiposContrato != null)
+				return false;
+		} else if (!tiposContrato.equals(other.tiposContrato))
+			return false;
 		return true;
 	}
-	
+
+
 }

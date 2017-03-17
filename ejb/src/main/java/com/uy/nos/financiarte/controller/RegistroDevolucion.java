@@ -1,5 +1,7 @@
 package com.uy.nos.financiarte.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -9,7 +11,15 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+
+import com.uy.nos.financiarte.data.ContratoListProducer;
+import com.uy.nos.financiarte.data.DevolucionListProducer;
+import com.uy.nos.financiarte.data.FacturaListProducer;
+import com.uy.nos.financiarte.data.UsuarioListProducer;
+import com.uy.nos.financiarte.model.Contrato;
 import com.uy.nos.financiarte.model.Devolucion;
+import com.uy.nos.financiarte.model.Factura;
+import com.uy.nos.financiarte.model.Usuario;
 
 
 
@@ -22,6 +32,15 @@ public class RegistroDevolucion {
 
 	   @Inject
 	   private EntityManager em;
+	   
+	   @Inject
+	   private ContratoListProducer clp;
+	   
+	   @Inject
+	   private UsuarioListProducer ulp;
+	   
+	   @Inject
+	   private FacturaListProducer flp;
 
 	   @Inject
 	   private Event<Devolucion> devolucionEventSrc;
@@ -34,7 +53,7 @@ public class RegistroDevolucion {
 	      return newDevolucion;
 	   }
 
-	   public void registro() throws Exception {
+	   public void registro(Contrato contrato, String descripcion, long monto, Factura factura) throws Exception {
 	      log.info("Registro " + newDevolucion.getDescripcion());
 	      em.persist(newDevolucion);
 	      devolucionEventSrc.fire(newDevolucion);
@@ -64,5 +83,18 @@ public class RegistroDevolucion {
 		   newDevolucion = new Devolucion();
 	   }
 
-
+	   public List<Contrato> contratosPorCliente(String usuario){
+		   List<Contrato> contratos = new ArrayList<Contrato>();
+		   Usuario usr = new Usuario(); 
+		   usr = ulp.buscarUsuarioPorNombre(usuario);
+		   contratos = clp.getContratosPorCliente(usr.getId());
+		   return contratos;
+	   }
+	  
+	  public List<Factura> facturasPorcontrato(Long idContrato){
+		  System.out.println("id del contrato a buscacr la factura" + idContrato);
+		  List<Factura> facturas = null;
+		  facturas = flp.getFacturaPorContrato(idContrato);
+		  return facturas;
+	  }
 }

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define id="ui" name="content">
+		<h:form id="form" prependId="false">
+		
+		<h3 class="text-muted">Administrar Devoluciones</h3>
+			<hr color="blue" style="height: 1px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"	closable="true" />
+			
+				<p:wizard flowListener="#{devolucionBean.onFlowProcess}" id="tabDevolucion">
+        			<p:tab title="Contrato">
+			     		<hr color="blue" style="height: 1px" />
+			     		<p:dataTable id="contratos" var="_con" value="#{devolucionBean.contratos}" editable="false" 
+			     					 style="text-align:center; text-transform: capitalize;" 
+		    			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_con.id}" rowKey="#{_con.id}" 
+		    			  			 rowIndexVar="#{_con.id}" selectionMode="single" selection="#{devolucionBean.contratoSeleccionado}">
+
+							
+					         <p:column headerText="Cliente" filterBy="#{_con.cliente.nombre}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_con.cliente.nombre}" />
+				           	 </p:column>  
+				           	 
+				        	 <p:column headerText="Proveedor" filterBy="#{_con.proveedor.nombre}" filterMatchMode="contains" >  
+				              	<h:outputText value="#{_con.proveedor.nombre}" />
+				           	 </p:column>  
+				           	 
+				           	 <p:column headerText="Monto" filterBy="#{_con.montoPrestamo}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_con.montoPrestamo}" />
+				           	 </p:column>   
+				           	 
+				           	 <p:column headerText="Pago Mínimo" filterBy="#{_con.pagoMinimo}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_con.pagoMinimo}" />
+				           	 </p:column>   
+				           	 
+				           	 <p:column headerText="Días Gracia" filterBy="#{_con.diasInteres}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_con.diasInteres}" />
+				           	 </p:column>   
+				           	 
+				           	 <p:column headerText="Plazo" filterBy="#{_con.plazoPago}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_con.plazoPago}" />
+				           	 </p:column>   
+				           	 
+				           	 <p:column headerText="Interés" filterBy="#{_con.interes.monto}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_con.interes.monto}" />
+				           	 </p:column>  
+			           	 
+						</p:dataTable>
+					<hr color="blue" style="height: 1px" />
+        			<br/>
+        			</p:tab>
+        			<p:tab title="Factura">
+			     		<hr color="blue" style="height: 1px" />
+			     		<p:dataTable id="fact" var="_fac" value="#{devolucionBean.facturas}" editable="false" 
+			     					 style="text-align:center; text-transform: capitalize;" 
+		    			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}" rowKey="#{_fac.id}" 
+		    			  			 rowIndexVar="#{_fac.id}" selectionMode="single" selection="#{devolucionBean.facturaSeleccionada}">
+
+							
+					         <p:column headerText="Fecha" filterBy="#{_fac.fecha}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_fac.fecha}" />
+				           	 </p:column>  
+				           	 
+				        	 <p:column headerText="Serie" filterBy="#{_fac.numeroSerie}" filterMatchMode="contains" >  
+				              	<h:outputText value="#{_fac.numeroSerie}" />
+				           	 </p:column>  
+				           	 
+				           	 <p:column headerText="Monto" filterBy="#{_fac.monto}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_fac.monto}" />
+				           	 </p:column>   
+				           	 
+				           	 <p:column headerText="Descripcion" filterBy="#{_fac.descripcion}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_fac.descripcion}" />
+				           	 </p:column>   
+				           	 
+				           	 <p:column headerText="Articulos" filterBy="#{_fac.cantidadArticulos}" filterMatchMode="contains" >  
+				             	<h:outputText value="#{_fac.cantidadArticulos}" />
+				           	 </p:column>   
+				        
+						</p:dataTable>
+					<hr color="blue" style="height: 1px" />
+        			<br/>
+        			</p:tab>
+        			
+        			<p:tab title="Devolución">
+        				<hr color="blue" style="height: 1px" />
+						<p:panelGrid columns="4" layout="grid" id="panelContrato"
+							 		 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
+						 			 styleClass="ui-panelgrid-blank">
+									
+							<label>Descripción: </label>
+							<p:inputText id="desc" value="#{devolucionBean.descripcion}" label="descripcion"
+								required="true"	requiredMessage="Debe ingresar un valor para la descripción"
+								autocomplete="false" />
+							
+							<label>Monto: </label>
+							<p:inputText id="monto" value="#{devolucionBean.monto}" label="monto"
+								required="true"	requiredMessage="Debe ingresar un valor para el monto"
+								autocomplete="false" />
+						
+						</p:panelGrid>
+						<hr color="blue" style="height: 1px" />
+						<br/>
+        			</p:tab>
+        			<p:tab id="confirm" title="Confirmación">
+					<hr color="blue" style="height: 1px" />
+					
+              			<h:panelGrid id="confirmacion" columns="3"  layout="grid" 
+              						columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
+				 			 		styleClass="ui-panelgrid-blank">
+				 			 		
+				 			 		<div class="col-md-4" align="left">
+				 			 			<h3><kbd>Cliente</kbd></h3>
+<!-- 										<h4 >Nombre: #{devolucionBean.contratoSeleccionado.cliente.nombre}</h4> -->
+<!-- 										<h4 >Usuario: #{contratoBean.clienteSeleccionado.usuario}</h4> -->
+<!-- 										<h4	>correo: #{contratoBean.clienteSeleccionado.correo}</h4> -->
+<!-- 										<h4 >Cedula: #{contratoBean.clienteSeleccionado.ci}</h4> -->
+<!-- 										<h4 >Teléfono: #{contratoBean.clienteSeleccionado.telefono}</h4> -->
+									</div>
+
+									<div class="col-md-4" align="left">
+										<h3><kbd>Proveedor</kbd></h3>
+										<h4 >Nombre: #{devolucionBean.contratoSeleccionado.proveedor.nombre}</h4>
+<!-- 										<h4 >Usuario: #{contratoBean.proveedorSeleccionado.usuario}</h4> -->
+<!-- 										<h4 >Correo: #{contratoBean.proveedorSeleccionado.correo}</h4> -->
+<!-- 										<h4 >Rut: #{contratoBean.proveedorSeleccionado.rut}</h4> -->
+<!-- 										<h4 >Teléfono: #{contratoBean.proveedorSeleccionado.telefono}</h4> -->
+									</div>
+									
+									<div class="col-md-4" align="left">
+										<h3><kbd>Devolución</kbd></h3>
+										<h4 >Descripción: #{devolucionBean.descripcion}</h4>
+										<h4 >Monto: #{devolucionBean.monto}</h4>
+									</div>
+							
+						</h:panelGrid>
+						<br/>
+						<hr color="blue" style="height: 1px" />
+						<h:panelGrid id="guardar" columns="2"  layout="grid" 
+              						columnClasses="ui-grid-col-11,ui-grid-col-1" 
+				 			 		styleClass="ui-panelgrid-blank">
+				 			<label></label>
+				 			<p:commandButton value="Confirmar" actionListener="#{devolucionBean.registrar}" ajax="false" update="form" process="@this"/>
+				 		</h:panelGrid>
+
+            	</p:tab>
+    		 </p:wizard>
+			
+			<br/>
+			<p:dataTable id="devs" var="_dev" value="#{devolucionBean.devoluciones}" editable="true" 
+						 style="text-align:center; text-transform: capitalize;" rendered="#{devolucionBean.mostrarDevoluciones}"
+		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_dev.id}" >
+		    			  
+			       		<f:facet name="header">  
+			            	<p class="text-muted">Devoluciones</p>
+			        	</f:facet>
+			        	
+	        			 <p:ajax event="cellEdit" listener="#{devolucionBean.onCellEdit}" update=":form:messages"/>  
+			        	
+			        	 <p:column headerText="Cliente" filterBy="#{_dev.contrato.cliente.nombre}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_dev.contrato.cliente.nombre}" />
+			           	 </p:column>  
+			           	 
+			        	 <p:column headerText="Proveedor" filterBy="#{_dev.contrato.proveedor.nombre}" filterMatchMode="contains" >  
+			              	<h:outputText value="#{_dev.contrato.proveedor.nombre}" />
+			           	 </p:column>  
+			           	 
+			           	 <p:column headerText="Monto" filterBy="#{_dev.monto}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_dev.monto}" />
+			           	 </p:column>   
+			           	
+	           	 		 <p:column headerText="Eliminar" >
+		        			<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
+		        					 actionListener="#{devolucionBean.eliminar(_dev.id)}">
+		        			<p:confirm header="Confirmación" message="Esta seguro que desea eliminar la devolucion" icon="ui-icon-alert" />
+		     				</p:commandButton>	        	
+		       			 </p:column>
+			        	 
+					</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

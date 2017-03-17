@@ -46,4 +46,25 @@ public class ContratoListProducer {
       contratos = em.createQuery(criteria).getResultList();
    }
    
+   public List<Contrato> getContratosPorCliente(Long idcliente) {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Contrato> criteria = cb.createQuery(Contrato.class);
+      Root<Contrato> contrato = criteria.from(Contrato.class);
+      criteria.select(contrato);
+      criteria.where(cb.equal(contrato.get("cliente"), idcliente));
+      List<Contrato> contratos = em.createQuery(criteria).getResultList();
+      return contratos;
+   }
+   
+   public List<Contrato> getContratosDuplicados(Long idcliente, Long idproveedor) {
+	      CriteriaBuilder cb = em.getCriteriaBuilder();
+	      CriteriaQuery<Contrato> criteria = cb.createQuery(Contrato.class);
+	      Root<Contrato> contrato = criteria.from(Contrato.class);
+	      criteria.select(contrato);
+	      criteria.where(cb.and(cb.equal(contrato.get("cliente"),idcliente)),
+	    		  				cb.equal(contrato.get("proveedor"), idproveedor));
+	      List<Contrato> contratos = em.createQuery(criteria).getResultList();
+	      return contratos;
+	   }
+   
 }

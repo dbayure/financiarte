@@ -1,8 +1,11 @@
 package com.uy.nos.financiarte.bean;
 
+import java.io.IOException;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -17,6 +20,7 @@ import com.uy.nos.financiarte.model.Comercio;
 import com.uy.nos.financiarte.model.Contrato;
 import com.uy.nos.financiarte.model.Interes;
 import com.uy.nos.financiarte.model.Proveedor;
+import com.uy.nos.financiarte.model.TipoContrato;
 
 
 @ManagedBean
@@ -29,10 +33,11 @@ public class ContratoBean {
 	private Cliente clienteSeleccionado;
 	private Proveedor proveedorSeleccionado;
 	private long montoPrestamo;
-	private int diasInteres;
+	private int diasSinInteres;
 	private long pagoMinimo;
 	private int plazoPago;
 	private Interes interes;
+	private TipoContrato tipo;
 	private boolean skip;
 	
 	public Cliente getClienteSeleccionado() {
@@ -59,12 +64,12 @@ public class ContratoBean {
 		this.montoPrestamo = montoPrestamo;
 	}
 
-	public int getDiasInteres() {
-		return diasInteres;
+	public int getDiasSinInteres() {
+		return diasSinInteres;
 	}
 
-	public void setDiasInteres(int diasInteres) {
-		this.diasInteres = diasInteres;
+	public void setDiasSinInteres(int diasSinInteres) {
+		this.diasSinInteres = diasSinInteres;
 	}
 
 	public long getPagoMinimo() {
@@ -91,6 +96,14 @@ public class ContratoBean {
 		this.interes = interes;
 	}
 
+	public TipoContrato getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoContrato tipo) {
+		this.tipo = tipo;
+	}
+
 	public boolean isSkip() {
         return skip;
     }
@@ -101,12 +114,19 @@ public class ContratoBean {
 
 	public void registrar() {
 		try {
-			registroContrato.registro(clienteSeleccionado, proveedorSeleccionado, montoPrestamo, diasInteres, pagoMinimo, plazoPago, interes);
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
-	        FacesContext.getCurrentInstance().addMessage(null, msg);
+			if (registroContrato.registro(clienteSeleccionado, proveedorSeleccionado, montoPrestamo, diasSinInteres, pagoMinimo, plazoPago, interes)){
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El contrato fue registrado con éxito ", "");  
+		        FacesContext.getCurrentInstance().addMessage(null, msg);
+		        recargarPagina();
+			}
+			else{
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se pudo registrar el contrato ", "Ya existe un contrato con el cliente y proveedor seleccionados");  
+		        FacesContext.getCurrentInstance().addMessage(null, msg);
+		        recargarPagina();
+			}
 		}
 		catch (Exception e) {
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al registrar ", "");  
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error inesperado al registrar el contrato ", "");  
         FacesContext.getCurrentInstance().addMessage(null, msg); 
 		}
 	}
@@ -131,13 +151,19 @@ public class ContratoBean {
 	
 	public void eliminar(Long id) {
 		try {
-			registroContrato.eliminar(id);
-			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
-	        FacesContext.getCurrentInstance().addMessage(null, msg);
+			if (registroContrato.eliminar(id)){
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El contrato fue eliminado correctamente", "");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg); 
+			}
+			else{
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se puede eliminar el contrato porque tiene datos asociados ","");  
+	            FacesContext.getCurrentInstance().addMessage(null, msg); 
+			}
+
 		}
 		catch(Exception e) {
-			FacesMessage msg = new FacesMessage("Error al eliminar", id.toString());  
-	        FacesContext.getCurrentInstance().addMessage(null, msg);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error inesperado al intentar eliminar el contrato ", "");  
+            FacesContext.getCurrentInstance().addMessage(null, msg); 
 		}
 		  
 	}
@@ -180,6 +206,11 @@ public class ContratoBean {
         else {
             return event.getNewStep();
         }
+    }
+    
+    public void recargarPagina() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+	    ec.redirect(ec.getRequestContextPath() + "/proveedor/contratos/contratos.jsf");
     }
 	
 }

@@ -1,7 +1,7 @@
 package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +24,7 @@ public class Factura implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Date fecha;
+	private Calendar fecha;
 	
 	private long numeroSerie;
 	
@@ -46,11 +46,11 @@ public class Factura implements Serializable {
 		this.id = id;
 	}
 
-	public Date getFecha() {
+	public Calendar getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Calendar fecha) {
 		this.fecha = fecha;
 	}
 
@@ -149,5 +149,6 @@ public class Factura implements Serializable {
 			return false;
 		return true;
 	}
+
 
 }

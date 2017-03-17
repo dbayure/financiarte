@@ -10,8 +10,8 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
-import com.uy.nos.financiarte.controller.RegistroPagoCliente;
-import com.uy.nos.financiarte.model.PagoCliente;
+import com.uy.nos.financiarte.controller.RegistroSolicitudCredito;
+import com.uy.nos.financiarte.model.solicitudCredito;
 
 
 
@@ -20,7 +20,7 @@ import com.uy.nos.financiarte.model.PagoCliente;
 public class PagoClienteBean {
 
 	@Inject
-	private RegistroPagoCliente registroPagoCliente;
+	private RegistroSolicitudCredito registroPagoCliente;
 	
 	public void registrar() {
 		try {
@@ -35,8 +35,8 @@ public class PagoClienteBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-		PagoCliente pagoCliente = ((PagoCliente) event.getObject());
-		Long pago = ((PagoCliente) event.getObject()).getId();
+		solicitudCredito pagoCliente = ((solicitudCredito) event.getObject());
+		Long pago = ((solicitudCredito) event.getObject()).getId();
             try {
             	registroPagoCliente.modificar(pagoCliente);
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", Long.toString(pago));  
@@ -48,7 +48,7 @@ public class PagoClienteBean {
     }
 	
 	public void onCancel(RowEditEvent event) {  
-		Long pago = ((PagoCliente) event.getObject()).getId();
+		Long pago = ((solicitudCredito) event.getObject()).getId();
         FacesMessage msg = new FacesMessage("Se canceló modificar ", Long.toString(pago));  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
@@ -85,7 +85,7 @@ public class PagoClienteBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    PagoCliente pagoCliente = (PagoCliente) d.getRowData();
+            	    solicitudCredito pagoCliente = (solicitudCredito) d.getRowData();
             		registroPagoCliente.modificar(pagoCliente);
                 }
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El Pago de Cliente fue modificado exitosamente" , "");  
