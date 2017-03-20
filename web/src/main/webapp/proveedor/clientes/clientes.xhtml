@@ -8,7 +8,7 @@
 	<ui:define name="content">
 		<h:form id="form" prependId="false">
 			<h3 class="text-muted">Administrar Clientes</h3>
-			<hr color="blue" style="height: 30px" />
+			<hr color="blue" style="height: 0px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
@@ -37,14 +37,10 @@
 						autocomplete="false" />
 						
 					<label>Teléfono: </label>
-					<p:inputText id="Tel" value="#{newCliente.telefono}" label="telefono"
-						required="false" requiredMessage="Debe ingresar un valor para el telefono"
-						autocomplete="false" />
-					
-					<label>Correo: </label>
-					<p:inputText id="correo" value="#{newCliente.correo}" label="correo"
-						required="true"	requiredMessage="Debe ingresar un valor para el correo"
-						autocomplete="false" />						
+					<p:inputText id="Tel" value="#{newCliente.telefono}" label="telefono" autocomplete="false" />
+						
+					<label>Fecha Nacimiento: </label>
+					<p:calendar id="fnac" value="#{newCliente.fechaNacimiento}" />
 					
 					<label>Usuario: </label>
 					<p:inputText id="Usr" value="#{newCliente.usuario}" label="usuario"
@@ -63,24 +59,65 @@
 						required="true"	requiredMessage="Debe ingresar un valor para el pin"
 						autocomplete="false" />
 						
+					<label>Tipo cuenta: </label>
+						<p:selectOneMenu id="tcb" value="#{newCliente.tipoCuentaBancaria}"	required="false">
+							<f:selectItem itemLabel="Cuenta Corriente" itemValue="Cuenta Corriente" />
+           					<f:selectItem itemLabel="Caja Ahorro" itemValue="Caja Ahorro" />
+						</p:selectOneMenu>	
+							
+					<label>Vehiculo: </label>
+					<p:inputText id="auto" value="#{newCliente.vehiculo}" label="correo" />	
+					
+						<label>Bancos: </label>
+						<p:selectManyMenu id="bancos" value="#{newCliente.bancos}" converter="bancoConverter"
+                          var="ban" filter="true" filterMatchMode="contains" showCheckbox="true">
+            				<f:selectItems value="#{bancos}" var="_banc" itemLabel="#{_banc.nombre}" itemValue="#{_banc}" />
+             				<p:column>
+                				<h:outputText value="#{ban.nombre}" />
+            				</p:column>
+       					 </p:selectManyMenu>
+					
+						<label>Tarjetas: </label>
+						<p:selectManyMenu id="tarjeta" value="#{newCliente.tarjetas}" converter="tarjetaConverter"
+                          var="tar" filter="true" filterMatchMode="contains" showCheckbox="true">
+            				<f:selectItems value="#{tarjetas}" var="_tarj" itemLabel="#{_tarj.nombre}" itemValue="#{_tarj}" />
+             				<p:column>
+                				<h:outputText value="#{tar.nombre}" />
+            				</p:column>
+       					 </p:selectManyMenu>
+					
+					<label>Propietario: </label>
+        			<p:selectBooleanButton id="prop" value="#{newCliente.propietario}" onLabel="Si" offLabel="No" style="width:60px" />
+					
+					<label>Correo: </label>
+					<p:inputText id="correo" value="#{newCliente.correo}" label="correo"
+						required="true"	requiredMessage="Debe ingresar un valor para el correo"
+						autocomplete="false" />
+						
 					<label></label>
 					<p:commandButton id="register" action="#{clienteBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
 					</p:panelGrid>
 								
 			</div>
 
-			<hr color="blue" style="height: 30px" />
+			<hr color="blue" style="height: 0px" />
 
 		    <p:dataTable id="clientes" var="_cli" value="#{clientes}" editable="true" style="text-align:center; text-transform: capitalize;" 
-		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" >
+		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" 
+		    			 selectionMode="single" selection="#{clienteBean.clienteSeleccionado}" rowKey="#{_cli.id}">
 	       		<f:facet name="header">  
 	            	<p class="text-muted">Clientes</p>
 	        	</f:facet>
 	        	
 	        	<p:ajax event="cellEdit" listener="#{clienteBean.onCellEdit}" update=":form:messages"/>  
-	        	 
+	        	<p:ajax event="rowSelect" listener="#{clienteBean.onRowSelect}" update=":form" />
+	        	
 	        	 <p:column headerText="Id" >
 	        	 	<h:outputText value="#{_cli.id}" />
+	        	 </p:column>
+	        	 
+	        	 <p:column headerText="Rol" >
+	        	 	<h:outputText value="#{_cli.rol.rol}" />
 	        	 </p:column>
 	        	 
 	        	 <p:column headerText="Nombre" >  
@@ -138,18 +175,89 @@
 	               </p:cellEditor>  
 	           	 </p:column>  
 	           	 
-	           	 <p:column headerText="Rol" >
-	        	 	<h:outputText value="#{_cli.rol.rol}" />
-	        	 </p:column>
-	           	 
 		        <p:column headerText="Eliminar" >
 		        	<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
 		        					 actionListener="#{clienteBean.eliminar(_cli.id)}">
 		        		<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el cliente" icon="ui-icon-alert" />
 		     		</p:commandButton>	        	
 		        </p:column>
+		                
 			</p:dataTable>
-			
+			<p:fieldset  rendered="#{clienteBean.mostrarAnalisis}">
+				<div class="container-fluid">
+			 		
+			  		<div class="row">
+			    		<div class="col-sm-6" >
+			      			<h3><kbd>Cliente</kbd></h3>
+	 			 			
+			 			 			<h4 >Nombre: #{clienteBean.clienteSeleccionado.nombre}</h4>
+			 			 			
+									<h4 >Usuario: #{clienteBean.clienteSeleccionado.usuario}</h4>
+									
+									<h4	>correo: #{clienteBean.clienteSeleccionado.correo}</h4>
+									
+									<h4 >Cedula: #{clienteBean.clienteSeleccionado.ci}</h4>
+									
+									<h4 >Fecha de nacimiento: #{clienteBean.clienteSeleccionado.fechaNacimiento}</h4>
+									
+									<h4 >Tipo de cuenta: #{clienteBean.clienteSeleccionado.tipoCuentaBancaria}</h4>
+									
+									<h4 >Vehiculo: #{clienteBean.clienteSeleccionado.vehiculo}</h4>
+									<h4 >Propietario: #{clienteBean.propietario}</h4>
+									
+									<div class="row">
+			    						<div class="col-sm-3" >
+			    						<h4 >Bancos: </h4>
+											<p:repeat value="#{clienteBean.bancosSeleccionados}" var="b">
+												<h4 >#{b.nombre} </h4>
+											</p:repeat>
+			    						</div>
+			    						<div class="col-sm-3" >
+			    						<h4 >Tarjetas: </h4>
+											<p:repeat value="#{clienteBean.tarjetasCliente}" var="t">
+												<h4 >#{t.nombre} </h4>
+											</p:repeat>
+			    						</div>
+			    					</div>
+			    		</div>
+			    		<div class="col-sm-6" >
+			    			<h3><kbd>Comercios</kbd></h3>
+			    			<p:repeat value="#{clienteBean.comerciosCliente}" var="c">
+
+									<h4 >Nombre: #{c.nombre}</h4>
+			 			 			
+									<h4 >Razón social: #{c.razonSocial}</h4>
+									
+									<h4	>Rut: #{c.rut}</h4>
+									
+									<h4 >Teléfono: #{c.telefono}</h4>
+									
+									<h4 >Dirección: #{c.direccion}</h4>
+									
+									<h4 >Barrio: #{c.localidaBarrio}</h4>
+									
+									<h4 >Fecha de inicio: #{c.fechaInicio}</h4>
+									
+									<h4 >Metros cuadrados: #{c.metrosCuadrados}</h4>
+			 			 			
+									<h4 >Cantidad de cajas: #{c.cantidadCajas}</h4>
+									
+									<h4	>Carnicería: #{c.carniceria}</h4>
+									
+									<h4 >Fiambrería: #{c.fiambreria}</h4>
+									
+									<h4 >Roticería: #{c.roticeriia}</h4>
+									
+									<h4 >Tarjeta mides: #{c.tarjetaMides}</h4>
+									
+									<h4 >Tipo Cuenta: #{c.tipoCuenta}</h4>
+							</p:repeat>
+			     					
+			    		</div>
+			  		</div>
+				</div>
+			</p:fieldset> 
+					 			 	
 		</h:form>
 	
 	</ui:define>

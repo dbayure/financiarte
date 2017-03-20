@@ -8,7 +8,7 @@
 	<ui:define name="content">
 		<h:form id="form" prependId="false">
 			<h3 class="text-muted">Administrar Clientes</h3>
-			<hr color="blue" style="height: 30px" />
+			<hr color="blue" style="height: 0px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
@@ -69,7 +69,7 @@
 								
 			</div>
 
-			<hr color="blue" style="height: 30px" />
+			<hr color="blue" style="height: 0px" />
 
 		    <p:dataTable id="clientes" var="_cli" value="#{clientes}" editable="true" style="text-align:center; text-transform: capitalize;" 
 		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" >

@@ -1,12 +1,16 @@
 package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,16 +25,22 @@ public class Cliente extends Usuario implements Serializable {
 	
 	private long ci;
 	private boolean propietario;
-	private Calendar fechaNacimiento;
+	private Date fechaNacimiento;
 	private int cel;
 	private String vehiculo;
 	private int pin;
 	private String tipoCuentaBancaria;
     
-	@OneToMany(mappedBy="cliente", cascade={CascadeType.ALL})
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name = "clientes_tarjetas",
+			joinColumns = {@JoinColumn(name = "cliente_id", nullable = false, updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "tarjeta_id",	nullable = false, updatable = false) })
 	private Set<Tarjeta> tarjetas;
 	
-	@OneToMany(mappedBy="cliente", cascade={CascadeType.ALL})
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name = "clientes_bancos",
+			joinColumns = {@JoinColumn(name = "cliente_id", nullable = false, updatable = false) },
+			inverseJoinColumns = { @JoinColumn(name = "banco_id",	nullable = false, updatable = false) })
 	private Set<Banco> bancos;
 	
 	@OneToMany(mappedBy="cliente", cascade={CascadeType.ALL})
@@ -62,11 +72,11 @@ public class Cliente extends Usuario implements Serializable {
 		this.propietario = propietario;
 	}
 
-	public Calendar getFechaNacimiento() {
+	public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Calendar fechaNacimiento) {
+	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
@@ -102,6 +112,38 @@ public class Cliente extends Usuario implements Serializable {
 		this.tipoCuentaBancaria = tipoCuentaBancaria;
 	}
 
+	public Set<Tarjeta> getTarjetas() {
+		return tarjetas;
+	}
+
+	public void setTarjetas(Set<Tarjeta> tarjetas) {
+		this.tarjetas = tarjetas;
+	}
+
+	public Set<Banco> getBancos() {
+		return bancos;
+	}
+
+	public void setBancos(Set<Banco> bancos) {
+		this.bancos = bancos;
+	}
+
+	public Set<Comercio> getComercios() {
+		return comercios;
+	}
+
+	public void setComercios(Set<Comercio> comercios) {
+		this.comercios = comercios;
+	}
+
+	public Set<Contrato> getContratos() {
+		return contratos;
+	}
+
+	public void setContratos(Set<Contrato> contratos) {
+		this.contratos = contratos;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -110,15 +152,11 @@ public class Cliente extends Usuario implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((bancos == null) ? 0 : bancos.hashCode());
 		result = prime * result + cel;
 		result = prime * result + (int) (ci ^ (ci >>> 32));
-		result = prime * result + ((comercios == null) ? 0 : comercios.hashCode());
-		result = prime * result + ((contratos == null) ? 0 : contratos.hashCode());
 		result = prime * result + ((fechaNacimiento == null) ? 0 : fechaNacimiento.hashCode());
 		result = prime * result + pin;
 		result = prime * result + (propietario ? 1231 : 1237);
-		result = prime * result + ((tarjetas == null) ? 0 : tarjetas.hashCode());
 		result = prime * result + ((tipoCuentaBancaria == null) ? 0 : tipoCuentaBancaria.hashCode());
 		result = prime * result + ((vehiculo == null) ? 0 : vehiculo.hashCode());
 		return result;
@@ -133,24 +171,9 @@ public class Cliente extends Usuario implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		if (bancos == null) {
-			if (other.bancos != null)
-				return false;
-		} else if (!bancos.equals(other.bancos))
-			return false;
 		if (cel != other.cel)
 			return false;
 		if (ci != other.ci)
-			return false;
-		if (comercios == null) {
-			if (other.comercios != null)
-				return false;
-		} else if (!comercios.equals(other.comercios))
-			return false;
-		if (contratos == null) {
-			if (other.contratos != null)
-				return false;
-		} else if (!contratos.equals(other.contratos))
 			return false;
 		if (fechaNacimiento == null) {
 			if (other.fechaNacimiento != null)
@@ -160,11 +183,6 @@ public class Cliente extends Usuario implements Serializable {
 		if (pin != other.pin)
 			return false;
 		if (propietario != other.propietario)
-			return false;
-		if (tarjetas == null) {
-			if (other.tarjetas != null)
-				return false;
-		} else if (!tarjetas.equals(other.tarjetas))
 			return false;
 		if (tipoCuentaBancaria == null) {
 			if (other.tipoCuentaBancaria != null)
@@ -179,5 +197,5 @@ public class Cliente extends Usuario implements Serializable {
 		return true;
 	}
 
-	
+
 }

@@ -9,7 +9,7 @@
 		<h:form id="form" prependId="false">
 		
 		<h3 class="text-muted">Administrar Contratos</h3>
-			<hr color="blue" style="height: 1px" />
+			<hr color="blue" style="height: 0px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
@@ -21,8 +21,8 @@
 			<p:messages id="messages" showDetail="false" autoUpdate="true"	closable="true" />
 			
 				<p:wizard flowListener="#{contratoBean.onFlowProcess}" id="tabContrato">
-        			<p:tab title="Cliente">
-			     		<hr color="blue" style="height: 1px" />
+        			<p:tab title="Cliente" id="cliente">
+			     		<hr color="blue" style="height: 0px" />
 			     		<p:dataTable id="clientes" var="_cli" value="#{clientes}" editable="false" style="text-align:center; text-transform: capitalize;" 
 		    			 				 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_cli.id}" rowKey="#{_cli.id}" 
 		    			  				 rowIndexVar="#{_cli.id}" selectionMode="single" selection="#{contratoBean.clienteSeleccionado}">
@@ -45,11 +45,11 @@
 				           	 </p:column>  
 			           	 
 						</p:dataTable>
-					<hr color="blue" style="height: 1px" />
+					<hr color="blue" style="height: 0px" />
         			<br/>
         			</p:tab>
-        			<p:tab title="Proveedor">
-						<hr color="blue" style="height: 1px" />
+        			<p:tab title="Proveedor" id="proveedor">
+						<hr color="blue" style="height: 0px" />
 							<p:dataTable id="provee" var="_pro" value="#{proveedores}" editable="false" style="text-align:center; text-transform: capitalize;" 
 		    			 				 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_pro.id}" rowKey="#{_pro.id}" 
 		    			  				 rowIndexVar="#{_pro.id}" selectionMode="single" selection="#{contratoBean.proveedorSeleccionado}">
@@ -73,56 +73,46 @@
 			        	 
 						</p:dataTable>
 					<br/>
-					<hr color="blue" style="height: 1px" />
+					<hr color="blue" style="height: 0px" />
         			</p:tab>
-        			<p:tab title="Contrato">
-        				<hr color="blue" style="height: 1px" />
+        			<p:tab title="Contrato" id="contrato">
+        				<hr color="blue" style="height: 0px" />
 						<p:panelGrid columns="4" layout="grid" id="panelContrato"
 							 		 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
 						 			 styleClass="ui-panelgrid-blank">
 									
 							<label>Monto Prestamo: </label>
-							<p:inputText id="monto" value="#{contratoBean.montoPrestamo}" label="monto"
-								required="true"	requiredMessage="Debe ingresar un valor para el monto"
-								autocomplete="false" />
+							<p:inputText id="monto" value="#{contratoBean.montoPrestamo}" label="monto"/>
 								
 							<label>Pago Mínimo: </label>
-							<p:inputText id="pm" value="#{contratoBean.pagoMinimo}" label="pago"
-								required="true" requiredMessage="Debe ingresar un valor para el pago mínimo"
-								autocomplete="false" />								
+							<p:inputText id="pm" value="#{contratoBean.pagoMinimo}" label="pago" />								
 							
 							<label>Días sin Interés: </label>
-							<p:inputText id="dsi" value="#{contratoBean.diasSinInteres}" label="plazo"
-								required="true"	requiredMessage="Debe ingresar los días sin interés"
-								autocomplete="false" />
+							<p:inputText id="dsi" value="#{contratoBean.diasSinInteres}" label="plazo"/>
 								
 							<label>Plazo de Pago: </label>
-							<p:inputText id="plazo" value="#{contratoBean.plazoPago}" label="plazo pago"
-								required="true"	requiredMessage="Debe ingresar un valor para el plazo de pago"
-								autocomplete="false" />						
+							<p:inputText id="plazo" value="#{contratoBean.plazoPago}" label="plazo pago"/>						
 							
 							<label>Interés: </label>
-							<p:selectOneMenu id="intereses" value="#{contratoBean.interes}"	required="true"
-											 requiredMessage="Campo requerido, debe ingresar un valor para el interés">
+							<p:selectOneMenu id="intereses" value="#{contratoBean.interes}"	>
 								<f:converter converterId="interesConverter" />
 								<f:selectItem itemLabel="Seleccione..." itemValue="" />
 								<f:selectItems value="#{intereses}" var="_int" itemLabel="#{_int.nombre}" itemValue="#{_int}" />
 							</p:selectOneMenu>			
 							
 							<label>Tipo de Contrato: </label>
-							<p:selectOneMenu id="tipo" value="#{contratoBean.tipo}"	required="true"
-											 requiredMessage="Campo requerido, debe ingresar un valor para el tipo de contrato">
-								<f:converter converterId="tipo" />
+							<p:selectOneMenu id="tipo" value="#{contratoBean.tipo}"	>
+								<f:converter converterId="tipoContratoConverter" />
 								<f:selectItem itemLabel="Seleccione..." itemValue="" />
-								<f:selectItems value="#{}" var="_int" itemLabel="#{_int.nombre}" itemValue="#{_int}" />
+								<f:selectItems value="#{tiposContrato}" var="_tipo" itemLabel="#{_tipo.nombre}" itemValue="#{_tipo }" />
 							</p:selectOneMenu>								
 						
 						</p:panelGrid>
-						<hr color="blue" style="height: 1px" />
+						<hr color="blue" style="height: 0px" />
 						<br/>
         			</p:tab>
         			<p:tab id="confirm" title="Confirmación">
-					<hr color="blue" style="height: 1px" />
+					<hr color="blue" style="height: 0px" />
 					
               			<h:panelGrid id="confirmacion" columns="3"  layout="grid" 
               						columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
@@ -150,14 +140,15 @@
 										<h3><kbd>Contrato</kbd></h3>
 										<h4 >Prestamo: #{contratoBean.montoPrestamo}</h4>
 										<h4 >Interés: #{contratoBean.interes.monto}</h4>
-										<h4 >Pago Mínimo: #{contratoBean.pagoMinimo}</h4>
-										<h4 >Días de Gracia: #{contratoBean.diasInteres}</h4>
 										<h4 >Plazo Pago: #{contratoBean.plazoPago}</h4>
+										<h4 >Pago Mínimo: #{contratoBean.pagoMinimo}</h4>
+										<h4 >Días sin Interés: #{contratoBean.diasSinInteres}</h4>
+										<h4 >Tipo de Contrato: #{contratoBean.tipo.nombre}</h4>
 									</div>
 							
 						</h:panelGrid>
 						<br/>
-						<hr color="blue" style="height: 1px" />
+						<hr color="blue" style="height: 0px" />
 						<h:panelGrid id="guardar" columns="2"  layout="grid" 
               						columnClasses="ui-grid-col-11,ui-grid-col-1" 
 				 			 		styleClass="ui-panelgrid-blank">
@@ -191,12 +182,12 @@
 			             	<h:outputText value="#{_con.montoPrestamo}" />
 			           	 </p:column>   
 			           	 
-			           	 <p:column headerText="Pago Mínimo" filterBy="#{_con.pagoMinimo}" filterMatchMode="contains" >  
+			           	 <p:column headerText="Mínimo" filterBy="#{_con.pagoMinimo}" filterMatchMode="contains" >  
 			             	<h:outputText value="#{_con.pagoMinimo}" />
 			           	 </p:column>   
 			           	 
-			           	 <p:column headerText="Días Gracia" filterBy="#{_con.diasInteres}" filterMatchMode="contains" >  
-			             	<h:outputText value="#{_con.diasInteres}" />
+			           	 <p:column headerText="Gracia" filterBy="#{_con.diasSinInteres}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_con.diasSinInteres}" />
 			           	 </p:column>   
 			           	 
 			           	 <p:column headerText="Plazo" filterBy="#{_con.plazoPago}" filterMatchMode="contains" >  
@@ -205,6 +196,10 @@
 			           	 
 			           	 <p:column headerText="Interés" filterBy="#{_con.interes.monto}" filterMatchMode="contains" >  
 			             	<h:outputText value="#{_con.interes.monto}" />
+			           	 </p:column>  
+			           	 
+			           	 <p:column headerText="Tipo" filterBy="#{_con.tiposContrato.nombre}" filterMatchMode="contains" >  
+			             	<h:outputText value="#{_con.tiposContrato.nombre}" />
 			           	 </p:column>  
 	           	 
 	           	 		 <p:column headerText="Eliminar" >

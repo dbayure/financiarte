@@ -12,12 +12,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import org.jboss.security.SecurityContextAssociation;
 
+import com.uy.nos.financiarte.data.CiudadListProducer;
 import com.uy.nos.financiarte.data.ComercioListProducer;
+import com.uy.nos.financiarte.model.Ciudad;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Comercio;
-import com.uy.nos.financiarte.model.Usuario;
+import com.uy.nos.financiarte.model.Departamento;
 
 
 
@@ -30,9 +31,9 @@ public class RegistroComercio {
 
 	   @Inject
 	   private EntityManager em;
-	   
+	   	   
 	   @Inject
-	   private RegistroUsuario registroUsuario;
+	   private CiudadListProducer citylp;
 
 	   @Inject
 	   private Event<Comercio> comercioEventSrc;
@@ -48,17 +49,12 @@ public class RegistroComercio {
 	      return newComercio;
 	   }
 
-	   public void registro(Cliente clienteSeleccionado) throws Exception {
+	   public void registro(Cliente clienteSeleccionado, Departamento depto) throws Exception {
 	      log.info("Registro " + newComercio.getNombre());
-	      if(clienteSeleccionado == null){
-	    	  String usr = SecurityContextAssociation.getPrincipal().getName();
-		      Usuario usuario  = registroUsuario.buscarUsuarioPorNombre(usr);
-		      Cliente cliente = em.find(Cliente.class, usuario.getId());
-		      newComercio.setCliente(cliente);
-	      }
-	      else{
-	    	  newComercio.setCliente(clienteSeleccionado);
-	      }
+		  Cliente cliente = em.find(Cliente.class, clienteSeleccionado.getId());
+		  newComercio.setCliente(cliente);
+		  newComercio.setDeparatamento(depto);
+		  newComercio.setCiudad(newComercio.getCiudad());
 	      em.persist(newComercio);
 	      comercioEventSrc.fire(newComercio);
 	      initNewComercio();
@@ -91,4 +87,9 @@ public class RegistroComercio {
 	   public List<Comercio> comerciosPorCliente(Long idCliente){
 		   return clp.comerciosPorCliente(idCliente);
 	   }
+	   
+	   public List<Ciudad> obtenerCiudadesPorDepto(Long depto){
+		   return citylp.obtenerCiudadesPorDepto(depto);
+	   }
+	   
 }

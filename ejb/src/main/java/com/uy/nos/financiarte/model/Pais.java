@@ -12,8 +12,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
-@Table(name = "bancos")
-public class Banco implements Serializable {
+@Table(name = "paises")
+public class Pais implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,37 +22,36 @@ public class Banco implements Serializable {
 	private Long id;
 	
 	private String nombre;
-	private String descripcion;
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getNombre() {
 		return nombre;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getDescripcion() {
-		return descripcion;
-	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -61,12 +60,7 @@ public class Banco implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Banco other = (Banco) obj;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
-			return false;
+		Pais other = (Pais) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -79,5 +73,5 @@ public class Banco implements Serializable {
 			return false;
 		return true;
 	}
-
+	
 }

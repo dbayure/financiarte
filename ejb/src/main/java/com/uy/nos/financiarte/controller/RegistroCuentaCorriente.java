@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import com.uy.nos.financiarte.model.Ciudad;
+import com.uy.nos.financiarte.model.CuentaCorriente;
 
 
 
@@ -26,43 +26,43 @@ public class RegistroCuentaCorriente {
 	   private EntityManager em;
 
 	   @Inject
-	   private Event<Ciudad> ciudadEventSrc;
+	   private Event<CuentaCorriente> cuentaCorrienteEventSrc;
 
-	   private Ciudad newCiudad;
+	   private CuentaCorriente newCuentaCorriente;
 
 	   @Produces
 	   @Named
-	   public Ciudad getNewCiudad() {
-	      return newCiudad;
+	   public CuentaCorriente getNewCuentaCorriente() {
+	      return newCuentaCorriente;
 	   }
 
 	   public void registro() throws Exception {
-	      log.info("Registro " + newCiudad.getNombre());
-	      em.persist(newCiudad);
-	      ciudadEventSrc.fire(newCiudad);
-	      initNewCiudad();
+	      log.info("Registro " + newCuentaCorriente.getId());
+	      em.persist(newCuentaCorriente);
+	      cuentaCorrienteEventSrc.fire(newCuentaCorriente);
+	      initNewCuentaCorriente();
 	   }
 	   
-	   public void modificar(Ciudad ciudad) throws Exception {
-		   log.info("Modifico " + ciudad);
-		   em.merge(ciudad);
+	   public void modificar(CuentaCorriente cuentaCorriente) throws Exception {
+		   log.info("Modifico " + cuentaCorriente);
+		   em.merge(cuentaCorriente);
 	   }
 	   
 	   public void eliminar(Long id) throws Exception {
 		   log.info("Elimino " + id);
-		   Ciudad ciudad = em.find(Ciudad.class, id);
-		   em.remove(ciudad);
-		   ciudadEventSrc.fire(newCiudad);
+		   CuentaCorriente cuentaCorriente = em.find(CuentaCorriente.class, id);
+		   em.remove(cuentaCorriente);
+		   cuentaCorrienteEventSrc.fire(newCuentaCorriente);
 	   }
 
-	   public Ciudad buscar(Long id) throws Exception {
+	   public CuentaCorriente buscar(Long id) throws Exception {
 		   log.info("Buscar " + id);
-		   Ciudad ciudad = em.find(Ciudad.class, id);
-		   return ciudad;
+		   CuentaCorriente cuentaCorriente = em.find(CuentaCorriente.class, id);
+		   return cuentaCorriente;
 	   }
 	   
 	   @PostConstruct
-	   public void initNewCiudad() {
-		   newCiudad = new Ciudad();
+	   public void initNewCuentaCorriente() {
+		   newCuentaCorriente = new CuentaCorriente();
 	   }
 }

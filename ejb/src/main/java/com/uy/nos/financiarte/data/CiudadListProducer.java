@@ -46,4 +46,14 @@ public class CiudadListProducer {
       ciudades = em.createQuery(criteria).getResultList();
    }
    
+   public List<Ciudad> obtenerCiudadesPorDepto(Long depto) {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Ciudad> criteria = cb.createQuery(Ciudad.class);
+      Root<Ciudad> ciudad = criteria.from(Ciudad.class);
+      criteria.select(ciudad);
+      criteria.where(cb.equal(ciudad.get("departamento"), depto));
+      List<Ciudad> cities = em.createQuery(criteria).getResultList();
+      return cities;
+   }
+
 }

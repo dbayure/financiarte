@@ -9,7 +9,7 @@
 		<h:form id="form" prependId="false">
 		
 		<h3 class="text-muted">Administrar Devoluciones</h3>
-			<hr color="blue" style="height: 1px" />
+			<hr color="blue" style="height: 0px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
@@ -22,7 +22,7 @@
 			
 				<p:wizard flowListener="#{devolucionBean.onFlowProcess}" id="tabDevolucion">
         			<p:tab title="Contrato">
-			     		<hr color="blue" style="height: 1px" />
+			     		<hr color="blue" style="height: 0px" />
 			     		<p:dataTable id="contratos" var="_con" value="#{devolucionBean.contratos}" editable="false" 
 			     					 style="text-align:center; text-transform: capitalize;" 
 		    			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_con.id}" rowKey="#{_con.id}" 
@@ -58,11 +58,11 @@
 				           	 </p:column>  
 			           	 
 						</p:dataTable>
-					<hr color="blue" style="height: 1px" />
+					<hr color="blue" style="height: 0px" />
         			<br/>
         			</p:tab>
         			<p:tab title="Factura">
-			     		<hr color="blue" style="height: 1px" />
+			     		<hr color="blue" style="height: 0px" />
 			     		<p:dataTable id="fact" var="_fac" value="#{devolucionBean.facturas}" editable="false" 
 			     					 style="text-align:center; text-transform: capitalize;" 
 		    			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}" rowKey="#{_fac.id}" 
@@ -90,12 +90,12 @@
 				           	 </p:column>   
 				        
 						</p:dataTable>
-					<hr color="blue" style="height: 1px" />
+					<hr color="blue" style="height: 0px" />
         			<br/>
         			</p:tab>
         			
         			<p:tab title="Devolución">
-        				<hr color="blue" style="height: 1px" />
+        				<hr color="blue" style="height: 0px" />
 						<p:panelGrid columns="4" layout="grid" id="panelContrato"
 							 		 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
 						 			 styleClass="ui-panelgrid-blank">
@@ -111,11 +111,11 @@
 								autocomplete="false" />
 						
 						</p:panelGrid>
-						<hr color="blue" style="height: 1px" />
+						<hr color="blue" style="height: 0px" />
 						<br/>
         			</p:tab>
         			<p:tab id="confirm" title="Confirmación">
-					<hr color="blue" style="height: 1px" />
+					<hr color="blue" style="height: 0px" />
 					
               			<h:panelGrid id="confirmacion" columns="3"  layout="grid" 
               						columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
@@ -147,7 +147,7 @@
 							
 						</h:panelGrid>
 						<br/>
-						<hr color="blue" style="height: 1px" />
+						<hr color="blue" style="height: 0px" />
 						<h:panelGrid id="guardar" columns="2"  layout="grid" 
               						columnClasses="ui-grid-col-11,ui-grid-col-1" 
 				 			 		styleClass="ui-panelgrid-blank">

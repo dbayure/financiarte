@@ -1,7 +1,6 @@
 package com.uy.nos.financiarte.controller;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -14,16 +13,11 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import com.uy.nos.financiarte.data.ContratoListProducer;
-import com.uy.nos.financiarte.data.DevolucionListProducer;
-import com.uy.nos.financiarte.data.FacturaListProducer;
-import com.uy.nos.financiarte.data.NotaCreditoListProducer;
-import com.uy.nos.financiarte.data.SolicitudCreditoListProducer;
-import com.uy.nos.financiarte.data.PagoMedioPagoListProducer;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
-import com.uy.nos.financiarte.model.Devolucion;
 import com.uy.nos.financiarte.model.Interes;
 import com.uy.nos.financiarte.model.Proveedor;
+import com.uy.nos.financiarte.model.TipoContrato;
 
 
 
@@ -52,7 +46,7 @@ public class RegistroContrato {
 	      return newContrato;
 	   }
 	   
-	   public boolean registro(Cliente cliente, Proveedor proveedor, long montoPrestamo, int diasInteres, long pagoMinimo, int plazoPago, Interes interes) throws Exception {
+	   public boolean registro(Cliente cliente, Proveedor proveedor, long montoPrestamo, int diasInteres, long pagoMinimo, int plazoPago, Interes interes, TipoContrato tipo) throws Exception {
 	      log.info("Registro " + newContrato.getId());
 	      boolean seAgrega = false;
 	      if (clp.getContratosDuplicados(cliente.getId(), proveedor.getId()).isEmpty()){
@@ -66,6 +60,7 @@ public class RegistroContrato {
 		      newContrato.setDiasSinInteres(diasInteres);
 		      newContrato.setPagoMinimo(pagoMinimo);
 		      newContrato.setPlazoPago(plazoPago);
+		      newContrato.setTiposContrato(tipo);
 		      em.persist(newContrato);
 		      contratoEventSrc.fire(newContrato);
 		      initNewComercio();

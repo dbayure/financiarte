@@ -1,10 +1,8 @@
 package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Set;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,11 +37,9 @@ public class Comercio implements Serializable {
 	
 	private String localidaBarrio;
 	
-	private Calendar fechaInicio;
+	private Date fechaInicio;
 	
 	private int metrosCuadrados;
-	
-	private boolean alquila;
 	
 	private int cantidadCajas;
 	
@@ -52,14 +47,11 @@ public class Comercio implements Serializable {
 	
 	private boolean fiambreria;
 	
-	private boolean roticeriia;
+	private boolean roticeria;
 	
 	private boolean tarjetaMides;
 	
 	private String tipoCuenta;
-	
-	@OneToMany(mappedBy="comercio", cascade={CascadeType.ALL})
-	private Set<Banco> bancos;
 	
     @OneToOne(orphanRemoval = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "ciudad", unique = false)
@@ -129,11 +121,11 @@ public class Comercio implements Serializable {
 		this.localidaBarrio = localidaBarrio;
 	}
 
-	public Calendar getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public void setFechaInicio(Calendar fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 
@@ -143,14 +135,6 @@ public class Comercio implements Serializable {
 
 	public void setMetrosCuadrados(int metrosCuadrados) {
 		this.metrosCuadrados = metrosCuadrados;
-	}
-
-	public boolean isAlquila() {
-		return alquila;
-	}
-
-	public void setAlquila(boolean alquila) {
-		this.alquila = alquila;
 	}
 
 	public int getCantidadCajas() {
@@ -177,12 +161,12 @@ public class Comercio implements Serializable {
 		this.fiambreria = fiambreria;
 	}
 
-	public boolean isRoticeriia() {
-		return roticeriia;
+	public boolean isRoticeria() {
+		return roticeria;
 	}
 
-	public void setRoticeriia(boolean roticeriia) {
-		this.roticeriia = roticeriia;
+	public void setRoticeria(boolean roticeria) {
+		this.roticeria = roticeria;
 	}
 
 	public boolean isTarjetaMides() {
@@ -233,8 +217,6 @@ public class Comercio implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (alquila ? 1231 : 1237);
-		result = prime * result + ((bancos == null) ? 0 : bancos.hashCode());
 		result = prime * result + cantidadCajas;
 		result = prime * result + (carniceria ? 1231 : 1237);
 		result = prime * result + ((ciudad == null) ? 0 : ciudad.hashCode());
@@ -248,7 +230,7 @@ public class Comercio implements Serializable {
 		result = prime * result + metrosCuadrados;
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		result = prime * result + ((razonSocial == null) ? 0 : razonSocial.hashCode());
-		result = prime * result + (roticeriia ? 1231 : 1237);
+		result = prime * result + (roticeria ? 1231 : 1237);
 		result = prime * result + (int) (rut ^ (rut >>> 32));
 		result = prime * result + (tarjetaMides ? 1231 : 1237);
 		result = prime * result + (int) (telefono ^ (telefono >>> 32));
@@ -265,13 +247,6 @@ public class Comercio implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Comercio other = (Comercio) obj;
-		if (alquila != other.alquila)
-			return false;
-		if (bancos == null) {
-			if (other.bancos != null)
-				return false;
-		} else if (!bancos.equals(other.bancos))
-			return false;
 		if (cantidadCajas != other.cantidadCajas)
 			return false;
 		if (carniceria != other.carniceria)
@@ -325,7 +300,7 @@ public class Comercio implements Serializable {
 				return false;
 		} else if (!razonSocial.equals(other.razonSocial))
 			return false;
-		if (roticeriia != other.roticeriia)
+		if (roticeria != other.roticeria)
 			return false;
 		if (rut != other.rut)
 			return false;

@@ -14,8 +14,10 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 import com.uy.nos.financiarte.controller.RegistroComercio;
+import com.uy.nos.financiarte.model.Ciudad;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Comercio;
+import com.uy.nos.financiarte.model.Departamento;
 
 
 @ManagedBean
@@ -29,6 +31,9 @@ public class ComercioBean {
 	private List<Cliente> clientesFiltrados;
 	private List<Comercio> comerciosCliente;
 	private boolean mostrarComerciosCliente = false;
+	private Departamento deptoSeleccionado;
+	private Ciudad ciudadSeleccionada;
+	private List<Ciudad> ciudadesDisponibles;
 	
 	public boolean isMostrarComerciosCliente() {
 		return mostrarComerciosCliente;
@@ -62,9 +67,34 @@ public class ComercioBean {
 		this.clientesFiltrados = clientesFiltrados;
 	}
 
+	public Departamento getDeptoSeleccionado() {
+		return deptoSeleccionado;
+	}
+
+	public void setDeptoSeleccionado(Departamento deptoSeleccionado) {
+		this.deptoSeleccionado = deptoSeleccionado;
+	}
+
+	public Ciudad getCiudadSeleccionada() {
+		return ciudadSeleccionada;
+	}
+
+	public void setCiudadSeleccionada(Ciudad ciudadSeleccionada) {
+		this.ciudadSeleccionada = ciudadSeleccionada;
+	}
+
+	public List<Ciudad> getCiudadesDisponibles() {
+		return ciudadesDisponibles;
+	}
+
+	public void setCiudadesDisponibles(List<Ciudad> ciudadesDisponibles) {
+		this.ciudadesDisponibles = ciudadesDisponibles;
+	}
+
 	public void registrar() {
 		try {
-			registroComercio.registro(clienteSeleccionado);
+			registroComercio.registro(clienteSeleccionado, deptoSeleccionado);
+			setComerciosCliente(registroComercio.comerciosPorCliente(clienteSeleccionado.getId()));
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -95,6 +125,7 @@ public class ComercioBean {
 	public void eliminar(Long id) {
 		try {
 			registroComercio.eliminar(id);
+			setComerciosCliente(registroComercio.comerciosPorCliente(clienteSeleccionado.getId()));
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -139,6 +170,14 @@ public class ComercioBean {
         Long idCliente = ((Cliente) event.getObject()).getId();
         setComerciosCliente(registroComercio.comerciosPorCliente(idCliente));
         setMostrarComerciosCliente(true);
+        System.out.println("Cantidad de comercios del cliente " + idCliente + " = " + comerciosCliente.size());
+    }
+    
+    public void obtenerCiudadesPorDepto(){
+    	setCiudadesDisponibles(registroComercio.obtenerCiudadesPorDepto(deptoSeleccionado.getId()));
+    	System.out.println("Cantidad de ciudades encontradas : " + ciudadesDisponibles.size());
+    	
     }
 	
+    
 }

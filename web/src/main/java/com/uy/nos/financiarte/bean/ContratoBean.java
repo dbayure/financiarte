@@ -114,7 +114,7 @@ public class ContratoBean {
 
 	public void registrar() {
 		try {
-			if (registroContrato.registro(clienteSeleccionado, proveedorSeleccionado, montoPrestamo, diasSinInteres, pagoMinimo, plazoPago, interes)){
+			if (registroContrato.registro(clienteSeleccionado, proveedorSeleccionado, montoPrestamo, diasSinInteres, pagoMinimo, plazoPago, interes, tipo)){
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El contrato fue registrado con éxito ", "");  
 		        FacesContext.getCurrentInstance().addMessage(null, msg);
 		        recargarPagina();
@@ -198,15 +198,65 @@ public class ContratoBean {
 			}
 	}
 	
-    public String onFlowProcess(FlowEvent event) {
-        if(skip) {
+	public String onFlowProcess(FlowEvent event) {
+	    if(skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
         }
         else {
+        	if(event.getOldStep().equals("cliente")){
+        		System.out.println("Estoy en el paso cliente ");
+        		if(clienteSeleccionado == null){
+    				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un cliente para proseguir", "");  
+    	            FacesContext.getCurrentInstance().addMessage(null, msg);
+    	            return "cliente";
+    	    	}
+        	}
+        	if(event.getOldStep().equals("proveedor")){
+        		System.out.println("Estoy en el paso proveedor ");
+	        	if(proveedorSeleccionado == null){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un proveedor para proseguir", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "proveedor";
+		    	}
+        	}
+        	if(event.getOldStep().equals("contrato")){
+        		System.out.println("Estoy en el paso contrato " );
+	        	if(montoPrestamo == 0){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el prestamo", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "contrato";
+		    	}
+	        	if(pagoMinimo == 0){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el pago mínimo", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "contrato";
+		    	}
+	        	if(diasSinInteres == 0){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para los días sin interés", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "contrato";
+		    	}
+	        	if(plazoPago == 0){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el plazo de pago", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "contrato";
+		    	}
+	        	if(interes == null){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el interés", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "contrato";
+		    	}
+	        	if(tipo == null){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el tipo de contrato", "");  
+		            FacesContext.getCurrentInstance().addMessage(null, msg);
+		            return "contrato";
+		    	}
+        	}
             return event.getNewStep();
+            
         }
-    }
+	}
     
     public void recargarPagina() throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
