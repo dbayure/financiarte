@@ -219,6 +219,13 @@ public class ContratoBean {
 		            FacesContext.getCurrentInstance().addMessage(null, msg);
 		            return "proveedor";
 		    	}
+	        	else{
+	        		if (registroContrato.buscarContratoDuplicado(clienteSeleccionado.getId(), proveedorSeleccionado.getId())){
+	        			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error ya existe un contrato para el cliente y proveedor seleccionados ", "");  
+	        	        FacesContext.getCurrentInstance().addMessage(null, msg); 
+	        	        return "proveedor";
+	        		}
+	        	}
         	}
         	if(event.getOldStep().equals("contrato")){
         		System.out.println("Estoy en el paso contrato " );
@@ -262,5 +269,5 @@ public class ContratoBean {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 	    ec.redirect(ec.getRequestContextPath() + "/proveedor/contratos/contratos.jsf");
     }
-	
+
 }

@@ -118,4 +118,13 @@ public class RegistroContrato {
 			   
 	   }
 	   
+	   public boolean buscarContratoDuplicado(Long cliente, Long proveedor){
+		   if (clp.getContratosDuplicados(cliente,proveedor) == null){
+			   return false;
+		   }
+		   else{
+			   return true;
+		   }
+		   
+	   }
 }

@@ -82,7 +82,8 @@
 						 			 styleClass="ui-panelgrid-blank">
 									
 							<label>Monto Prestamo: </label>
-							<p:inputText id="monto" value="#{contratoBean.montoPrestamo}" label="monto"/>
+							<p:inputText id="monto" value="#{contratoBean.montoPrestamo}" label="monto"
+										 required="true" requiredMessage="ingrese el monto"/>
 								
 							<label>Pago Mínimo: </label>
 							<p:inputText id="pm" value="#{contratoBean.pagoMinimo}" label="pago" />								
@@ -153,7 +154,7 @@
               						columnClasses="ui-grid-col-11,ui-grid-col-1" 
 				 			 		styleClass="ui-panelgrid-blank">
 				 			<label></label>
-				 			<p:commandButton value="Confirmar" actionListener="#{contratoBean.registrar}" ajax="false" update="@form" process="@this"/>
+				 			<p:commandButton value="Confirmar" actionListener="#{contratoBean.registrar}" ajax="true" update="@form" process="@this"/>
 				 		</h:panelGrid>
 
             	</p:tab>
