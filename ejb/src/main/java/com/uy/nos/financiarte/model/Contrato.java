@@ -56,7 +56,7 @@ public class Contrato implements Serializable {
 	private Proveedor proveedor;
 	
     @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
-    private Set<solicitudCredito> solicitudes;  
+    private Set<SolicitudCredito> solicitudes;  
     
     @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
     private Set<Devolucion> devoluciones;  
@@ -71,7 +71,7 @@ public class Contrato implements Serializable {
     private Set<PagoMedioPago> pagos;
 
     public Contrato (){
-    	solicitudes = new HashSet<solicitudCredito>();
+    	solicitudes = new HashSet<SolicitudCredito>();
     	devoluciones = new HashSet<Devolucion>();
     	facturas = new HashSet<Factura>();
     	notas = new HashSet<NotaCredito>();
@@ -166,11 +166,11 @@ public class Contrato implements Serializable {
 		this.proveedor = proveedor;
 	}
 
-	public Set<solicitudCredito> getSolicitudes() {
+	public Set<SolicitudCredito> getSolicitudes() {
 		return solicitudes;
 	}
 
-	public void setSolicitudes(Set<solicitudCredito> solicitudes) {
+	public void setSolicitudes(Set<SolicitudCredito> solicitudes) {
 		this.solicitudes = solicitudes;
 	}
 

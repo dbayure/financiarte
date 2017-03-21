@@ -46,4 +46,14 @@ public class ClienteListProducer {
       clientes = em.createQuery(criteria).getResultList();
    }
    
+   public Cliente obtenerClientePorUsuario(String usuario) {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Cliente> criteria = cb.createQuery(Cliente.class);
+      Root<Cliente> cliente = criteria.from(Cliente.class);
+      criteria.select(cliente);
+      criteria.where(cb.equal(cliente.get("usuario"), usuario));
+      Cliente c = em.createQuery(criteria).getSingleResult();
+      return c;
+   }
+   
 }

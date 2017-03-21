@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.uy.nos.financiarte.model.solicitudCredito;
+import com.uy.nos.financiarte.model.SolicitudCredito;
 
 
 
-@FacesConverter(forClass = solicitudCredito.class, value = "pagoClienteConverter")
+@FacesConverter(forClass = SolicitudCredito.class, value = "pagoClienteConverter")
 public class SolicitudCreditoConverter implements Converter {
 
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -24,12 +24,12 @@ public class SolicitudCreditoConverter implements Converter {
 			value = ((HttpServletRequest) context.getExternalContext().getRequest()).getParameter(component.getClientId()+"_input");
 //			return null;
 		}
-		solicitudCredito pago = null;
+		SolicitudCredito pago = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();	
 			pago = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
-					+ "/rest/pagosCliente/" + value), solicitudCredito.class);
+					+ "/rest/pagosCliente/" + value), SolicitudCredito.class);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class SolicitudCreditoConverter implements Converter {
 		if (value == null || value.equals("")) {
             return "";
         } else {
-        	return String.valueOf( ((solicitudCredito)value).getId()  );
+        	return String.valueOf( ((SolicitudCredito)value).getId()  );
         }
 	}
 

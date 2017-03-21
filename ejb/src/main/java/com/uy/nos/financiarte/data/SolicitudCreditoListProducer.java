@@ -14,7 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import com.uy.nos.financiarte.model.solicitudCredito;
+import com.uy.nos.financiarte.model.SolicitudCredito;
 
 
 
@@ -24,35 +24,35 @@ public class SolicitudCreditoListProducer {
    @Inject
    private EntityManager em;
 
-   private List<solicitudCredito> pagosCliente;
+   private List<SolicitudCredito> pagosCliente;
 
 
    @Produces
    @Named
-   public List<solicitudCredito> getPagosCliente() {
+   public List<SolicitudCredito> getPagosCliente() {
       return pagosCliente;
    }
 
-   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final solicitudCredito pagoCliente) {
+   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final SolicitudCredito pagoCliente) {
 	      retrieveAllOrderedByName();
    }
 
    @PostConstruct
    public void retrieveAllOrderedByName() {
       CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<solicitudCredito> criteria = cb.createQuery(solicitudCredito.class);
-      Root<solicitudCredito> pagoCliente = criteria.from(solicitudCredito.class);
+      CriteriaQuery<SolicitudCredito> criteria = cb.createQuery(SolicitudCredito.class);
+      Root<SolicitudCredito> pagoCliente = criteria.from(SolicitudCredito.class);
       criteria.select(pagoCliente).orderBy(cb.asc(pagoCliente.get("pagoCliente")));
       pagosCliente = em.createQuery(criteria).getResultList();
    }
    
-   public List<solicitudCredito> getPagoClientePorContrato(Long idContrato) {
+   public List<SolicitudCredito> getPagoClientePorContrato(Long idContrato) {
       CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<solicitudCredito> criteria = cb.createQuery(solicitudCredito.class);
-      Root<solicitudCredito> pagoCliente = criteria.from(solicitudCredito.class);
+      CriteriaQuery<SolicitudCredito> criteria = cb.createQuery(SolicitudCredito.class);
+      Root<SolicitudCredito> pagoCliente = criteria.from(SolicitudCredito.class);
       criteria.select(pagoCliente);
       criteria.where(cb.equal(pagoCliente.get("contrato"), idContrato));
-      List<solicitudCredito> pc = em.createQuery(criteria).getResultList();
+      List<SolicitudCredito> pc = em.createQuery(criteria).getResultList();
       return pc;
    }
 }

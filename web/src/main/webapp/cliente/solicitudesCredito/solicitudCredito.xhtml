@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h:form id="form" prependId="false">
+			<h3 class="text-muted">Solicitar Crédito</h3>
+			<hr color="blue" style="height: 0px" />
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	    		<h:panelGrid columns="2" style="margin: 0 auto;" cellpadding="15">
+	        		<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	     		</h:panelGrid>   
+	   		 </p:confirmDialog>
+
+			<p:messages id="messages" showDetail="false" autoUpdate="true"
+				closable="true" />
+				
+			<p:dataTable id="proveedores" var="_pro" value="#{proveedores}" editable="false" style="text-align:center; text-transform: capitalize;" 
+			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_pro.id}" rowKey="#{_pro.id}" 
+			  			 rowIndexVar="#{_pro.id}" selectionMode="single" selection="#{solicitudCreditoBean.proveedorSeleccionado}">
+		
+	        	 <p:column headerText="Nombre" filterBy="#{_pro.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_pro.nombre}" />
+	           	 </p:column>  
+	           	 
+	        	 <p:column headerText="RUT" filterBy="#{_pro.rut}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_pro.rut}" />
+	             </p:column>  
+			           	 
+			</p:dataTable>	
+			<p:dataTable id="facturas" var="_fac" value="#{solicitudCreditoBean.facturasPendientes}" editable="false" style="text-align:center; text-transform: capitalize;" 
+			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}" rowKey="#{_fac.id}" 
+			  			 rowIndexVar="#{_fac.id}" selectionMode="single" selection="#{solicitudCreditoBean.facturaSeleccionada}">
+		
+	        	 <p:column headerText="Serie" filterBy="#{_fac.numeroSerie}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_fac.numeroSerie}" />
+	           	 </p:column>  
+	           	 
+	        	 <p:column headerText="Fecha" filterBy="#{_fac.fecha}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_fac.fecha}" />
+	             </p:column>  
+	           	 
+	           	 <p:column headerText="Artículos" filterBy="#{_fac.cantidadArticulos}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_cli.correo}" />
+	           	 </p:column>   
+	           	 
+	           	 <p:column headerText="Monto" filterBy="#{_fac.monto}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_fac.monto}" />
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Estado" filterBy="#{_fac.estados.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_fac.estados.nombre}" />
+	           	 </p:column>  
+	           	 
+	           	 <p:column headerText="Acreditar" >
+		        	<p:commandButton id="acreditar" update=":form" immediate="true" ajax="true" icon="ui-icon-plus" value="Acreditar"
+		        					 actionListener="#{solicitudCreditoBean.registrar}">
+		     		</p:commandButton>	        	
+		        </p:column>
+			           	 
+			</p:dataTable>
+		</h:form>
+	
+	</ui:define>
+</ui:composition>

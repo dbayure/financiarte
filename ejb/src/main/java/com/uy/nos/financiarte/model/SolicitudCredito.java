@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @Table(name = "solicitudesCredito")
-public class solicitudCredito implements Serializable {
+public class SolicitudCredito implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -98,7 +98,7 @@ public class solicitudCredito implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		solicitudCredito other = (solicitudCredito) obj;
+		SolicitudCredito other = (SolicitudCredito) obj;
 		if (contrato == null) {
 			if (other.contrato != null)
 				return false;

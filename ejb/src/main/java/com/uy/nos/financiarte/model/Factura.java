@@ -35,6 +35,10 @@ public class Factura implements Serializable {
 	private int cantidadArticulos;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="estados")
+	private Estado estados;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="contrato")
 	private Contrato contrato;
 
@@ -86,6 +90,14 @@ public class Factura implements Serializable {
 		this.cantidadArticulos = cantidadArticulos;
 	}
 
+	public Estado getEstados() {
+		return estados;
+	}
+
+	public void setEstados(Estado estados) {
+		this.estados = estados;
+	}
+
 	public Contrato getContrato() {
 		return contrato;
 	}
@@ -105,6 +117,7 @@ public class Factura implements Serializable {
 		result = prime * result + cantidadArticulos;
 		result = prime * result + ((contrato == null) ? 0 : contrato.hashCode());
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((estados == null) ? 0 : estados.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + (int) (monto ^ (monto >>> 32));
@@ -133,6 +146,11 @@ public class Factura implements Serializable {
 				return false;
 		} else if (!descripcion.equals(other.descripcion))
 			return false;
+		if (estados == null) {
+			if (other.estados != null)
+				return false;
+		} else if (!estados.equals(other.estados))
+			return false;
 		if (fecha == null) {
 			if (other.fecha != null)
 				return false;
@@ -150,5 +168,5 @@ public class Factura implements Serializable {
 		return true;
 	}
 
-
+	
 }

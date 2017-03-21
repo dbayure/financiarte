@@ -49,7 +49,7 @@ public class RegistroContrato {
 	   public boolean registro(Cliente cliente, Proveedor proveedor, long montoPrestamo, int diasInteres, long pagoMinimo, int plazoPago, Interes interes, TipoContrato tipo) throws Exception {
 	      log.info("Registro " + newContrato.getId());
 	      boolean seAgrega = false;
-	      if (clp.getContratosDuplicados(cliente.getId(), proveedor.getId()).isEmpty()){
+	      if (clp.getContratoPorClienteProveedor(cliente.getId(), proveedor.getId()) == null){
 	    	  Calendar today = Calendar.getInstance();
 		      today.set(Calendar.HOUR_OF_DAY, 0);
 		      newContrato.setFecha(today);
@@ -119,7 +119,7 @@ public class RegistroContrato {
 	   }
 	   
 	   public boolean buscarContratoDuplicado(Long cliente, Long proveedor){
-		   if (clp.getContratosDuplicados(cliente,proveedor) == null){
+		   if (clp.getContratoPorClienteProveedor(cliente,proveedor) == null){
 			   return false;
 		   }
 		   else{
