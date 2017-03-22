@@ -20,19 +20,26 @@
 			<p:messages id="messages" showDetail="false" autoUpdate="true"
 				closable="true" />
 				
-			<p:dataTable id="proveedores" var="_pro" value="#{proveedores}" editable="false" style="text-align:center; text-transform: capitalize;" 
-			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_pro.id}" rowKey="#{_pro.id}" 
-			  			 rowIndexVar="#{_pro.id}" selectionMode="single" selection="#{solicitudCreditoBean.proveedorSeleccionado}">
+			<p:dataTable id="contratos" var="_con" value="#{solicitudCreditoBean.contratosDisponibles}" editable="false" style="text-align:center; text-transform: capitalize;" 
+			 			 reflow="true" emptyMessage="No existen contratos activos ." sortBy="#{_con.id}" rowKey="#{_con.id}" 
+			  			 rowIndexVar="#{_con.id}" selectionMode="single" selection="#{solicitudCreditoBean.contratoSeleccionado}">
+			  	
+			  	<p:ajax event="rowSelect" listener="#{solicitudCreditoBean.onRowSelect}" update=":form:facturas" />
 		
-	        	 <p:column headerText="Nombre" filterBy="#{_pro.nombre}" filterMatchMode="contains" >  
-	             	<h:outputText value="#{_pro.nombre}" />
+	        	 <p:column headerText="Cliente" filterBy="#{_con.cliente.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_con.cliente.nombre}" />
 	           	 </p:column>  
 	           	 
-	        	 <p:column headerText="RUT" filterBy="#{_pro.rut}" filterMatchMode="contains" >  
-	             	<h:outputText value="#{_pro.rut}" />
+	        	 <p:column headerText="Proveedor" filterBy="#{_con.proveedor.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_con.proveedor.nombre}" />
 	             </p:column>  
+	             
+	        	 <p:column headerText="RUT Proveedor" filterBy="#{_con.proveedor.rut}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_con.proveedor.rut}" />
+	             </p:column>  	             
 			           	 
 			</p:dataTable>	
+			<br/>
 			<p:dataTable id="facturas" var="_fac" value="#{solicitudCreditoBean.facturasPendientes}" editable="false" style="text-align:center; text-transform: capitalize;" 
 			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}" rowKey="#{_fac.id}" 
 			  			 rowIndexVar="#{_fac.id}" selectionMode="single" selection="#{solicitudCreditoBean.facturaSeleccionada}">

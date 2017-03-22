@@ -45,4 +45,5 @@ public class ProveedorListProducer {
       criteria.select(proveedor).orderBy(cb.asc(proveedor.get("id")));
       proveedores = em.createQuery(criteria).getResultList();
    }
+   
 }

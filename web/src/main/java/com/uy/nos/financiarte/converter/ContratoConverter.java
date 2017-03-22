@@ -33,7 +33,7 @@ public class ContratoConverter implements Converter {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Comercio no válido"));
+			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Contrato no válido"));
 		}
 		return contrato;
 	}

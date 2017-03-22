@@ -17,10 +17,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 
 @Entity
 @XmlRootElement
 @Table(name = "contratos")
+@JsonIgnoreProperties({"solicitudes","devoluciones","facturas","notas","pagos"})
 public class Contrato implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import com.uy.nos.financiarte.data.ContratoListProducer;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
+import com.uy.nos.financiarte.model.Estado;
 import com.uy.nos.financiarte.model.Interes;
 import com.uy.nos.financiarte.model.Proveedor;
 import com.uy.nos.financiarte.model.TipoContrato;
@@ -52,6 +53,7 @@ public class RegistroContrato {
 	      if (clp.getContratoPorClienteProveedor(cliente.getId(), proveedor.getId()) == null){
 	    	  Calendar today = Calendar.getInstance();
 		      today.set(Calendar.HOUR_OF_DAY, 0);
+		      Estado estado = em.find(Estado.class, 2);
 		      newContrato.setFecha(today);
 		      newContrato.setCliente(cliente);
 		      newContrato.setProveedor(proveedor);
@@ -61,6 +63,7 @@ public class RegistroContrato {
 		      newContrato.setPagoMinimo(pagoMinimo);
 		      newContrato.setPlazoPago(plazoPago);
 		      newContrato.setTiposContrato(tipo);
+		      newContrato.setEstados(estado);
 		      em.persist(newContrato);
 		      contratoEventSrc.fire(newContrato);
 		      initNewComercio();

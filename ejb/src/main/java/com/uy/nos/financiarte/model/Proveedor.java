@@ -10,9 +10,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 @Entity
 @XmlRootElement
 @Table(name = "proveedores")
+@JsonIgnoreProperties({"contratos"})
 public class Proveedor extends Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;

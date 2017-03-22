@@ -21,6 +21,7 @@ INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('1', 'ADM
 INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('2', 'PROVEEDOR', 'PROVEEDOR');
 INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('3', 'CLIENTE', 'CLIENTE');
 INSERT INTO `financiarte`.`usuarios` (`id`, `correo`, `nombre`, `password`, `telefono`, `usuario`, `rol`) VALUES ('1', 'admin@financiarte.com.uy', 'admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'admin', '1');
+INSERT INTO estados VALUES (1,'activo','activo'),(2,'inactivo', 'inactivo'),(3, 'creada', 'creada'),(4, 'moroso', 'moroso'),(5 ,'entregada', 'entregada');
 INSERT INTO `paises` VALUES (1,'Uruguay');
 INSERT INTO `departamentos` VALUES (1,'Montevideo',1),(2,'Canelones',1),
 (3,'Maldonado',1),(4,'Rocha',1),(5,'Treinta y Tres',1),(6,'Cerro Largo',1),

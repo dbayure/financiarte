@@ -10,8 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import com.uy.nos.financiarte.data.BancoListProducer;
-import com.uy.nos.financiarte.model.Banco;
+import com.uy.nos.financiarte.data.CuentaCorrienteListProducer;
+import com.uy.nos.financiarte.model.CuentaCorriente;
 
 
 
@@ -28,11 +28,11 @@ public class CuentaCorrienteResourceRESTService {
    private EntityManager em;
    
    @Inject
-   private BancoListProducer bancos;
+   private CuentaCorrienteListProducer cuentas;
 
    @GET
    @Produces("application/json")
-   public List<Banco> listAll() {
+   public List<CuentaCorriente> listAll() {
       // Use @SupressWarnings to force IDE to ignore warnings about "genericizing" the results of
       // this query
       @SuppressWarnings("unchecked")
@@ -40,14 +40,14 @@ public class CuentaCorrienteResourceRESTService {
       // the @Entity class
       // as described in the named query blueprint:
       // https://blueprints.dev.java.net/bpcatalog/ee5/persistence/namedquery.html
-      final List<Banco> results = bancos.getBancos();
+      final List<CuentaCorriente> results = cuentas.getCuentasCorriente();
       return results;
    }
 
    @GET
    @Path("/{id:[0-9][0-9]*}")
    @Produces("application/json")
-   public Banco lookupById(@PathParam("id") long id) {
-      return em.find(Banco.class, id);
+   public CuentaCorriente lookupById(@PathParam("id") long id) {
+      return em.find(CuentaCorriente.class, id);
    }
 }

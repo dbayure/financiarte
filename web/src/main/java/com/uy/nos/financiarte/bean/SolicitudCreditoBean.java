@@ -1,7 +1,9 @@
 package com.uy.nos.financiarte.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -28,6 +30,7 @@ import com.uy.nos.financiarte.model.SolicitudCredito;
 public class SolicitudCreditoBean {
 	
 	private List<Factura> facturasPendientes;
+	private List<Contrato> contratosDisponibles;
 	private Factura facturaSeleccionada;
 	private Proveedor proveedorSeleccionado;
 	private Cliente clienteSeleccionado;
@@ -73,8 +76,22 @@ public class SolicitudCreditoBean {
 		this.contratoSeleccionado = contratoSeleccionado;
 	}
 
+	public List<Contrato> getContratosDisponibles() {
+		return contratosDisponibles;
+	}
+
+	public void setContratosDisponibles(List<Contrato> contratosDisponibles) {
+		this.contratosDisponibles = contratosDisponibles;
+	}
+
+
 	@Inject
 	private RegistroSolicitudCredito registroSolicitudCredito;
+	
+	@PostConstruct
+	public void init() {
+		generarListaProveedores();
+	}
 	
 	public void registrar() {
 		try {
@@ -151,14 +168,25 @@ public class SolicitudCreditoBean {
 	}
 	
 	public void onRowSelect(SelectEvent event) {
-    	String cli = SecurityContextAssociation.getPrincipal().getName();
-    	setClienteSeleccionado(registroSolicitudCredito.obtenerClientePorUsuario(cli));
     	generarListaFacturasPendientes();
-    	setContratoSeleccionado(registroSolicitudCredito.obtenerContatoAsociado(clienteSeleccionado.getId(), proveedorSeleccionado.getId()));
     }
 	
 	public void generarListaFacturasPendientes(){
-		setFacturasPendientes(registroSolicitudCredito.obtenerFacturasPorContrato(clienteSeleccionado.getId(), proveedorSeleccionado.getId()));
+		List<Factura> facturas = new ArrayList<Factura>();
+		facturas = registroSolicitudCredito.obtenerFacturasPorContrato(contratoSeleccionado.getId());
+		if (facturas.size() > 0){
+			setFacturasPendientes(facturas);
+		}
+	}
+	
+	public void generarListaProveedores(){
+		String cli = SecurityContextAssociation.getPrincipal().getName();
+    	setClienteSeleccionado(registroSolicitudCredito.obtenerClientePorUsuario(cli));
+    	List<Contrato> contratos = registroSolicitudCredito.obtenerContatosPorCliente(clienteSeleccionado.getId());
+    	if(contratos.size() > 0){
+    		setContratosDisponibles(contratos);
+    	}
+    	
 	}
 
 }

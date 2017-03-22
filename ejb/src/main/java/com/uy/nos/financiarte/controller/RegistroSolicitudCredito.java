@@ -1,5 +1,6 @@
 package com.uy.nos.financiarte.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -90,9 +91,10 @@ public class RegistroSolicitudCredito {
 		   newSolicitudCredito = new SolicitudCredito();
 	   }
 
-	   public List<Factura> obtenerFacturasPorContrato(Long idCliente, Long idProveedor){
-		   Contrato contrato = clp.getContratoPorClienteProveedor(idCliente, idProveedor);
-		   List<Factura> facturas = flp.getFacturaPorContrato(contrato.getId());
+	   public List<Factura> obtenerFacturasPorContrato(Long idCcontrato){
+		   List<Factura> facturas = new ArrayList<Factura>();
+		   System.out.println("id del contrato " + idCcontrato);
+		   facturas = flp.getFacturaPorContrato(idCcontrato);
 		   return facturas;
 	   }
 	   
@@ -100,8 +102,9 @@ public class RegistroSolicitudCredito {
 		   return clilp.obtenerClientePorUsuario(usuario);
 	   }
 	   
-	   public Contrato obtenerContatoAsociado(Long idCliente, Long idProveedor){
-		   Contrato contrato = clp.getContratoPorClienteProveedor(idCliente, idProveedor);
-		   return contrato;
+	   public List<Contrato> obtenerContatosPorCliente(Long idCliente){
+		   List<Contrato> contratos = clp.getContratosPorCliente(idCliente);
+		   return contratos;
 	   }
+	   
 }
