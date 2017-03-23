@@ -23,7 +23,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @Entity
 @XmlRootElement
 @Table(name = "contratos")
-@JsonIgnoreProperties({"solicitudes","devoluciones","facturas","notas","pagos"})
+@JsonIgnoreProperties({"solicitudes","devoluciones","facturas","notas","pagos","interes",
+	"estados","tiposContrato","cliente","proveedor"})
 public class Contrato implements Serializable {
 
 	private static final long serialVersionUID = 1L;

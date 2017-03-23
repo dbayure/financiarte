@@ -1,3 +1,4 @@
+
 package com.uy.nos.financiarte.data;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class FacturaListProducer {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Factura> criteria = cb.createQuery(Factura.class);
       Root<Factura> factura = criteria.from(Factura.class);
-      criteria.select(factura).orderBy(cb.asc(factura.get("factura")));
+      criteria.select(factura).orderBy(cb.asc(factura.get("id")));
       facturas = em.createQuery(criteria).getResultList();
    }
    
@@ -56,4 +57,5 @@ public class FacturaListProducer {
       List<Factura> fac = em.createQuery(criteria).getResultList();
       return fac;
    }
+   
 }

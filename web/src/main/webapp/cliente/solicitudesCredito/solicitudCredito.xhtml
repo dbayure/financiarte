@@ -17,8 +17,7 @@
 	     		</h:panelGrid>   
 	   		 </p:confirmDialog>
 
-			<p:messages id="messages" showDetail="false" autoUpdate="true"
-				closable="true" />
+			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 				
 			<p:dataTable id="contratos" var="_con" value="#{solicitudCreditoBean.contratosDisponibles}" editable="false" style="text-align:center; text-transform: capitalize;" 
 			 			 reflow="true" emptyMessage="No existen contratos activos ." sortBy="#{_con.id}" rowKey="#{_con.id}" 
@@ -41,19 +40,20 @@
 			</p:dataTable>	
 			<br/>
 			<p:dataTable id="facturas" var="_fac" value="#{solicitudCreditoBean.facturasPendientes}" editable="false" style="text-align:center; text-transform: capitalize;" 
-			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}" rowKey="#{_fac.id}" 
-			  			 rowIndexVar="#{_fac.id}" selectionMode="single" selection="#{solicitudCreditoBean.facturaSeleccionada}">
+			 			 reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_fac.id}" rowKey="#{_fac.id}" >
 		
 	        	 <p:column headerText="Serie" filterBy="#{_fac.numeroSerie}" filterMatchMode="contains" >  
 	             	<h:outputText value="#{_fac.numeroSerie}" />
 	           	 </p:column>  
 	           	 
 	        	 <p:column headerText="Fecha" filterBy="#{_fac.fecha}" filterMatchMode="contains" >  
-	             	<h:outputText value="#{_fac.fecha}" />
+	             	<h:outputText value="#{_fac.fecha}" >
+	             		    <f:convertDateTime pattern="dd-MM-yyyy" />
+	                </h:outputText>
 	             </p:column>  
 	           	 
 	           	 <p:column headerText="Artículos" filterBy="#{_fac.cantidadArticulos}" filterMatchMode="contains" >  
-	             	<h:outputText value="#{_cli.correo}" />
+	             	<h:outputText value="#{_fac.cantidadArticulos}" />
 	           	 </p:column>   
 	           	 
 	           	 <p:column headerText="Monto" filterBy="#{_fac.monto}" filterMatchMode="contains" >  
@@ -64,13 +64,59 @@
 	             	<h:outputText value="#{_fac.estados.nombre}" />
 	           	 </p:column>  
 	           	 
-	           	 <p:column headerText="Acreditar" >
-		        	<p:commandButton id="acreditar" update=":form" immediate="true" ajax="true" icon="ui-icon-plus" value="Acreditar"
-		        					 actionListener="#{solicitudCreditoBean.registrar}">
-		     		</p:commandButton>	        	
-		        </p:column>
+	           	<p:column headerText="Acreditar">
+             		<p:commandButton update=":form:facDetail" oncomplete="PF('facDialog').show()" icon="ui-icon-plus" title="Acreditar">
+                		<f:setPropertyActionListener value="#{_fac}" target="#{solicitudCreditoBean.facturaSeleccionada}" />
+            		</p:commandButton>
+        		</p:column>
 			           	 
 			</p:dataTable>
+			
+			 <p:dialog widgetVar="facDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+			 
+			 	<p:outputPanel id="facDetail">
+			 	
+			  		<p:messages id="msgFac" showDetail="false" autoUpdate="true" closable="true" />
+			  		
+			        <div class="panel panel-default">
+			        
+			        	<div class="panel-heading">Confirmar solicitud de crédito</div>
+			        	
+			        	<div class="panel-body">
+			        	
+					 		<div class="row">
+					 		
+					 			<div class="col-md-6" align="left">
+					 			
+			 			 			<h3><kbd>Factura</kbd></h3>
+									<h4 >Fecha: #{solicitudCreditoBean.facturaSeleccionada.fecha}</h4>
+									<h4 >Serie: #{solicitudCreditoBean.facturaSeleccionada.numeroSerie}</h4>
+									<h4	>Artículos: #{solicitudCreditoBean.facturaSeleccionada.cantidadArticulos}</h4>
+									<h4 >Monto: #{solicitudCreditoBean.facturaSeleccionada.monto}</h4>
+								
+								</div>
+					 		</div>	 	
+					 		
+					 		<div class="row">
+					 		
+					 			<div class="col-md-6" align="left">
+						 			<h4 >PIN:</h4>
+									<p:password id="pin" value="#{solicitudCreditoBean.pin}" required="true" requiredMessage="Debe ingresar el pin para poder confirmar la solicitud de crédito"/>
+									<h4 >Confirmar:</h4>
+									<p:commandButton value="Confirmar" action="#{solicitudCreditoBean.registrar}" oncomplete="PF('facDialog').hide()" icon="ui-icon-check" title="Confirmar"/>
+								
+								</div>
+								
+					 		</div>	
+					 		
+					 	</div>	
+					 	
+		 			</div>		
+		 			
+	 			</p:outputPanel>
+	 					
+    		</p:dialog>
+    		
 		</h:form>
 	
 	</ui:define>

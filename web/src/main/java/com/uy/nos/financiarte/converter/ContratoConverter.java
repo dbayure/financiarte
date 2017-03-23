@@ -11,6 +11,7 @@ import javax.faces.convert.FacesConverter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 
 import com.uy.nos.financiarte.model.Contrato;
 
@@ -27,6 +28,7 @@ public class ContratoConverter implements Converter {
 		Contrato contrato = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();	
+			mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
 			contrato = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
 					+ "/rest/contratos/" + value), Contrato.class);

@@ -35,6 +35,7 @@ public class SolicitudCreditoBean {
 	private Proveedor proveedorSeleccionado;
 	private Cliente clienteSeleccionado;
 	private Contrato contratoSeleccionado;
+	private String pin;
 
 	public List<Factura> getFacturasPendientes() {
 		return facturasPendientes;
@@ -49,6 +50,7 @@ public class SolicitudCreditoBean {
 	}
 
 	public void setFacturaSeleccionada(Factura facturaSeleccionada) {
+		System.out.println("factura seleccionada " + facturaSeleccionada.getNumeroSerie());
 		this.facturaSeleccionada = facturaSeleccionada;
 	}
 
@@ -82,6 +84,14 @@ public class SolicitudCreditoBean {
 
 	public void setContratosDisponibles(List<Contrato> contratosDisponibles) {
 		this.contratosDisponibles = contratosDisponibles;
+	}
+
+	public String getPin() {
+		return pin;
+	}
+
+	public void setPin(String pin) {
+		this.pin = pin;
 	}
 
 
