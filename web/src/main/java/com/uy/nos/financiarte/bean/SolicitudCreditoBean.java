@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -26,12 +26,12 @@ import com.uy.nos.financiarte.model.SolicitudCredito;
 
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class SolicitudCreditoBean {
 	
 	private List<Factura> facturasPendientes;
 	private List<Contrato> contratosDisponibles;
-	private Factura facturaSeleccionada;
+	private List<Factura> facturasSeleccionadas;
 	private Proveedor proveedorSeleccionado;
 	private Cliente clienteSeleccionado;
 	private Contrato contratoSeleccionado;
@@ -45,13 +45,13 @@ public class SolicitudCreditoBean {
 		this.facturasPendientes = facturasPendientes;
 	}
 
-	public Factura getFacturaSeleccionada() {
-		return facturaSeleccionada;
+	public List<Factura> getFacturasSeleccionadas() {
+		return facturasSeleccionadas;
 	}
 
-	public void setFacturaSeleccionada(Factura facturaSeleccionada) {
-		System.out.println("factura seleccionada " + facturaSeleccionada.getNumeroSerie());
-		this.facturaSeleccionada = facturaSeleccionada;
+	public void setFacturasSeleccionadas(List<Factura> facturasSeleccionadas) {
+		System.out.println("factura seleccionada " + facturasSeleccionadas.get(0).getDescripcion());
+		this.facturasSeleccionadas = facturasSeleccionadas;
 	}
 
 	public Proveedor getProveedorSeleccionado() {
@@ -105,7 +105,7 @@ public class SolicitudCreditoBean {
 	
 	public void registrar() {
 		try {
-			registroSolicitudCredito.registro(facturaSeleccionada, contratoSeleccionado);
+			registroSolicitudCredito.registro(facturasSeleccionadas, contratoSeleccionado);
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -113,6 +113,7 @@ public class SolicitudCreditoBean {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al registrar ", "");  
         FacesContext.getCurrentInstance().addMessage(null, msg); 
 		}
+		generarListaFacturasPendientes();
 	}
 	
 	public void onEdit(RowEditEvent event) {  

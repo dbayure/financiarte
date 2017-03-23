@@ -46,13 +46,13 @@ public class EstadoListProducer {
       estados = em.createQuery(criteria).getResultList();
    }
    
-   public Estado obtenerEstadoPorNombre(String nombre) {
+   public List<Estado> obtenerEstadoPorNombre(String nombre) {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Estado> criteria = cb.createQuery(Estado.class);
       Root<Estado> estado = criteria.from(Estado.class);
       criteria.select(estado);
-      criteria.where(cb.equal(estado.get("nombre"), estado));
-      Estado e = em.createQuery(criteria).getSingleResult();
+      criteria.where(cb.equal(estado.get("nombre"), nombre));
+      List<Estado> e = em.createQuery(criteria).getResultList();
       return e;
    }
 }
