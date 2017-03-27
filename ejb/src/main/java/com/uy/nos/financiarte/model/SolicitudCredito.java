@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -26,9 +27,22 @@ public class SolicitudCredito implements Serializable {
 	
 	private Date fecha;
 	
-	private long monto;
+	private Date vencimiento;
 	
-	private boolean totalParcial;
+	private float monto;
+	
+	@Transient
+	private float interes;
+	
+	@Transient
+	private float iva;
+	
+	@Transient
+	private float total;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="estado")
+	private Estado estados;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="contrato")
@@ -50,20 +64,52 @@ public class SolicitudCredito implements Serializable {
 		this.fecha = fecha;
 	}
 
-	public long getMonto() {
+	public Date getVencimiento() {
+		return vencimiento;
+	}
+
+	public void setVencimiento(Date vencimiento) {
+		this.vencimiento = vencimiento;
+	}
+
+	public float getMonto() {
 		return monto;
 	}
 
-	public void setMonto(long monto) {
+	public void setMonto(float monto) {
 		this.monto = monto;
 	}
 
-	public boolean isTotalParcial() {
-		return totalParcial;
+	public float getInteres() {
+		return interes;
 	}
 
-	public void setTotalParcial(boolean totalParcial) {
-		this.totalParcial = totalParcial;
+	public void setInteres(float interes) {
+		this.interes = interes;
+	}
+
+	public float getIva() {
+		return iva;
+	}
+
+	public void setIva(float iva) {
+		this.iva = iva;
+	}
+
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
+
+	public Estado getEstados() {
+		return estados;
+	}
+
+	public void setEstados(Estado estados) {
+		this.estados = estados;
 	}
 
 	public Contrato getContrato() {
@@ -82,11 +128,13 @@ public class SolicitudCredito implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((contrato == null) ? 0 : contrato.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (int) (monto ^ (monto >>> 32));
-		result = prime * result + (totalParcial ? 1231 : 1237);
+		result = prime * result + Float.floatToIntBits(interes);
+		result = prime * result + Float.floatToIntBits(iva);
+		result = prime * result + Float.floatToIntBits(monto);
+		result = prime * result + Float.floatToIntBits(total);
+		result = prime * result + ((vencimiento == null) ? 0 : vencimiento.hashCode());
 		return result;
 	}
 
@@ -99,11 +147,6 @@ public class SolicitudCredito implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		SolicitudCredito other = (SolicitudCredito) obj;
-		if (contrato == null) {
-			if (other.contrato != null)
-				return false;
-		} else if (!contrato.equals(other.contrato))
-			return false;
 		if (fecha == null) {
 			if (other.fecha != null)
 				return false;
@@ -114,11 +157,20 @@ public class SolicitudCredito implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (monto != other.monto)
+		if (Float.floatToIntBits(interes) != Float.floatToIntBits(other.interes))
 			return false;
-		if (totalParcial != other.totalParcial)
+		if (Float.floatToIntBits(iva) != Float.floatToIntBits(other.iva))
+			return false;
+		if (Float.floatToIntBits(monto) != Float.floatToIntBits(other.monto))
+			return false;
+		if (Float.floatToIntBits(total) != Float.floatToIntBits(other.total))
+			return false;
+		if (vencimiento == null) {
+			if (other.vencimiento != null)
+				return false;
+		} else if (!vencimiento.equals(other.vencimiento))
 			return false;
 		return true;
 	}
-	
+
 }

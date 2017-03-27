@@ -43,9 +43,10 @@
 		<display-name>Area administrativa</display-name>
 		<web-resource-collection>
 			<web-resource-name>Area Segura administrativa</web-resource-name>
-			<url-pattern>/proveedor/*</url-pattern>
-			<url-pattern>/principal/*</url-pattern>
+			<url-pattern>/cliente/*</url-pattern>
 			<url-pattern>/login/*</url-pattern>
+			<url-pattern>/principal/*</url-pattern>
+			<url-pattern>/proveedor/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>ADMIN</role-name>

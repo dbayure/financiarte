@@ -218,17 +218,12 @@ public class Contrato implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cliente == null) ? 0 : cliente.hashCode());
 		result = prime * result + diasSinInteres;
-		result = prime * result + ((estados == null) ? 0 : estados.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((interes == null) ? 0 : interes.hashCode());
 		result = prime * result + (int) (montoPrestamo ^ (montoPrestamo >>> 32));
 		result = prime * result + (int) (pagoMinimo ^ (pagoMinimo >>> 32));
 		result = prime * result + plazoPago;
-		result = prime * result + ((proveedor == null) ? 0 : proveedor.hashCode());
-		result = prime * result + ((tiposContrato == null) ? 0 : tiposContrato.hashCode());
 		return result;
 	}
 
@@ -241,17 +236,7 @@ public class Contrato implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Contrato other = (Contrato) obj;
-		if (cliente == null) {
-			if (other.cliente != null)
-				return false;
-		} else if (!cliente.equals(other.cliente))
-			return false;
 		if (diasSinInteres != other.diasSinInteres)
-			return false;
-		if (estados == null) {
-			if (other.estados != null)
-				return false;
-		} else if (!estados.equals(other.estados))
 			return false;
 		if (fecha == null) {
 			if (other.fecha != null)
@@ -263,26 +248,11 @@ public class Contrato implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (interes == null) {
-			if (other.interes != null)
-				return false;
-		} else if (!interes.equals(other.interes))
-			return false;
 		if (montoPrestamo != other.montoPrestamo)
 			return false;
 		if (pagoMinimo != other.pagoMinimo)
 			return false;
 		if (plazoPago != other.plazoPago)
-			return false;
-		if (proveedor == null) {
-			if (other.proveedor != null)
-				return false;
-		} else if (!proveedor.equals(other.proveedor))
-			return false;
-		if (tiposContrato == null) {
-			if (other.tiposContrato != null)
-				return false;
-		} else if (!tiposContrato.equals(other.tiposContrato))
 			return false;
 		return true;
 	}

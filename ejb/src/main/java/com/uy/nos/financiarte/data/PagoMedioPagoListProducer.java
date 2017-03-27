@@ -42,7 +42,7 @@ public class PagoMedioPagoListProducer {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<PagoMedioPago> criteria = cb.createQuery(PagoMedioPago.class);
       Root<PagoMedioPago> pagoMedioPago = criteria.from(PagoMedioPago.class);
-      criteria.select(pagoMedioPago).orderBy(cb.asc(pagoMedioPago.get("pagoMedioPago")));
+      criteria.select(pagoMedioPago).orderBy(cb.asc(pagoMedioPago.get("id")));
       pagosMedioPago = em.createQuery(criteria).getResultList();
    }
    

@@ -29,6 +29,8 @@ public class Factura implements Serializable {
 	
 	private Date fecha;
 	
+	private Date vencimiento;
+	
 	private long numeroSerie;
 	
 	private String descripcion;
@@ -37,8 +39,8 @@ public class Factura implements Serializable {
 	
 	private int cantidadArticulos;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="estados")
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="estado")
 	private Estado estados;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -59,6 +61,14 @@ public class Factura implements Serializable {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public Date getVencimiento() {
+		return vencimiento;
+	}
+
+	public void setVencimiento(Date vencimiento) {
+		this.vencimiento = vencimiento;
 	}
 
 	public long getNumeroSerie() {
@@ -118,13 +128,12 @@ public class Factura implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + cantidadArticulos;
-		result = prime * result + ((contrato == null) ? 0 : contrato.hashCode());
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((estados == null) ? 0 : estados.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + (int) (monto ^ (monto >>> 32));
 		result = prime * result + (int) (numeroSerie ^ (numeroSerie >>> 32));
+		result = prime * result + ((vencimiento == null) ? 0 : vencimiento.hashCode());
 		return result;
 	}
 
@@ -139,20 +148,10 @@ public class Factura implements Serializable {
 		Factura other = (Factura) obj;
 		if (cantidadArticulos != other.cantidadArticulos)
 			return false;
-		if (contrato == null) {
-			if (other.contrato != null)
-				return false;
-		} else if (!contrato.equals(other.contrato))
-			return false;
 		if (descripcion == null) {
 			if (other.descripcion != null)
 				return false;
 		} else if (!descripcion.equals(other.descripcion))
-			return false;
-		if (estados == null) {
-			if (other.estados != null)
-				return false;
-		} else if (!estados.equals(other.estados))
 			return false;
 		if (fecha == null) {
 			if (other.fecha != null)
@@ -167,6 +166,11 @@ public class Factura implements Serializable {
 		if (monto != other.monto)
 			return false;
 		if (numeroSerie != other.numeroSerie)
+			return false;
+		if (vencimiento == null) {
+			if (other.vencimiento != null)
+				return false;
+		} else if (!vencimiento.equals(other.vencimiento))
 			return false;
 		return true;
 	}

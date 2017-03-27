@@ -22,6 +22,11 @@ INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('2', 'PRO
 INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('3', 'CLIENTE', 'CLIENTE');
 INSERT INTO `financiarte`.`usuarios` (`id`, `correo`, `nombre`, `password`, `telefono`, `usuario`, `rol`) VALUES ('1', 'admin@financiarte.com.uy', 'admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'admin', '1');
 INSERT INTO estados VALUES (1,'activo','activo'),(2,'inactivo', 'inactivo'),(3, 'creada', 'creada'),(4, 'moroso', 'moroso'),(5 ,'entregada', 'entregada');
+INSERT INTO bancos VALUES (1,'brou', 'brou'),(2,'santander', 'santander'),(3,'itau', 'itau');
+INSERT INTO tarjetas VALUES (1,'visa', 'visa'),(2,'master', 'master'),(3,'oca', 'oca');
+INSERT INTO intereses VALUES (1,14, 'basico'),(2,0, '0'),(3,20, 'mora');
+INSERT INTO mediosPago VALUES (1,'RedPagos', 'RedPagos'),(2,'Contado', 'Contado'),(3,'Cheque', 'Cheque');
+INSERT INTO tiposContrato VALUES (1,'Credito', 'Credito'),(2,'Contado', 'Contado');
 INSERT INTO `paises` VALUES (1,'Uruguay');
 INSERT INTO `departamentos` VALUES (1,'Montevideo',1),(2,'Canelones',1),
 (3,'Maldonado',1),(4,'Rocha',1),(5,'Treinta y Tres',1),(6,'Cerro Largo',1),
@@ -74,5 +79,5 @@ INSERT INTO `ciudades` VALUES (1,'Montevideo',1),(221,'Las Piedras',2),(320,'Can
 (1009,'COLONIA DEL SACRAMENTO',13),(1010,'JUAN ANTONIO ARTIGAS',2),(1011,'PINAR NORTE',2),
 (1012,'DURAZNO',18),(1013,'SAN JOSE DE CARRASCO',14),(1014,'TRINIDAD',15),(1015,'MINAS',17);
 
-
+INSERT INTO facturas VALUES (1,2,'articulos limpieza',STR_TO_DATE('25-03-2017','%d-%m-%Y'),2400,82739238,1,3);
 

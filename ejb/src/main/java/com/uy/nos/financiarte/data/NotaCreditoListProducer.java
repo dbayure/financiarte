@@ -1,3 +1,4 @@
+
 package com.uy.nos.financiarte.data;
 
 import java.util.List;
@@ -24,16 +25,16 @@ public class NotaCreditoListProducer {
    @Inject
    private EntityManager em;
 
-   private List<NotaCredito> notasCredito;
+   private List<NotaCredito> notas;
 
 
    @Produces
    @Named
    public List<NotaCredito> getNotasCredito() {
-      return notasCredito;
+      return notas;
    }
 
-   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final NotaCredito notaCredito) {
+   public void onListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final NotaCredito nota) {
 	      retrieveAllOrderedByName();
    }
 
@@ -41,9 +42,9 @@ public class NotaCreditoListProducer {
    public void retrieveAllOrderedByName() {
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<NotaCredito> criteria = cb.createQuery(NotaCredito.class);
-      Root<NotaCredito> notaCredito = criteria.from(NotaCredito.class);
-      criteria.select(notaCredito).orderBy(cb.asc(notaCredito.get("notaCredito")));
-      notasCredito = em.createQuery(criteria).getResultList();
+      Root<NotaCredito> nota = criteria.from(NotaCredito.class);
+      criteria.select(nota).orderBy(cb.asc(nota.get("id")));
+      notas = em.createQuery(criteria).getResultList();
    }
    
    public List<NotaCredito> getNotaCreditoPorContrato(Long idContrato) {
@@ -55,4 +56,5 @@ public class NotaCreditoListProducer {
       List<NotaCredito> nc = em.createQuery(criteria).getResultList();
       return nc;
    }
+   
 }

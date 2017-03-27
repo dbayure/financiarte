@@ -13,10 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 @Entity
 @XmlRootElement
-@Table(name = "notasCredito")
-public class NotaCredito implements Serializable {
+@Table(name = "transacciones")
+public class Transaccion implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -24,19 +25,11 @@ public class NotaCredito implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="factura")
-	private Factura factura;
-	
-	private long numeroSerie;
-	
-	private long monto;
-	
+	private float monto;
 	private Date fecha;
-	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="estado")
-	private Estado estados;
+	@JoinColumn(name="tipoMovimiento")
+	private TipoMovimiento tipos;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="contrato")
@@ -50,27 +43,11 @@ public class NotaCredito implements Serializable {
 		this.id = id;
 	}
 
-	public Factura getFactura() {
-		return factura;
-	}
-
-	public void setFactura(Factura factura) {
-		this.factura = factura;
-	}
-
-	public long getNumeroSerie() {
-		return numeroSerie;
-	}
-
-	public void setNumeroSerie(long numeroSerie) {
-		this.numeroSerie = numeroSerie;
-	}
-
-	public long getMonto() {
+	public float getMonto() {
 		return monto;
 	}
 
-	public void setMonto(long monto) {
+	public void setMonto(float monto) {
 		this.monto = monto;
 	}
 
@@ -82,12 +59,12 @@ public class NotaCredito implements Serializable {
 		this.fecha = fecha;
 	}
 
-	public Estado getEstados() {
-		return estados;
+	public TipoMovimiento getTipos() {
+		return tipos;
 	}
 
-	public void setEstados(Estado estados) {
-		this.estados = estados;
+	public void setTipos(TipoMovimiento tipos) {
+		this.tipos = tipos;
 	}
 
 	public Contrato getContrato() {
@@ -106,11 +83,9 @@ public class NotaCredito implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((factura == null) ? 0 : factura.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (int) (monto ^ (monto >>> 32));
-		result = prime * result + (int) (numeroSerie ^ (numeroSerie >>> 32));
+		result = prime * result + Float.floatToIntBits(monto);
 		return result;
 	}
 
@@ -122,12 +97,7 @@ public class NotaCredito implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NotaCredito other = (NotaCredito) obj;
-		if (factura == null) {
-			if (other.factura != null)
-				return false;
-		} else if (!factura.equals(other.factura))
-			return false;
+		Transaccion other = (Transaccion) obj;
 		if (fecha == null) {
 			if (other.fecha != null)
 				return false;
@@ -138,11 +108,10 @@ public class NotaCredito implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (monto != other.monto)
-			return false;
-		if (numeroSerie != other.numeroSerie)
+		if (Float.floatToIntBits(monto) != Float.floatToIntBits(other.monto))
 			return false;
 		return true;
 	}
+
 
 }

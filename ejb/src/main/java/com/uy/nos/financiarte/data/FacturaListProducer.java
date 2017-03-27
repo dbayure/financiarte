@@ -48,7 +48,6 @@ public class FacturaListProducer {
    }
    
    public List<Factura> getFacturaPorContrato(Long idContrato) {
-	   System.out.println("id del contrato a buscar en facturas " + idContrato);
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Factura> criteria = cb.createQuery(Factura.class);
       Root<Factura> factura = criteria.from(Factura.class);

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -20,46 +20,31 @@ import com.uy.nos.financiarte.controller.RegistroSolicitudCredito;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
 import com.uy.nos.financiarte.model.Factura;
-import com.uy.nos.financiarte.model.Proveedor;
+import com.uy.nos.financiarte.model.NotaCredito;
 import com.uy.nos.financiarte.model.SolicitudCredito;
 
 
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class SolicitudCreditoBean {
 	
-	private List<Factura> facturasPendientes;
+	private List<Factura> facturas = new ArrayList<Factura>();
+	private List<NotaCredito> notas = new ArrayList<NotaCredito>();
 	private List<Contrato> contratosDisponibles;
-	private Factura facturaSeleccionada;
-	private Proveedor proveedorSeleccionado;
 	private Cliente clienteSeleccionado;
 	private Contrato contratoSeleccionado;
 	private String pin;
+	private long monto;
+	private long montoFacturas;
+	private long montoNotas;
 
-	public List<Factura> getFacturasPendientes() {
-		return facturasPendientes;
+	public List<Factura> getFacturas() {
+		return facturas;
 	}
 
-	public void setFacturasPendientes(List<Factura> facturasPendientes) {
-		this.facturasPendientes = facturasPendientes;
-	}
-
-	public Factura getFacturaSeleccionada() {
-		return facturaSeleccionada;
-	}
-
-	public void setFacturaSeleccionada(Factura facturaSeleccionada) {
-		System.out.println("factura seleccionada " + facturaSeleccionada.getNumeroSerie());
-		this.facturaSeleccionada = facturaSeleccionada;
-	}
-
-	public Proveedor getProveedorSeleccionado() {
-		return proveedorSeleccionado;
-	}
-
-	public void setProveedorSeleccionado(Proveedor proveedorSeleccionado) {
-		this.proveedorSeleccionado = proveedorSeleccionado;
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
 	}
 
 	public Cliente getClienteSeleccionado() {
@@ -94,20 +79,55 @@ public class SolicitudCreditoBean {
 		this.pin = pin;
 	}
 
+	public long getMonto() {
+		calcularMontoTotal();
+		System.out.println("monto total " + monto);
+		return monto;
+	}
+
+	public void setMonto(long monto) {
+		this.monto = monto;
+	}
+
+	public List<NotaCredito> getNotas() {
+		return notas;
+	}
+
+	public void setNotas(List<NotaCredito> notas) {
+		this.notas = notas;
+	}
+
+	public long getMontoFacturas() {
+		return montoFacturas;
+	}
+
+	public void setMontoFacturas(long montoFacturas) {
+		this.montoFacturas = montoFacturas;
+	}
+
+	public long getMontoNotas() {
+		return montoNotas;
+	}
+
+	public void setMontoNotas(long montoNotas) {
+		this.montoNotas = montoNotas;
+	}
 
 	@Inject
 	private RegistroSolicitudCredito registroSolicitudCredito;
 	
 	@PostConstruct
 	public void init() {
-		generarListaProveedores();
+		generarListaContratos();
 	}
 	
 	public void registrar() {
 		try {
-			registroSolicitudCredito.registro(facturaSeleccionada, contratoSeleccionado);
+			registroSolicitudCredito.registro(getFacturas(), getContratoSeleccionado(), getNotas(), getMonto());
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
+	        limpiarListas();
+	    	calcularMontoTotal();
 		}
 		catch (Exception e) {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al registrar ", "");  
@@ -179,24 +199,56 @@ public class SolicitudCreditoBean {
 	
 	public void onRowSelect(SelectEvent event) {
     	generarListaFacturasPendientes();
+    	generarListaNotasPendientes();
+    	calcularMontoTotal();
     }
 	
 	public void generarListaFacturasPendientes(){
+		long montoParcial = 0L;
 		List<Factura> facturas = new ArrayList<Factura>();
 		facturas = registroSolicitudCredito.obtenerFacturasPorContrato(contratoSeleccionado.getId());
 		if (facturas.size() > 0){
-			setFacturasPendientes(facturas);
+			for (Factura factura : facturas) {
+				System.out.println("factura estado " + factura.getEstados().getNombre());
+				if(factura.getEstados().getId() == 3){
+					this.facturas.add(factura);
+					montoParcial = montoParcial + factura.getMonto();
+				}
+			}
+		}
+		setMontoFacturas(montoParcial);
+	}
+	
+	public void generarListaNotasPendientes(){
+		long montoParcial = 0L;
+		List<NotaCredito> notas = new ArrayList<NotaCredito>();
+		notas = registroSolicitudCredito.obtenerNotasPorContrato(contratoSeleccionado.getId());
+		if (notas != null){
+			for (NotaCredito notaCredito : notas) {
+				if(notaCredito.getEstados().getId() == 3){
+					this.notas.add(notaCredito);
+					montoParcial = montoParcial + notaCredito.getMonto();
+				}
+			}
+			setMontoNotas(montoParcial);
 		}
 	}
 	
-	public void generarListaProveedores(){
+	public void generarListaContratos(){
 		String cli = SecurityContextAssociation.getPrincipal().getName();
     	setClienteSeleccionado(registroSolicitudCredito.obtenerClientePorUsuario(cli));
     	List<Contrato> contratos = registroSolicitudCredito.obtenerContatosPorCliente(clienteSeleccionado.getId());
     	if(contratos.size() > 0){
     		setContratosDisponibles(contratos);
     	}
-    	
+	}
+	
+	public void calcularMontoTotal(){
+    	setMonto(getMontoFacturas() - getMontoNotas());
 	}
 
+	public void limpiarListas(){
+		this.notas.clear();
+		this.facturas.clear();
+	}
 }

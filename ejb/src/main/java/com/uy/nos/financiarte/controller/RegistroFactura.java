@@ -43,7 +43,7 @@ public class RegistroFactura {
 	   }
 	   
 	   public void modificar(Factura factura) throws Exception {
-		   log.info("Modifico " + factura);
+		   log.info("Modifico " + factura.getNumeroSerie());
 		   em.merge(factura);
 	   }
 	   

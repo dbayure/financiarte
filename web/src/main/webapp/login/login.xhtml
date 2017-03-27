@@ -10,9 +10,9 @@
 			
 			<h:form id="login" onsubmit="document.getElementById('login').action='j_security_check';" prependId="false" class="form-signin">
 				
-				<h:panelGroup rendered="#{requestScope['javax.servlet.forward.servlet_path'] == '/paginas/principal/j_security_check'}">
+				<h:panelGroup rendered="#{requestScope['javax.servlet.forward.servlet_path'] == '/principal/j_security_check'}">
 					<div class="alert alert-danger fade in">
-    					<a href="http://127.0.0.1:8080/financiarte-web/paginas/persona/principal.jsf" class="close" data-dismiss="alert" aria-label="close">x</a>
+    					<a href="http://127.0.0.1:8080/financiarte-web/principal/principal.jsf" class="close" data-dismiss="alert" aria-label="close">x</a>
     					<strong>Error</strong> Usuario o Contraseña incorrectos.
   					</div>
 				</h:panelGroup>

@@ -12,37 +12,37 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.uy.nos.financiarte.model.SolicitudCredito;
+import com.uy.nos.financiarte.model.Transaccion;
 
 
 
-@FacesConverter(forClass = SolicitudCredito.class, value = "solicitudCreditoConverter")
-public class SolicitudCreditoConverter implements Converter {
+@FacesConverter(forClass = Transaccion.class, value = "transaccionConverter")
+public class TransaccionConverter implements Converter {
 
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value.trim().equals("")) {
 			value = ((HttpServletRequest) context.getExternalContext().getRequest()).getParameter(component.getClientId()+"_input");
 //			return null;
 		}
-		SolicitudCredito solicitud = null;
+		Transaccion transaccion = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();	
-			solicitud = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
+			transaccion = mapper.readValue(new URL( context.getExternalContext().getRequestScheme() + "://" + context.getExternalContext().getRequestServerName()
 					+ ":"  + context.getExternalContext().getRequestServerPort() + context.getExternalContext().getRequestContextPath() 
-					+ "/rest/solicitudesCredito/" + value), SolicitudCredito.class);
+					+ "/rest/transacciones/" + value), Transaccion.class);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Solicitud de pago no válido"));
+			throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Conversion", "Transaccion no válido"));
 		}
-		return solicitud;
+		return transaccion;
 	}
 
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value == null || value.equals("")) {
             return "";
         } else {
-        	return String.valueOf( ((SolicitudCredito)value).getId()  );
+        	return String.valueOf( ((Transaccion)value).getId()  );
         }
 	}
 

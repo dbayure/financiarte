@@ -56,6 +56,16 @@ public class ContratoListProducer {
       return contratos;
    }
    
+   public List<Contrato> getContratosPorProveedor(Long idproveedor) {
+	      CriteriaBuilder cb = em.getCriteriaBuilder();
+	      CriteriaQuery<Contrato> criteria = cb.createQuery(Contrato.class);
+	      Root<Contrato> contrato = criteria.from(Contrato.class);
+	      criteria.select(contrato);
+	      criteria.where(cb.equal(contrato.get("proveedor"), idproveedor));
+	      List<Contrato> contratos = em.createQuery(criteria).getResultList();
+	      return contratos;
+	   }
+   
    public List<Contrato> getContratoPorClienteProveedor(Long idcliente, Long idproveedor) {
 	  System.out.println("Valores para la busqueda " + idcliente + " - " + idproveedor);
       CriteriaBuilder cb = em.getCriteriaBuilder();

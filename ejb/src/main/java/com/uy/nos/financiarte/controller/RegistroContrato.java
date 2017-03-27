@@ -1,6 +1,7 @@
 package com.uy.nos.financiarte.controller;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -50,10 +51,11 @@ public class RegistroContrato {
 	   public boolean registro(Cliente cliente, Proveedor proveedor, long montoPrestamo, int diasInteres, long pagoMinimo, int plazoPago, Interes interes, TipoContrato tipo) throws Exception {
 	      log.info("Registro " + newContrato.getId());
 	      boolean seAgrega = false;
-	      if (clp.getContratoPorClienteProveedor(cliente.getId(), proveedor.getId()) == null){
+	      List<Contrato> contratos = clp.getContratoPorClienteProveedor(cliente.getId(), proveedor.getId());
+	      if (contratos == null || contratos.size() == 0){
 	    	  Calendar today = Calendar.getInstance();
 		      today.set(Calendar.HOUR_OF_DAY, 0);
-		      Estado estado = em.find(Estado.class, 2);
+		      Estado estado = em.find(Estado.class, 1L);
 		      newContrato.setFecha(today);
 		      newContrato.setCliente(cliente);
 		      newContrato.setProveedor(proveedor);
@@ -122,7 +124,8 @@ public class RegistroContrato {
 	   }
 	   
 	   public boolean buscarContratoDuplicado(Long cliente, Long proveedor){
-		   if (clp.getContratoPorClienteProveedor(cliente,proveedor) == null){
+		   List <Contrato> contratos = clp.getContratoPorClienteProveedor(cliente, proveedor);
+		   if (contratos == null || contratos.size() == 0){
 			   return false;
 		   }
 		   else{

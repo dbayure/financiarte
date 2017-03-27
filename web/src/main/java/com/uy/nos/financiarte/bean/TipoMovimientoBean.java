@@ -1,7 +1,5 @@
 package com.uy.nos.financiarte.bean;
 
-import java.util.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -12,31 +10,21 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
-import com.uy.nos.financiarte.controller.RegistroCuentaCorriente;
-import com.uy.nos.financiarte.model.CuentaCorriente;
+import com.uy.nos.financiarte.controller.RegistroTipoMovimiento;
+import com.uy.nos.financiarte.model.TipoMovimiento;
 
 
 
 @ManagedBean
 @RequestScoped
-public class CuentaCorrienteBean {
-
-	private List<CuentaCorriente> cuentasUsuario;
-	
-	public List<CuentaCorriente> getCuentasUsuario() {
-		return cuentasUsuario;
-	}
-
-	public void setCuentasUsuario(List<CuentaCorriente> cuentasUsuario) {
-		this.cuentasUsuario = cuentasUsuario;
-	}
+public class TipoMovimientoBean {
 
 	@Inject
-	private RegistroCuentaCorriente registroCuentaCorriente;
+	private RegistroTipoMovimiento registroTipoMovimiento;
 	
 	public void registrar() {
 		try {
-			registroCuentaCorriente.registro();
+			registroTipoMovimiento.registro();
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -47,26 +35,26 @@ public class CuentaCorrienteBean {
 	}
 	
 	public void onEdit(RowEditEvent event) {  
-		CuentaCorriente cuentaCorriente = ((CuentaCorriente) event.getObject());
+		TipoMovimiento tipo = ((TipoMovimiento) event.getObject());
            
             try {
-            	registroCuentaCorriente.modificar(cuentaCorriente);
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", cuentaCorriente.getId().toString());  
+            	registroTipoMovimiento.modificar(tipo);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó ", tipo.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", cuentaCorriente.getId().toString());  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar ", tipo.getNombre());  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
     }
 	
 	public void onCancel(RowEditEvent event) {  
-        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((CuentaCorriente) event.getObject()).getId().toString());  
+        FacesMessage msg = new FacesMessage("Se canceló modificar ", ((TipoMovimiento) event.getObject()).getNombre());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
 	
 	public void eliminar(Long id) {
 		try {
-			registroCuentaCorriente.eliminar(id);
+			registroTipoMovimiento.eliminar(id);
 			FacesMessage msg = new FacesMessage("Se eliminó ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -79,7 +67,7 @@ public class CuentaCorrienteBean {
 	
 	public void buscar(Long id) {
 		try {
-			registroCuentaCorriente.buscar(id);
+			registroTipoMovimiento.buscar(id);
 			FacesMessage msg = new FacesMessage("Se encontró ", id.toString());  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
@@ -96,18 +84,15 @@ public class CuentaCorrienteBean {
             try {
             	if(newValue != null && !newValue.equals(oldValue)) {
             	    DataTable d = (DataTable) event.getSource();
-            	    CuentaCorriente cuentaCorriente = (CuentaCorriente) d.getRowData();
-            		registroCuentaCorriente.modificar(cuentaCorriente);
+            	    TipoMovimiento tipo = (TipoMovimiento) d.getRowData();
+            	    registroTipoMovimiento.modificar(tipo);
                 }
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "La CuentaCorriente fue modificado exitosamente" , "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El Tipo de movimiento fue modificado exitosamente" , "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			} catch (Exception e) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar la CuentaCorriente", "");  
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Error al modificar el tipo de movimiento", "");  
 	            FacesContext.getCurrentInstance().addMessage(null, msg); 
 			}
 	}
-	
-	
-	
 	
 }

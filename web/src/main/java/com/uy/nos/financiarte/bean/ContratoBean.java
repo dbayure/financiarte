@@ -229,33 +229,28 @@ public class ContratoBean {
         	}
         	if(event.getOldStep().equals("contrato")){
         		System.out.println("Estoy en el paso contrato " );
-	        	if(montoPrestamo == 0){
+	        	if(getMontoPrestamo() == 0){
 					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el prestamo", "");  
 		            FacesContext.getCurrentInstance().addMessage(null, msg);
 		            return "contrato";
 		    	}
-	        	if(pagoMinimo == 0){
+	        	if(getPagoMinimo() == 0){
 					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el pago mínimo", "");  
 		            FacesContext.getCurrentInstance().addMessage(null, msg);
 		            return "contrato";
 		    	}
-	        	if(diasSinInteres == 0){
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para los días sin interés", "");  
+	        	if(getPlazoPago() == 0){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar los días para el plazo de pago", "");  
 		            FacesContext.getCurrentInstance().addMessage(null, msg);
 		            return "contrato";
 		    	}
-	        	if(plazoPago == 0){
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el plazo de pago", "");  
+	        	if(getInteres() == null){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un tipo de interés", "");  
 		            FacesContext.getCurrentInstance().addMessage(null, msg);
 		            return "contrato";
 		    	}
-	        	if(interes == null){
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el interés", "");  
-		            FacesContext.getCurrentInstance().addMessage(null, msg);
-		            return "contrato";
-		    	}
-	        	if(tipo == null){
-					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un monto para el tipo de contrato", "");  
+	        	if(getTipo() == null){
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un tipo de contrato", "");  
 		            FacesContext.getCurrentInstance().addMessage(null, msg);
 		            return "contrato";
 		    	}
