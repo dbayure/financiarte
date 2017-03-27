@@ -52,7 +52,8 @@ public class FacturaListProducer {
       CriteriaQuery<Factura> criteria = cb.createQuery(Factura.class);
       Root<Factura> factura = criteria.from(Factura.class);
       criteria.select(factura);
-      criteria.where(cb.equal(factura.get("contrato"), idContrato));
+      criteria.where(cb.and(cb.equal(factura.get("contrato"), idContrato)),
+    		  		cb.equal(factura.get("estados"), 5));
       List<Factura> fac = em.createQuery(criteria).getResultList();
       return fac;
    }
