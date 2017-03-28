@@ -21,7 +21,7 @@
 
 
 			<h4 class="text-muted">Solicitudes</h4>
-			<p:dataTable id="sol" var="_sol" value="#{transaccionBean.solicitudesCliente}" editable="false" 
+			<p:dataTable id="sol" var="_sol" value="#{transaccionBean.solicitudesPendientesCliente}" editable="false" 
 						 style="text-align:center; text-transform: capitalize;" 
 			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_sol.contrato.cliente.nombre}" rowKey="#{_sol.id}" 
 			  			 rowIndexVar="#{_sol.id}" selectionMode="single" selection="#{transaccionBean.solicitudSeleccionada}">

@@ -15,15 +15,9 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import com.uy.nos.financiarte.data.ContratoListProducer;
-import com.uy.nos.financiarte.data.FacturaListProducer;
-import com.uy.nos.financiarte.data.PagoMedioPagoListProducer;
-import com.uy.nos.financiarte.data.SolicitudCreditoListProducer;
 import com.uy.nos.financiarte.data.TransaccionListProducer;
 import com.uy.nos.financiarte.data.UsuarioListProducer;
 import com.uy.nos.financiarte.model.Contrato;
-import com.uy.nos.financiarte.model.Factura;
-import com.uy.nos.financiarte.model.PagoMedioPago;
-import com.uy.nos.financiarte.model.SolicitudCredito;
 import com.uy.nos.financiarte.model.TipoMovimiento;
 import com.uy.nos.financiarte.model.Transaccion;
 import com.uy.nos.financiarte.model.Usuario;
@@ -45,15 +39,6 @@ public class RegistroTransaccion {
 	   
 	   @Inject
 	   private ContratoListProducer clp;
-	   
-	   @Inject
-	   private FacturaListProducer flp;
-	   
-	   @Inject
-	   private SolicitudCreditoListProducer slp;
-	   
-	   @Inject
-	   private PagoMedioPagoListProducer pmplp;
 	   
 	   @Inject
 	   private TransaccionListProducer tlp;
@@ -114,39 +99,11 @@ public class RegistroTransaccion {
 		   return contratos;
 	   }
 	   
-	   public List<Contrato> obtenerContratosPorProveedor(Long idProveedor){
-		   List<Contrato> contratos = new ArrayList<Contrato>();
-		   contratos = clp.getContratosPorProveedor(idProveedor);
-		   return contratos;
-	   }
 	   public List<Transaccion> obtenerTransaccionesPorContrato(Long idContrato){
 		   List<Transaccion> transacciones = new ArrayList<Transaccion>();
 		   transacciones = tlp.obtenerTransaccionesPorContrato(idContrato);
 		   return transacciones;
-	   }
-	   
-	   
-	   public List<Factura> obtenerFacturasPorContrato(Long idContrato){
-		   List<Factura> facturas = new ArrayList<Factura>();
-		   facturas = flp.getFacturaPorContrato(idContrato);
-		   return facturas;
-	   }
-	   
-	   public List<SolicitudCredito> obtenerSolicitudesPorContrato(Long idContrato){
-		   List<SolicitudCredito> solicitudes = new ArrayList<SolicitudCredito>();
-		   solicitudes = slp.getSolicitudCreditoContrato(idContrato);
-		   return solicitudes;
-	   }
-	   
-	   public List<PagoMedioPago> obtenerPagosPorContrato(Long idContrato){
-		   List<PagoMedioPago> pagos = new ArrayList<PagoMedioPago>();
-		   pagos = pmplp.getPagoMedioPagoPorContrato(idContrato);
-		   return pagos;
-	   }
-	   
-	   
-	   
-	   
+	   }	   
 	   
 	   
 }

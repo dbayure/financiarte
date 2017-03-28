@@ -1,6 +1,5 @@
 package com.uy.nos.financiarte.controller;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,9 +15,6 @@ import javax.persistence.EntityManager;
 
 import com.uy.nos.financiarte.data.ClienteListProducer;
 import com.uy.nos.financiarte.data.ContratoListProducer;
-import com.uy.nos.financiarte.data.EstadoListProducer;
-import com.uy.nos.financiarte.data.FacturaListProducer;
-import com.uy.nos.financiarte.data.NotaCreditoListProducer;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
 import com.uy.nos.financiarte.model.Factura;
@@ -45,23 +41,11 @@ public class RegistroSolicitudCredito {
 	   private RegistroNotaCredito rnc;
 	   
 	   @Inject
-	   private RegistroFactura rf;
-	   
-	   @Inject
-	   private FacturaListProducer flp;
-	   
-	   @Inject
-	   private NotaCreditoListProducer nclp;
-	   
-	   @Inject
 	   private ContratoListProducer clp;
 	   
 	   @Inject
 	   private ClienteListProducer clilp;
 	   
-	   @Inject
-	   private EstadoListProducer elp;
-
 	   @Inject
 	   private Event<SolicitudCredito> solicitudCreditoEventSrc;
 
@@ -73,7 +57,6 @@ public class RegistroSolicitudCredito {
 	      return newSolicitudCredito;
 	   }
 
-<<<<<<< HEAD
 	   public void registro(List<Factura> facturas, Contrato contrato, List<NotaCredito> notas, long monto) throws Exception {
 	      log.info("Registro " + monto);
 	      Estado estado = em.find(Estado.class, 3L);
@@ -100,23 +83,6 @@ public class RegistroSolicitudCredito {
 	      em.persist(newSolicitudCredito);
 	      solicitudCreditoEventSrc.fire(newSolicitudCredito);
 	      initNewSolicitudCredito();
-=======
-	   public void registro(List<Factura> facturasSeleccionada, Contrato contrato) throws Exception {
-	      log.info("Registro solicitud de credito" + newSolicitudCredito.getMonto());
-	      List<Estado> estados = elp.obtenerEstadoPorNombre("entregada");
-	      for (Factura factura : facturasSeleccionada) {
-	    	  factura.setEstados(estados.get(0));
-	 	      rf.modificar(factura);
-		      newSolicitudCredito.setContrato(contrato);
-		      Date hoy = new Date();
-		      newSolicitudCredito.setFecha(hoy);
-		      newSolicitudCredito.setMonto(factura.getMonto());
-		      newSolicitudCredito.setTotalParcial(true);
-		      em.persist(newSolicitudCredito);
-		      solicitudCreditoEventSrc.fire(newSolicitudCredito);
-		      initNewSolicitudCredito();
-	      }
->>>>>>> 2a4dd0c19ac6bc57b376f9934d8c586251526870
 	   }
 	   
 	   public void modificar(SolicitudCredito solicitudCredito) throws Exception {
@@ -142,22 +108,6 @@ public class RegistroSolicitudCredito {
 		   newSolicitudCredito = new SolicitudCredito();
 	   }
 
-	   public List<Factura> obtenerFacturasPorContrato(Long idCcontrato){
-		   List<Factura> facturas = new ArrayList<Factura>();
-		   facturas = flp.getFacturaPorContrato(idCcontrato);
-		   return facturas;
-	   }
-	   
-	   public List<NotaCredito> obtenerNotasPorContrato(Long idCcontrato){
-		   List<NotaCredito> notas = new ArrayList<NotaCredito>();
-		   notas = nclp.getNotaCreditoPorContrato(idCcontrato);
-		   if(notas.size() > 0){
-			   return notas;
-		   }
-		   else{
-			   return null;
-		   }
-	   }
 	   
 	   public Cliente obtenerClientePorUsuario(String usuario){
 		   return clilp.obtenerClientePorUsuario(usuario);

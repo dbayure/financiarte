@@ -33,13 +33,26 @@ public class Proveedor extends Usuario implements Serializable {
 		return rut;
 	}
 
+
 	public void setRut(long rut) {
 		this.rut = rut;
 	}
 
+
+	public Set<Contrato> getContratos() {
+		return contratos;
+	}
+
+
+	public void setContratos(Set<Contrato> contratos) {
+		this.contratos = contratos;
+	}
+
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
 
 	@Override
 	public int hashCode() {

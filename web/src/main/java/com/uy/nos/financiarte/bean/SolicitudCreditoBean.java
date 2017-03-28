@@ -32,11 +32,6 @@ public class SolicitudCreditoBean {
 	private List<Factura> facturas = new ArrayList<Factura>();
 	private List<NotaCredito> notas = new ArrayList<NotaCredito>();
 	private List<Contrato> contratosDisponibles;
-<<<<<<< HEAD
-=======
-	private List<Factura> facturasSeleccionadas;
-	private Proveedor proveedorSeleccionado;
->>>>>>> 2a4dd0c19ac6bc57b376f9934d8c586251526870
 	private Cliente clienteSeleccionado;
 	private Contrato contratoSeleccionado;
 	private String pin;
@@ -48,30 +43,8 @@ public class SolicitudCreditoBean {
 		return facturas;
 	}
 
-<<<<<<< HEAD
 	public void setFacturas(List<Factura> facturas) {
 		this.facturas = facturas;
-=======
-	public void setFacturasPendientes(List<Factura> facturasPendientes) {
-		this.facturasPendientes = facturasPendientes;
-	}
-
-	public List<Factura> getFacturasSeleccionadas() {
-		return facturasSeleccionadas;
-	}
-
-	public void setFacturasSeleccionadas(List<Factura> facturasSeleccionadas) {
-		System.out.println("factura seleccionada " + facturasSeleccionadas.get(0).getDescripcion());
-		this.facturasSeleccionadas = facturasSeleccionadas;
-	}
-
-	public Proveedor getProveedorSeleccionado() {
-		return proveedorSeleccionado;
-	}
-
-	public void setProveedorSeleccionado(Proveedor proveedorSeleccionado) {
-		this.proveedorSeleccionado = proveedorSeleccionado;
->>>>>>> 2a4dd0c19ac6bc57b376f9934d8c586251526870
 	}
 
 	public Cliente getClienteSeleccionado() {
@@ -150,11 +123,7 @@ public class SolicitudCreditoBean {
 	
 	public void registrar() {
 		try {
-<<<<<<< HEAD
 			registroSolicitudCredito.registro(getFacturas(), getContratoSeleccionado(), getNotas(), getMonto());
-=======
-			registroSolicitudCredito.registro(facturasSeleccionadas, contratoSeleccionado);
->>>>>>> 2a4dd0c19ac6bc57b376f9934d8c586251526870
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró ", "con éxito!");  
 	        FacesContext.getCurrentInstance().addMessage(null, msg);
 	        limpiarListas();
@@ -230,6 +199,7 @@ public class SolicitudCreditoBean {
 	}
 	
 	public void onRowSelect(SelectEvent event) {
+		System.out.println("Llamo a los metodos par acargar tablas auxiliares");
     	generarListaFacturasPendientes();
     	generarListaNotasPendientes();
     	calcularMontoTotal();
@@ -237,12 +207,11 @@ public class SolicitudCreditoBean {
 	
 	public void generarListaFacturasPendientes(){
 		long montoParcial = 0L;
-		List<Factura> facturas = new ArrayList<Factura>();
-		facturas = registroSolicitudCredito.obtenerFacturasPorContrato(contratoSeleccionado.getId());
-		if (facturas.size() > 0){
-			for (Factura factura : facturas) {
-				System.out.println("factura estado " + factura.getEstados().getNombre());
-				if(factura.getEstados().getId() == 3){
+		long estado = 0L;
+		if (contratoSeleccionado.getFacturas().size() > 0){
+			for (Factura factura : contratoSeleccionado.getFacturas()) {
+				estado = factura.getEstados().getId();
+				if(estado == 3L){
 					this.facturas.add(factura);
 					montoParcial = montoParcial + factura.getMonto();
 				}
@@ -253,11 +222,11 @@ public class SolicitudCreditoBean {
 	
 	public void generarListaNotasPendientes(){
 		long montoParcial = 0L;
-		List<NotaCredito> notas = new ArrayList<NotaCredito>();
-		notas = registroSolicitudCredito.obtenerNotasPorContrato(contratoSeleccionado.getId());
-		if (notas != null){
-			for (NotaCredito notaCredito : notas) {
-				if(notaCredito.getEstados().getId() == 3){
+		long estado = 0L;
+		if (contratoSeleccionado.getNotas().size() > 0){
+			for (NotaCredito notaCredito : contratoSeleccionado.getNotas()) {
+				estado = notaCredito.getEstados().getId();
+				if(estado == 3L){
 					this.notas.add(notaCredito);
 					montoParcial = montoParcial + notaCredito.getMonto();
 				}

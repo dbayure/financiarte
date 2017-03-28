@@ -224,10 +224,6 @@ public class Contrato implements Serializable {
 		result = prime * result + (int) (montoPrestamo ^ (montoPrestamo >>> 32));
 		result = prime * result + (int) (pagoMinimo ^ (pagoMinimo >>> 32));
 		result = prime * result + plazoPago;
-<<<<<<< HEAD
-=======
-		result = prime * result + ((tiposContrato == null) ? 0 : tiposContrato.hashCode());
->>>>>>> 2a4dd0c19ac6bc57b376f9934d8c586251526870
 		return result;
 	}
 
@@ -258,16 +254,9 @@ public class Contrato implements Serializable {
 			return false;
 		if (plazoPago != other.plazoPago)
 			return false;
-<<<<<<< HEAD
-=======
-		if (tiposContrato == null) {
-			if (other.tiposContrato != null)
-				return false;
-		} else if (!tiposContrato.equals(other.tiposContrato))
-			return false;
->>>>>>> 2a4dd0c19ac6bc57b376f9934d8c586251526870
 		return true;
 	}
+
 
 	
 }
