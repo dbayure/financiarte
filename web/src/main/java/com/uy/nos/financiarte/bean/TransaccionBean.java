@@ -44,10 +44,18 @@ public class TransaccionBean {
 	private Factura facturaSeleccionada;
 	private PagoMedioPago pagoSeleccionado;
 	private SolicitudCredito solicitudSeleccionada;
-	private float totalCreditos;
-	private float totalCreditosPendientes;
-	private float totalPagos;
-	private float saldoActual;
+	private float totalCreditosPendientesCliente = 0L;
+	private float totalImpuestosPendientesCliente = 0L;
+	private float totalInteresesPendientesCiente = 0L;
+	private float totalPagosRealizadosCliente = 0L;
+	private float totalCreditosCerradosCliente = 0L;
+	
+	private float totalCreditosPendientes = 0L;
+	private float totalImpuestosPendientes = 0L;
+	private float totalInteresesPendientes = 0L;
+	private float totalPagosRealizados = 0L;
+	private float totalCreditosCerrados = 0L;
+
 	private float iva =0.22f;
 	
 	public List<Transaccion> getTransaccionesCliente() {
@@ -130,12 +138,44 @@ public class TransaccionBean {
 		this.solicitudSeleccionada = solicitudSeleccionada;
 	}
 
-	public float getTotalCreditos() {
-		return totalCreditos;
+	public float getTotalCreditosPendientesCliente() {
+		return totalCreditosPendientesCliente;
 	}
 
-	public void setTotalCreditos(float totalCreditos) {
-		this.totalCreditos = totalCreditos;
+	public void setTotalCreditosPendientesCliente(float totalCreditosPendientesCliente) {
+		this.totalCreditosPendientesCliente = totalCreditosPendientesCliente;
+	}
+
+	public float getTotalImpuestosPendientesCliente() {
+		return totalImpuestosPendientesCliente;
+	}
+
+	public void setTotalImpuestosPendientesCliente(float totalImpuestosPendientesCliente) {
+		this.totalImpuestosPendientesCliente = totalImpuestosPendientesCliente;
+	}
+
+	public float getTotalInteresesPendientesCiente() {
+		return totalInteresesPendientesCiente;
+	}
+
+	public void setTotalInteresesPendientesCiente(float totalInteresesPendientesCiente) {
+		this.totalInteresesPendientesCiente = totalInteresesPendientesCiente;
+	}
+
+	public float getTotalPagosRealizadosCliente() {
+		return totalPagosRealizadosCliente;
+	}
+
+	public void setTotalPagosRealizadosCliente(float totalPagosRealizadosCliente) {
+		this.totalPagosRealizadosCliente = totalPagosRealizadosCliente;
+	}
+
+	public float getTotalCreditosCerradosCliente() {
+		return totalCreditosCerradosCliente;
+	}
+
+	public void setTotalCreditosCerradosCliente(float totalCreditosCerradosCliente) {
+		this.totalCreditosCerradosCliente = totalCreditosCerradosCliente;
 	}
 
 	public float getTotalCreditosPendientes() {
@@ -146,20 +186,36 @@ public class TransaccionBean {
 		this.totalCreditosPendientes = totalCreditosPendientes;
 	}
 
-	public float getTotalPagos() {
-		return totalPagos;
+	public float getTotalImpuestosPendientes() {
+		return totalImpuestosPendientes;
 	}
 
-	public void setTotalPagos(float totalPagos) {
-		this.totalPagos = totalPagos;
+	public void setTotalImpuestosPendientes(float totalImpuestosPendientes) {
+		this.totalImpuestosPendientes = totalImpuestosPendientes;
 	}
 
-	public float getSaldoActual() {
-		return saldoActual;
+	public float getTotalInteresesPendientes() {
+		return totalInteresesPendientes;
 	}
 
-	public void setSaldoActual(float saldoActual) {
-		this.saldoActual = saldoActual;
+	public void setTotalInteresesPendientes(float totalInteresesPendientes) {
+		this.totalInteresesPendientes = totalInteresesPendientes;
+	}
+
+	public float getTotalPagosRealizados() {
+		return totalPagosRealizados;
+	}
+
+	public void setTotalPagosRealizados(float totalPagosRealizados) {
+		this.totalPagosRealizados = totalPagosRealizados;
+	}
+
+	public float getTotalCreditosCerrados() {
+		return totalCreditosCerrados;
+	}
+
+	public void setTotalCreditosCerrados(float totalCreditosCerrados) {
+		this.totalCreditosCerrados = totalCreditosCerrados;
 	}
 
 	@Inject
@@ -259,6 +315,7 @@ public class TransaccionBean {
 			}
 		}
 		pagosCliente.addAll(solicitudSeleccionada.getContrato().getPagos());
+		calcularSaldosContrato();
     }
 	
 	
@@ -278,15 +335,14 @@ public class TransaccionBean {
 			cliente = (Cliente) usuario;
 			contratos.addAll(cliente.getContratos());
 			for (Contrato contrato : contratos) {
-				setTransaccionesCliente(registroTransaccion.obtenerTransaccionesPorContrato(contrato.getId()));
 				solicitudes.addAll(contrato.getSolicitudes());
 			}
 		}
 		if (usuario instanceof Proveedor){
 			proveedor = (Proveedor) usuario;
 			contratos.addAll(proveedor.getContratos());
+			calcularSaldosGenerales();
 			for (Contrato contrato : contratos) {
-				setTransaccionesCliente(registroTransaccion.obtenerTransaccionesPorContrato(contrato.getId()));
 				solicitudes.addAll(contrato.getSolicitudes());
 			}
 		}
@@ -298,23 +354,46 @@ public class TransaccionBean {
 				interes = interes/10000;
 				interes = interes * solicitudCredito.getMonto();
 				interes = interes * dias;
+				totalInteresesPendientes = totalInteresesPendientes + interes;
 				impuesto = interes * iva;
+				totalImpuestosPendientes = totalImpuestosPendientes + impuesto;
 				total = solicitudCredito.getMonto() + interes + impuesto;
 				totalCreditosPendientes  = totalCreditosPendientes + total;
 				solicitudCredito.setInteres(interes);
 				solicitudCredito.setIva(impuesto);
 				solicitudCredito.setTotal(total);
 				solicitudesPendientesCliente.add(solicitudCredito);
+				calcularSaldosGenerales();
 			}
 		}
-		calcularSaldos();
 	}
 		
 	
-	public void calcularSaldos(){
+	public void calcularSaldosContrato(){
 		float creditos = 0L;
 		float pagos = 0L;
-		
+		Long estado = 0L;
+		float interes = 0;
+		float impuesto = 0;
+		float total = 0;
+		int dias;
+		Date hoy = new Date();
+		Contrato contrato = solicitudSeleccionada.getContrato();
+		for (SolicitudCredito solicitud : contrato.getSolicitudes()) {
+			estado = solicitud.getEstados().getId();
+			dias = (int) ((hoy.getTime() - solicitud.getFecha().getTime())/86400000);
+			if (estado == 3L){
+				interes = solicitud.getContrato().getInteres().getMonto();
+				interes = interes/10000;
+				interes = interes * solicitud.getMonto();
+				interes = interes * dias;
+				totalInteresesPendientesCiente = totalInteresesPendientesCiente + interes;
+				impuesto = interes * iva;
+				totalImpuestosPendientesCliente = totalImpuestosPendientesCliente + impuesto;
+				total = solicitud.getMonto() + interes + impuesto;
+				totalCreditosPendientesCliente  = totalCreditosPendientesCliente + total;
+		}
+		setTransaccionesCliente(registroTransaccion.obtenerTransaccionesPorContrato(contrato.getId()));
 		for (Transaccion transaccion : transaccionesCliente) {
 			long tipo = transaccion.getTipos().getId();
 			if( tipo == 1L){
@@ -324,10 +403,28 @@ public class TransaccionBean {
 				pagos = pagos + transaccion.getMonto();
 			}
 		}
-		setTotalPagos(pagos);
-		setTotalCreditos(creditos);
-		setSaldoActual(pagos -(creditos + totalCreditosPendientes));
+		setTotalPagosRealizadosCliente(pagos);
+		setTotalCreditosCerradosCliente(creditos);
+		}
 	}
 	
+	public void calcularSaldosGenerales(){
+		float creditos = 0L;
+		float pagos = 0L;
+		for (Contrato contrato : contratos) {
+			for (Transaccion transaccion : registroTransaccion.obtenerTransaccionesPorContrato(contrato.getId())) {
+				long tipo = transaccion.getTipos().getId();
+				if( tipo == 1L){
+					creditos = creditos + transaccion.getMonto();
+				}
+				if(tipo == 1L){
+					pagos = pagos + transaccion.getMonto();
+				}
+			}
+		}
+		
+		setTotalPagosRealizados(pagos);
+		setTotalCreditosCerrados(creditos);
+	}
 	
 }

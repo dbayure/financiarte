@@ -20,7 +20,7 @@
 			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 
 
-			<h4 class="text-muted">Solicitudes</h4>
+			<h4 class="text-muted">Solicitudes de créditos pendientes de pago</h4>
 			<p:dataTable id="sol" var="_sol" value="#{transaccionBean.solicitudesPendientesCliente}" editable="false" 
 						 style="text-align:center; text-transform: capitalize;" 
 			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_sol.contrato.cliente.nombre}" rowKey="#{_sol.id}" 
@@ -75,13 +75,16 @@
 	            	               
 			</p:dataTable>	
 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#facAsociada">
-				<i class="fa fa-info-circle" aria-hidden="true"></i> Facturas y Notas Asociadas
+				<i class="fa fa-info-circle" aria-hidden="true"></i> Facturas y Notas
 			</button>
 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#tranHistorico">
-				<i class="fa fa-info-circle" aria-hidden="true"></i> Histórico de transacciones
+				<i class="fa fa-info-circle" aria-hidden="true"></i> Pagos por cliente
 			</button>
-			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#resumen">
-				<i class="fa fa-info-circle" aria-hidden="true"></i> Totales de Movimientos
+			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#resumenCliente">
+				<i class="fa fa-info-circle" aria-hidden="true"></i> Movimientos por cliente
+			</button>
+			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#resumenTotales">
+				<i class="fa fa-info-circle" aria-hidden="true"></i> Resumen de Movimientos
 			</button>
 			<div id="facAsociada" class="collapse">
 				<hr color="blue" style="height: 0px" />	
@@ -202,25 +205,51 @@
 			           	 
 			</p:dataTable>	
 			</div>
-			<div id="resumen" class="collapse">	
+			<div id="resumenCliente" class="collapse">	
 			<hr color="blue" style="height: 0px" />		
 			
-			<h4 class="text-muted">Resumen de Movimientos</h4>
-			<ul class="list-group ">
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Total de créditos ralizados: #{transaccionBean.totalCreditos} </kbd></h3>
-				</li>
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Total créditos pendientes de pago: #{transaccionBean.totalCreditosPendientes} </kbd></h3>
-				</li>
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Pagos realizados: #{transaccionBean.totalPagos} </kbd></h3>
-				</li>					
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Saldo Actual: #{transaccionBean.saldoActual} </kbd></h3>
-				</li>
-			</ul>
+				<h4 class="text-muted">Resumen de Movimientos del Cliente</h4>
+				<ul class="list-group ">
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Total créditos pendientes de pago: #{transaccionBean.totalCreditosPendientesCliente} </kbd></h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Total intereses pendientes de pago: #{transaccionBean.totalInteresesPendientesCiente} </kbd></h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Total de impuestos pendientes: #{transaccionBean.totalImpuestosPendientesCliente} </kbd></h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Histórico de créditos ralizados: #{transaccionBean.totalCreditosCerradosCliente}  </kbd></h4>
+					</li>					
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Histórico de pagos realizados: #{transaccionBean.totalPagosRealizadosCliente}</kbd></h4>
+					</li>
+				</ul>
 			</div>
+			<div id="resumenTotales" class="collapse">	
+			<hr color="blue" style="height: 0px" />		
+			
+				<h4 class="text-muted">Resumen de Movimientos generales</h4>
+				<ul class="list-group ">
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Total créditos pendientes de pago: #{transaccionBean.totalCreditosPendientes} </kbd></h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Total intereses pendientes de pago: #{transaccionBean.totalInteresesPendientes} </kbd></h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Total de impuestos pendientes de pago: #{transaccionBean.totalImpuestosPendientes} </kbd></h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Histŕico de créditos ralizados: #{transaccionBean.totalCreditosCerrados}  </kbd></h4>
+					</li>					
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left"><kbd>Histŕico de pagos realizados: #{transaccionBean.totalPagosRealizados}</kbd></h4>
+					</li>
+				</ul>
+			</div>
+			
 		</h:form>
 	
 	</ui:define>
