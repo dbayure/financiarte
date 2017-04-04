@@ -46,6 +46,10 @@ public class Factura implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="contrato")
 	private Contrato contrato;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="solicitudCredito")
+	private SolicitudCredito solicitud;
 
 	public Long getId() {
 		return id;
@@ -117,6 +121,14 @@ public class Factura implements Serializable {
 
 	public void setContrato(Contrato contrato) {
 		this.contrato = contrato;
+	}
+
+	public SolicitudCredito getSolicitud() {
+		return solicitud;
+	}
+
+	public void setSolicitud(SolicitudCredito solicitud) {
+		this.solicitud = solicitud;
 	}
 
 	public static long getSerialversionuid() {

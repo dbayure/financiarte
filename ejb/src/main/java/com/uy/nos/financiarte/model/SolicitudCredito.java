@@ -2,7 +2,10 @@ package com.uy.nos.financiarte.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -56,7 +60,22 @@ public class SolicitudCredito implements Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="contrato")
 	private Contrato contrato;
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<Factura> facturas;  
+    
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<NotaCredito> notas;  
 
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="contrato")  
+    private Set<PagoMedioPago> pagos;
+    
+    public SolicitudCredito (){
+    	facturas = new HashSet<Factura>();
+    	notas = new HashSet<NotaCredito>();
+    	pagos = new HashSet<PagoMedioPago>();
+    }
+    
 	public Long getId() {
 		return id;
 	}
@@ -155,6 +174,30 @@ public class SolicitudCredito implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Set<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(Set<Factura> facturas) {
+		this.facturas = facturas;
+	}
+
+	public Set<NotaCredito> getNotas() {
+		return notas;
+	}
+
+	public void setNotas(Set<NotaCredito> notas) {
+		this.notas = notas;
+	}
+
+	public Set<PagoMedioPago> getPagos() {
+		return pagos;
+	}
+
+	public void setPagos(Set<PagoMedioPago> pagos) {
+		this.pagos = pagos;
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class PagoMedioPago implements Serializable {
 	private MedioPago medioPago;
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="solicitud")
+	@JoinColumn(name="solicitudCredito")
 	private SolicitudCredito solicitud;
 	
 	public Long getId() {

@@ -22,6 +22,7 @@ INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('2', 'PRO
 INSERT INTO `financiarte`.`roles` (`id`, `descripcion`, `rol`) VALUES ('3', 'CLIENTE', 'CLIENTE');
 INSERT INTO `financiarte`.`usuarios` (`id`, `correo`, `nombre`, `password`, `telefono`, `usuario`, `rol`) VALUES ('1', 'admin@financiarte.com.uy', 'admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'admin', '1');
 INSERT INTO estados VALUES (1,'activo','activo'),(2,'inactivo', 'inactivo'),(3, 'creada', 'creada'),(4, 'moroso', 'moroso'),(5 ,'entregada', 'entregada');
+INSERT INTO tiposMovimiento VALUES (1,'credito','credito'),(2,'pago', 'pago');
 INSERT INTO bancos VALUES (1,'brou', 'brou'),(2,'santander', 'santander'),(3,'itau', 'itau');
 INSERT INTO tarjetas VALUES (1,'visa', 'visa'),(2,'master', 'master'),(3,'oca', 'oca');
 INSERT INTO intereses VALUES (1,14, 'basico'),(2,0, '0'),(3,20, 'mora');
@@ -80,4 +81,60 @@ INSERT INTO `ciudades` VALUES (1,'Montevideo',1),(221,'Las Piedras',2),(320,'Can
 (1012,'DURAZNO',18),(1013,'SAN JOSE DE CARRASCO',14),(1014,'TRINIDAD',15),(1015,'MINAS',17);
 
 INSERT INTO facturas VALUES (1,2,'articulos limpieza',STR_TO_DATE('25-03-2017','%d-%m-%Y'),2400,82739238,1,3);
+
+INSERT INTO usuarios VALUES ('2', 'cli1@financiarte.com.uy', 'cli1','jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'cli1', '3');
+INSERT INTO clientes VALUES (24729374,08028403,STR_TO_DATE('20-03-1997','%d-%m-%Y'),23432,1,'CC','GOL',2);
+INSERT INTO usuarios VALUES ('3', 'cli2@financiarte.com.uy', 'cli2','jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'cli2', '3');
+INSERT INTO clientes VALUES (2423423,2423423,STR_TO_DATE('20-03-1980','%d-%m-%Y'),232323,1,'CC','VOLVO',3);
+INSERT INTO usuarios VALUES ('4', 'pro@financiarte.com.uy', 'pro1','jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', '123', 'pro1', '2');
+INSERT INTO proveedores VALUES (080768756,4);
+INSERT INTO contratos VALUES (1,0,STR_TO_DATE('20-03-2017','%d-%m-%Y'),100000,10000,7,2,1,1,4,1);
+INSERT INTO contratos VALUES (2,0,STR_TO_DATE('20-03-2017','%d-%m-%Y'),100000,10000,7,3,1,1,4,1);
+
+INSERT INTO facturas VALUES (1,2,'articulos limpieza',STR_TO_DATE('20-03-2017','%d-%m-%Y'),2400,82739238,STR_TO_DATE('27-03-2017','%d-%m-%Y'),1,3,1);
+INSERT INTO facturas VALUES (2,3,'articulos limpieza',STR_TO_DATE('20-03-2017','%d-%m-%Y'),7400,82739238,STR_TO_DATE('27-03-2017','%d-%m-%Y'),1,3,1);
+INSERT INTO facturas VALUES (3,3,'articulos limpieza',STR_TO_DATE('20-03-2017','%d-%m-%Y'),4000,82739238,STR_TO_DATE('27-03-2017','%d-%m-%Y'),2,3,2);
+INSERT INTO facturas VALUES (4,4,'articulos limpieza',STR_TO_DATE('25-03-2017','%d-%m-%Y'),4000,82739238,STR_TO_DATE('01-04-2017','%d-%m-%Y'),1,3,3);
+INSERT INTO facturas VALUES (5,4,'articulos limpieza',STR_TO_DATE('25-03-2017','%d-%m-%Y'),6000,82739238,STR_TO_DATE('01-04-2017','%d-%m-%Y'),2,3,4);
+INSERT INTO facturas VALUES (6,5,'articulos limpieza',STR_TO_DATE('30-03-2017','%d-%m-%Y'),8000,82739238,STR_TO_DATE('06-04-2017','%d-%m-%Y'),1,3,5);
+INSERT INTO facturas VALUES (7,3,'articulos limpieza',STR_TO_DATE('30-03-2017','%d-%m-%Y'),4500,82739238,STR_TO_DATE('06-04-2017','%d-%m-%Y'),1,3,5);
+INSERT INTO facturas VALUES (8,3,'articulos limpieza',STR_TO_DATE('30-03-2017','%d-%m-%Y'),4500,82739238,STR_TO_DATE('06-04-2017','%d-%m-%Y'),2,3,6);
+INSERT INTO facturas VALUES (9,1,'articulos limpieza',STR_TO_DATE('30-03-2017','%d-%m-%Y'),1600,82739238,STR_TO_DATE('06-04-2017','%d-%m-%Y'),2,3,6);
+INSERT INTO facturas VALUES (10,7,'articulos limpieza',STR_TO_DATE('30-03-2017','%d-%m-%Y'),9600,82739238,STR_TO_DATE('06-04-2017','%d-%m-%Y'),2,3,6);
+
+INSERT INTO notasCredito VALUES (1,STR_TO_DATE('25-03-2017','%d-%m-%Y'),1000,82739238,2,3,5,4);
+INSERT INTO notasCredito VALUES (2,STR_TO_DATE('30-03-2017','%d-%m-%Y'),1200,324387347,1,3,6,5);
+
+
+INSERT INTO solicitudesCredito VALUES (1,STR_TO_DATE('20-03-2017','%d-%m-%Y'),9800,STR_TO_DATE('27-03-2017','%d-%m-%Y'),1,3);
+INSERT INTO solicitudesCredito VALUES (2,STR_TO_DATE('20-03-2017','%d-%m-%Y'),4000,STR_TO_DATE('27-03-2017','%d-%m-%Y'),2,3);
+INSERT INTO solicitudesCredito VALUES (3,STR_TO_DATE('25-03-2017','%d-%m-%Y'),4000,STR_TO_DATE('01-04-2017','%d-%m-%Y'),1,3);
+INSERT INTO solicitudesCredito VALUES (4,STR_TO_DATE('25-03-2017','%d-%m-%Y'),6000,STR_TO_DATE('01-04-2017','%d-%m-%Y'),2,3);
+INSERT INTO solicitudesCredito VALUES (5,STR_TO_DATE('30-03-2017','%d-%m-%Y'),12500,STR_TO_DATE('06-04-2017','%d-%m-%Y'),1,3);
+INSERT INTO solicitudesCredito VALUES (6,STR_TO_DATE('30-03-2017','%d-%m-%Y'),15700,STR_TO_DATE('06-04-2017','%d-%m-%Y'),2,3);
+
+INSERT INTO transacciones VALUES (1,STR_TO_DATE('20-03-2017','%d-%m-%Y'),0,0,9800,0,1,1);
+INSERT INTO transacciones VALUES (2,STR_TO_DATE('20-03-2017','%d-%m-%Y'),0,0,4000,0,2,
+INSERT INTO transacciones VALUES (3,STR_TO_DATE('25-03-2017','%d-%m-%Y'),0,0,4000,0,1,1);
+INSERT INTO transacciones VALUES (4,STR_TO_DATE('25-03-2017','%d-%m-%Y'),0,0,6000,0,2,1);
+INSERT INTO transacciones VALUES (5,STR_TO_DATE('30-03-2017','%d-%m-%Y'),0,0,12500,0,1,1);
+INSERT INTO transacciones VALUES (6,STR_TO_DATE('30-03-2017','%d-%m-%Y'),0,0,15700,0,2,1);
+
+INSERT INTO pagosMedioPago VALUES (1,STR_TO_DATE('27-03-2017','%d-%m-%Y'),7000,1,1,1,1);
+INSERT INTO pagosMedioPago VALUES (2,STR_TO_DATE('27-03-2017','%d-%m-%Y'),2800,1,1,1,1);
+INSERT INTO pagosMedioPago VALUES (3,STR_TO_DATE('27-03-2017','%d-%m-%Y'),3200,1,1,2,2);
+INSERT INTO pagosMedioPago VALUES (4,STR_TO_DATE('28-03-2017','%d-%m-%Y'),800,1,1,2,2);
+INSERT INTO pagosMedioPago VALUES (5,STR_TO_DATE('28-03-2017','%d-%m-%Y'),4000,1,1,1,3);
+INSERT INTO pagosMedioPago VALUES (6,STR_TO_DATE('30-03-2017','%d-%m-%Y'),4000,1,1,2,4);
+
+
+
+
+
+
+
+
+
+
+
 
