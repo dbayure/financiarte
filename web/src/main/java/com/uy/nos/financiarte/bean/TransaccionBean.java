@@ -11,6 +11,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import org.jboss.as.ee.component.deployers.InterceptorsAnnotationInformationFactory;
 import org.jboss.security.SecurityContextAssociation;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
@@ -35,6 +36,7 @@ import com.uy.nos.financiarte.model.Usuario;
 public class TransaccionBean {
 
 	private List<Transaccion> transaccionesCliente = new ArrayList<Transaccion>();
+	private List<Transaccion> transaccionesContrato = new ArrayList<Transaccion>();
 	private List<Factura> factruasPendientesCliente = new ArrayList<Factura>();
 	private List<NotaCredito> notasCreditoCliente = new ArrayList<NotaCredito>();
 	private List<SolicitudCredito> solicitudesPendientesCliente = new ArrayList<SolicitudCredito>();
@@ -66,6 +68,14 @@ public class TransaccionBean {
 		this.transaccionesCliente = transaccionesCliente;
 	}
 	
+	public List<Transaccion> getTransaccionesContrato() {
+		return transaccionesContrato;
+	}
+
+	public void setTransaccionesContrato(List<Transaccion> transaccionesContrato) {
+		this.transaccionesContrato = transaccionesContrato;
+	}
+
 	public List<Factura> getFactruasPendientesCliente() {
 		return factruasPendientesCliente;
 	}
@@ -301,8 +311,10 @@ public class TransaccionBean {
 	
 	public void onRowSelect(SelectEvent event) {
 		setSolicitudSeleccionada((SolicitudCredito) event.getObject());
+		List<Factura> facturas = new ArrayList<Factura>();
+		facturas.addAll(solicitudSeleccionada.getContrato().getFacturas());
 		Long estado = 0L;
-		for (Factura factura : solicitudSeleccionada.getContrato().getFacturas()) {
+		for (Factura factura : facturas) {
 			estado = factura.getEstados().getId();
 			if(estado == 5L){
 				factruasPendientesCliente.add(factura);
@@ -341,7 +353,6 @@ public class TransaccionBean {
 		if (usuario instanceof Proveedor){
 			proveedor = (Proveedor) usuario;
 			contratos.addAll(proveedor.getContratos());
-			calcularSaldosGenerales();
 			for (Contrato contrato : contratos) {
 				solicitudes.addAll(contrato.getSolicitudes());
 			}
@@ -399,7 +410,7 @@ public class TransaccionBean {
 			if( tipo == 1L){
 				creditos = creditos + transaccion.getMonto();
 			}
-			if(tipo == 1L){
+			if(tipo == 2L){
 				pagos = pagos + transaccion.getMonto();
 			}
 		}
@@ -417,7 +428,7 @@ public class TransaccionBean {
 				if( tipo == 1L){
 					creditos = creditos + transaccion.getMonto();
 				}
-				if(tipo == 1L){
+				if(tipo == 2L){
 					pagos = pagos + transaccion.getMonto();
 				}
 			}
@@ -426,5 +437,6 @@ public class TransaccionBean {
 		setTotalPagosRealizados(pagos);
 		setTotalCreditosCerrados(creditos);
 	}
+
 	
 }

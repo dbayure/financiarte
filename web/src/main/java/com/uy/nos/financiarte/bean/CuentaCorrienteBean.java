@@ -1,19 +1,27 @@
 package com.uy.nos.financiarte.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
+import org.jboss.security.SecurityContextAssociation;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.uy.nos.financiarte.controller.RegistroCuentaCorriente;
+import com.uy.nos.financiarte.model.Contrato;
 import com.uy.nos.financiarte.model.CuentaCorriente;
+import com.uy.nos.financiarte.model.PagoMedioPago;
+import com.uy.nos.financiarte.model.Proveedor;
+import com.uy.nos.financiarte.model.SolicitudCredito;
+import com.uy.nos.financiarte.model.Usuario;
 
 
 
@@ -21,7 +29,12 @@ import com.uy.nos.financiarte.model.CuentaCorriente;
 @RequestScoped
 public class CuentaCorrienteBean {
 
-	private List<CuentaCorriente> cuentasUsuario;
+	private List<CuentaCorriente> cuentasUsuario = new ArrayList<CuentaCorriente>();
+	private List<Contrato> contratos = new ArrayList<Contrato>();
+	private List<SolicitudCredito> solicitudesPendientesCliente = new ArrayList<SolicitudCredito>();
+	private List<PagoMedioPago> pagosCliente = new ArrayList<PagoMedioPago>();
+
+
 	
 	public List<CuentaCorriente> getCuentasUsuario() {
 		return cuentasUsuario;
@@ -29,6 +42,11 @@ public class CuentaCorrienteBean {
 
 	public void setCuentasUsuario(List<CuentaCorriente> cuentasUsuario) {
 		this.cuentasUsuario = cuentasUsuario;
+	}
+	
+	@PostConstruct
+	public void init() {
+		generarListaCuentaCorrienteCliente();
 	}
 
 	@Inject
@@ -107,7 +125,17 @@ public class CuentaCorrienteBean {
 			}
 	}
 	
-	
+	public void generarListaCuentaCorrienteCliente(){
+		String cli = SecurityContextAssociation.getPrincipal().getName();
+		Usuario usuario = registroCuentaCorriente.buscarUsuarioPorNombre(cli);
+		Proveedor proveedor = new Proveedor();
+		proveedor = (Proveedor) usuario;
+		contratos.addAll(proveedor.getContratos());
+		for (Contrato contrato : contratos) {
+			solicitudesPendientesCliente.addAll(contrato.getSolicitudes());
+			pagosCliente.addAll(contrato.getPagos());
+		}
+	}
 	
 	
 }

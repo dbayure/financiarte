@@ -54,25 +54,25 @@
 	           	 
 	        	 <p:column headerText="Monto"  >  
 	             	<h:outputText value="#{_sol.monto}" >
-	             		<f:convertNumber pattern="#0.00" />
+	             		<f:convertNumber type="currency" currencySymbol="$" locale="es_UY" />
 	             	</h:outputText>
 	           	 </p:column>  
 	           	 
 	           	 <p:column headerText="Intereses" >  
 	             	<h:outputText value="#{_sol.interes}" >
-	             		<f:convertNumber pattern="#0.00" />
+	             		<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
 	             	</h:outputText>	
 	           	 </p:column>         
 	           	 
 	           	 <p:column headerText="IVA" >  
 	             	<h:outputText value="#{_sol.iva}" >
-	             		<f:convertNumber pattern="#0.00" />
+	             		<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
 	             	</h:outputText>	
 	           	 </p:column> 
 	           	 
 	           	 <p:column headerText="Total" >  
 	             	<h:outputText value="#{_sol.total}" >
-	             		<f:convertNumber pattern="#0.00" />
+	             		<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
 	             	</h:outputText>	
 	           	 </p:column> 
 	    
@@ -215,19 +215,52 @@
 			
 			<h4 class="text-muted">Resumen de Movimientos</h4>
 			<ul class="list-group ">
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Total de créditos ralizados: #{transaccionBean.totalCreditos} </kbd></h3>
-				</li>
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Total créditos pendientes de pago: #{transaccionBean.totalCreditosPendientes} </kbd></h3>
-				</li>
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Pagos realizados: #{transaccionBean.totalPagos} </kbd></h3>
-				</li>					
-				<li class="list-group-item" style="border: none">
-					<h3 class="text-left"><kbd>Saldo Actual: #{transaccionBean.saldoActual} </kbd></h3>
-				</li>
-			</ul>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left">
+							<kbd>Total créditos pendientes de pago:
+								<h:outputText value="#{transaccionBean.totalCreditosPendientes} " >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left">
+							<kbd>Total intereses pendientes de pago:
+								<h:outputText value="#{transaccionBean.totalInteresesPendientes}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left">
+							<kbd>Total de impuestos pendientes:
+								<h:outputText value="#{transaccionBean.totalImpuestosPendientes}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
+					</li>
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left">
+							<kbd>Histórico de créditos ralizados:
+								<h:outputText value="#{transaccionBean.totalCreditosCerrados}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
+					</li>					
+					<li class="list-group-item" style="border: none">
+						<h4 class="text-left">
+							<kbd>Histórico de pagos realizados:
+								<h:outputText value="#{transaccionBean.totalPagosRealizados}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
+					</li>
+				</ul>
 			</div>
 		</h:form>
 	

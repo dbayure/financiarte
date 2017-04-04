@@ -35,9 +35,9 @@ public class SolicitudCreditoBean {
 	private Cliente clienteSeleccionado;
 	private Contrato contratoSeleccionado;
 	private String pin;
-	private long monto;
-	private long montoFacturas;
-	private long montoNotas;
+	private float monto;
+	private float montoFacturas;
+	private float montoNotas;
 
 	public List<Factura> getFacturas() {
 		return facturas;
@@ -79,13 +79,12 @@ public class SolicitudCreditoBean {
 		this.pin = pin;
 	}
 
-	public long getMonto() {
+	public float getMonto() {
 		calcularMontoTotal();
-		System.out.println("monto total " + monto);
 		return monto;
 	}
 
-	public void setMonto(long monto) {
+	public void setMonto(float monto) {
 		this.monto = monto;
 	}
 
@@ -97,19 +96,19 @@ public class SolicitudCreditoBean {
 		this.notas = notas;
 	}
 
-	public long getMontoFacturas() {
+	public float getMontoFacturas() {
 		return montoFacturas;
 	}
 
-	public void setMontoFacturas(long montoFacturas) {
+	public void setMontoFacturas(float montoFacturas) {
 		this.montoFacturas = montoFacturas;
 	}
 
-	public long getMontoNotas() {
+	public float getMontoNotas() {
 		return montoNotas;
 	}
 
-	public void setMontoNotas(long montoNotas) {
+	public void setMontoNotas(float montoNotas) {
 		this.montoNotas = montoNotas;
 	}
 
@@ -206,7 +205,7 @@ public class SolicitudCreditoBean {
     }
 	
 	public void generarListaFacturasPendientes(){
-		long montoParcial = 0L;
+		float montoParcial = 0L;
 		long estado = 0L;
 		if (contratoSeleccionado.getFacturas().size() > 0){
 			for (Factura factura : contratoSeleccionado.getFacturas()) {
@@ -221,7 +220,7 @@ public class SolicitudCreditoBean {
 	}
 	
 	public void generarListaNotasPendientes(){
-		long montoParcial = 0L;
+		float montoParcial = 0L;
 		long estado = 0L;
 		if (contratoSeleccionado.getNotas().size() > 0){
 			for (NotaCredito notaCredito : contratoSeleccionado.getNotas()) {

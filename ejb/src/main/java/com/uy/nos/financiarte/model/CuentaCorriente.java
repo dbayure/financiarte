@@ -24,13 +24,17 @@ public class CuentaCorriente implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String tipoMovimiento;
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="tipoMovimiento")
+	private TipoMovimiento tipos;
 	
 	private Date fechaMovimiento;
 	
-	private long monto;
+	private float monto;
 	
 	private int interes;
+	
+	private int impuestos;
 	
 	private int idClietne;
 	
@@ -52,12 +56,12 @@ public class CuentaCorriente implements Serializable {
 		this.id = id;
 	}
 
-	public String getTipoMovimiento() {
-		return tipoMovimiento;
+	public TipoMovimiento getTipos() {
+		return tipos;
 	}
 
-	public void setTipoMovimiento(String tipoMovimiento) {
-		this.tipoMovimiento = tipoMovimiento;
+	public void setTipos(TipoMovimiento tipos) {
+		this.tipos = tipos;
 	}
 
 	public Date getFechaMovimiento() {
@@ -68,11 +72,11 @@ public class CuentaCorriente implements Serializable {
 		this.fechaMovimiento = fechaMovimiento;
 	}
 
-	public long getMonto() {
+	public float getMonto() {
 		return monto;
 	}
 
-	public void setMonto(long monto) {
+	public void setMonto(float monto) {
 		this.monto = monto;
 	}
 
@@ -82,6 +86,14 @@ public class CuentaCorriente implements Serializable {
 
 	public void setInteres(int interes) {
 		this.interes = interes;
+	}
+
+	public int getImpuestos() {
+		return impuestos;
+	}
+
+	public void setImpuestos(int impuestos) {
+		this.impuestos = impuestos;
 	}
 
 	public int getIdClietne() {
@@ -132,16 +144,15 @@ public class CuentaCorriente implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((contrato == null) ? 0 : contrato.hashCode());
 		result = prime * result + ((fechaMovimiento == null) ? 0 : fechaMovimiento.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + idClietne;
 		result = prime * result + idProveedor;
+		result = prime * result + impuestos;
 		result = prime * result + interes;
-		result = prime * result + (int) (monto ^ (monto >>> 32));
+		result = prime * result + Float.floatToIntBits(monto);
 		result = prime * result + ((nombreCliente == null) ? 0 : nombreCliente.hashCode());
 		result = prime * result + ((nombreProveedor == null) ? 0 : nombreProveedor.hashCode());
-		result = prime * result + ((tipoMovimiento == null) ? 0 : tipoMovimiento.hashCode());
 		return result;
 	}
 
@@ -154,11 +165,6 @@ public class CuentaCorriente implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		CuentaCorriente other = (CuentaCorriente) obj;
-		if (contrato == null) {
-			if (other.contrato != null)
-				return false;
-		} else if (!contrato.equals(other.contrato))
-			return false;
 		if (fechaMovimiento == null) {
 			if (other.fechaMovimiento != null)
 				return false;
@@ -173,9 +179,11 @@ public class CuentaCorriente implements Serializable {
 			return false;
 		if (idProveedor != other.idProveedor)
 			return false;
+		if (impuestos != other.impuestos)
+			return false;
 		if (interes != other.interes)
 			return false;
-		if (monto != other.monto)
+		if (Float.floatToIntBits(monto) != Float.floatToIntBits(other.monto))
 			return false;
 		if (nombreCliente == null) {
 			if (other.nombreCliente != null)
@@ -187,13 +195,8 @@ public class CuentaCorriente implements Serializable {
 				return false;
 		} else if (!nombreProveedor.equals(other.nombreProveedor))
 			return false;
-		if (tipoMovimiento == null) {
-			if (other.tipoMovimiento != null)
-				return false;
-		} else if (!tipoMovimiento.equals(other.tipoMovimiento))
-			return false;
 		return true;
 	}
-	
-	
+
+
 }

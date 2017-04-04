@@ -7,7 +7,7 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h:form id="form" prependId="false">
-			<h3 class="text-muted">Administrar Bancos</h3>
+			<h3 class="text-muted">Cuenta Corriente</h3>
 			<hr color="blue" style="height: 0px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -17,72 +17,259 @@
 	     		</h:panelGrid>   
 	   		 </p:confirmDialog>
 
-			<p:messages id="messages" showDetail="false" autoUpdate="true"
-				closable="true" />
+			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 
-			<div class="ui-fluid">
-			
-				<p:panelGrid columns="4" layout="grid" 
-							 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4," 
-							 styleClass="ui-panelgrid-blank">
-					
-					<label>Nombre: </label>
-					<p:inputText id="nombre" value="#{newBanco.nombre}" label="nombre"
-						required="true"	requiredMessage="Debe ingresar un valor para el nombre"
-						autocomplete="false" />
-					
-					<label>Descripción: </label>
-					<p:inputText id="desc" value="#{newBanco.descripcion}" label="descripcion"/>
-					
-					<label></label>
-					<p:commandButton id="register" action="#{bancoBean.registrar}" value="Registrar" update="form" icon="ui-icon-plus" />
-				</p:panelGrid>
-								
-			</div>
 
-			<hr color="blue" style="height: 0px" />
-
-		    <p:dataTable id="bacncos" var="_ban" value="#{bancos}" editable="true" style="text-align:center; text-transform: capitalize;" 
-		    			 editMode="cell" reflow="true" emptyMessage="No existen datos a mostrar." sortBy="#{_ban.id}" >
-	       		<f:facet name="header">  
-	            	<p class="text-muted">Bancos</p>
-	        	</f:facet>
-	        	
-	        	<p:ajax event="cellEdit" listener="#{bancoBean.onCellEdit}" update=":form:messages"/>  
-	        	 
-	        	 <p:column headerText="Id" >
-	        	 	<h:outputText value="#{_ban.id}" />
-	        	 </p:column>
-	        	 
-	        	 <p:column headerText="Nombre" >  
-	               <p:cellEditor>  
-	                   <f:facet name="output">
-	                   		<h:outputText value="#{_ban.nombre}" />
-	                   	</f:facet>  
-	                   <f:facet name="input">
-	                   		<p:inputText id="modelInputNom" value="#{_ban.nombre}"/>
-	                   </f:facet>  
-	               </p:cellEditor>  
+			<h4 class="text-muted">Transacciones</h4>
+			<p:dataTable id="tran" var="_tra" value="#{transaccionBean.transaccionesContrato}" editable="false" 
+						 style="text-align:center; text-transform: capitalize;" 
+			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_tra.fecha}" rowKey="#{_tra.id}" 
+			  			 rowIndexVar="#{_tra.id}" >
+		           	 
+	           	 <p:column headerText="Cliente" filterBy="#{_tra.contrato.cliente.nombre}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_tra.contrato.cliente.nombre}" />
 	           	 </p:column>  
 	           	 
-	        	 <p:column headerText="Descripción" >  
-	               <p:cellEditor>  
-	                   <f:facet name="output">
-	                   		<h:outputText value="#{_ban.descripcion}" />
-	                   </f:facet>  
-	                   <f:facet name="input">
-	                   		<p:inputText id="modelInputDes" value="#{_ban.descripcion}"/>
-	                   </f:facet>  
-	               </p:cellEditor>  
-	           	 </p:column>
+	           	 <p:column headerText="Fecha" filterBy="#{_tra.fecha}" filterMatchMode="contains" sortBy="#{_tra.fecha}">  
+	             	<h:outputText value="#{_tra.fecha}" >
+	             		<f:convertDateTime pattern="dd-MM-yyyy" />
+	             	</h:outputText>
+	             </p:column>  
+	             
+	             <p:column headerText="Movimiento" filterBy="#{_tra.tipos.nombre}" filterMatchMode="contains" sortBy="#{_tra.tipos.nombre}">  
+	             	<h:outputText value="#{_tra.tipos.nombre}" />
+	             </p:column>  
 	           	 
-		        <p:column headerText="Eliminar" >
-		        	<p:commandButton id="deleteLink" update=":form" immediate="true" ajax="true" icon="ui-icon-trash" value="Eliminar"
-		        					 actionListener="#{bancoBean.eliminar(_ban.id)}">
-		        		<p:confirm header="Confirmación" message="Esta seguro que desea eliminar el Banco" icon="ui-icon-alert" />
-		     		</p:commandButton>	        	
-		        </p:column>
-			</p:dataTable>
+	        	 <p:column headerText="Monto"  >  
+	             	<h:outputText value="#{_tra.monto}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>
+	           	 </p:column>  
+	    
+	    	     <p:column headerText="IVA Amortizado" >  
+	             	<h:outputText value="#{_tra.impuestoAmortizado}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column> 
+	           	 
+	           	 <p:column headerText="Int. Amortizado" >  
+	             	<h:outputText value="#{_tra.interesAmortizado}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column> 
+	           	 
+	           	 <p:column headerText="Saldo" >  
+	             	<h:outputText value="#{_tra.saldoAmortizado}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column> 
+	            	               
+			</p:dataTable>	
+<!-- 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#facAsociada"> -->
+<!-- 				<i class="fa fa-info-circle" aria-hidden="true"></i> Facturas y Notas -->
+<!-- 			</button> -->
+<!-- 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#tranHistorico"> -->
+<!-- 				<i class="fa fa-info-circle" aria-hidden="true"></i> Pagos por cliente -->
+<!-- 			</button> -->
+<!-- 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#resumenCliente"> -->
+<!-- 				<i class="fa fa-info-circle" aria-hidden="true"></i> Movimientos por cliente -->
+<!-- 			</button> -->
+<!-- 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#resumenTotales"> -->
+<!-- 				<i class="fa fa-info-circle" aria-hidden="true"></i> Resumen de Movimientos -->
+<!-- 			</button> -->
+<!-- 			<div id="facAsociada" class="collapse"> -->
+<!-- 				<hr color="blue" style="height: 0px" />	 -->
+<!-- 				<h4 class="text-muted">Facturas Pendientes</h4> -->
+<!-- 				<p:dataTable id="facs" var="_fac" value="#{transaccionBean.factruasPendientesCliente}" editable="false"  -->
+<!-- 						 style="text-align:center; text-transform: capitalize;"  reflow="true" sortBy="#{_fac.id}" -->
+<!-- 						 emptyMessage="Debe seleccionar una solicitud de crédito para ver las facturas asociadas."> -->
+		
+<!-- 				<p:column headerText="Contrato" >   -->
+<!-- 	             	<h:outputText value="#{_fac.contrato.id}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Proveedor" >   -->
+<!-- 	             	<h:outputText value="#{_fac.contrato.proveedor.nombre}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="RUT" >   -->
+<!-- 	             	<h:outputText value="#{_fac.contrato.proveedor.rut}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Fecha"  >   -->
+<!-- 	             	<h:outputText value="#{_fac.fecha}" > -->
+<!-- 	             		<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+<!-- 	             	</h:outputText> -->
+<!-- 	             </p:column>   -->
+	             
+<!-- 	             <p:column headerText="Vencimiento"  >   -->
+<!-- 	             	<h:outputText value="#{_fac.vencimiento}" > -->
+<!-- 	             		<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+<!-- 	             	</h:outputText> -->
+<!-- 	             </p:column>   -->
+	             
+<!-- 	        	 <p:column headerText="Monto" >   -->
+<!-- 	             	<h:outputText value="#{_fac.monto}" /> -->
+<!-- 	           	 </p:column>   -->
+	             
+<!-- 	        	 <p:column headerText="Serie" >   -->
+<!-- 	             	<h:outputText value="#{_fac.numeroSerie}" /> -->
+<!-- 	             </p:column>  	      -->
+			           	 
+<!-- 			     <p:column headerText="Estado" >   -->
+<!-- 	             	<h:outputText value="#{_fac.estados.nombre}" /> -->
+<!-- 	             </p:column>  		   -->
+<!-- 			</p:dataTable>	 -->
+<!-- 		    <hr color="blue" style="height: 0px" />	 -->
+<!-- 				<h4 class="text-muted">Notas de Crédito</h4> -->
+<!-- 				<p:dataTable id="notas" var="_not" value="#{transaccionBean.notasCreditoCliente}" editable="false"  -->
+<!-- 						 style="text-align:center; text-transform: capitalize;"  reflow="true" sortBy="#{_not.id}" -->
+<!-- 						 emptyMessage="Debe seleccionar una solicitud de crédito para ver las notas asociadas."> -->
+		
+<!-- 				<p:column headerText="Contrato" >   -->
+<!-- 	             	<h:outputText value="#{_not.contrato.id}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Proveedor" >   -->
+<!-- 	             	<h:outputText value="#{_not.contrato.proveedor.nombre}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="RUT" >   -->
+<!-- 	             	<h:outputText value="#{_not.contrato.proveedor.rut}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Fecha"  >   -->
+<!-- 	             	<h:outputText value="#{_not.fecha}" > -->
+<!-- 	             		<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+<!-- 	             	</h:outputText> -->
+<!-- 	             </p:column>     -->
+	             
+<!-- 	        	 <p:column headerText="Monto" >   -->
+<!-- 	             	<h:outputText value="#{_not.monto}" /> -->
+<!-- 	           	 </p:column>   -->
+	             
+<!-- 	        	 <p:column headerText="Serie" >   -->
+<!-- 	             	<h:outputText value="#{_not.numeroSerie}" /> -->
+<!-- 	             </p:column>  	 -->
+	             
+<!-- 	             <p:column headerText="Factura" >   -->
+<!-- 	             	<h:outputText value="#{_not.factura.numeroSerie}" /> -->
+<!-- 	             </p:column>        -->
+			           	 
+<!-- 			     <p:column headerText="Estado" >   -->
+<!-- 	             	<h:outputText value="#{_not.estados.nombre}" /> -->
+<!-- 	             </p:column>  		   -->
+<!-- 			</p:dataTable>	 -->
+<!-- 			</div> -->
+<!-- 			<div id="tranHistorico" class="collapse">	 -->
+<!-- 			<hr color="blue" style="height: 0px" />		 -->
+			
+<!-- 			<h4 class="text-muted">Pagos realizados</h4> -->
+<!-- 			<p:dataTable id="pagos" var="_pag" value="#{transaccionBean.pagosCliente}" editable="false"  -->
+<!-- 						 style="text-align:center; text-transform: capitalize;"  -->
+<!-- 			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_pag.contrato.cliente.nombre}" rowKey="#{_pag.id}"  -->
+<!-- 			  			 rowIndexVar="#{_pag.id}" selectionMode="single" selection="#{transaccionBean.pagoSeleccionado}"> -->
+			  	
+<!-- 			  	<p:ajax event="rowSelect" listener="#{transaccionBean.onRowSelect}" update="@form" /> -->
+		
+<!-- 				<p:column headerText="Contrato" filterBy="#{_pag.contrato.id}" filterMatchMode="contains" >   -->
+<!-- 	             	<h:outputText value="#{_pag.contrato.id}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Cliente" filterBy="#{_pag.contrato.cliente.nombre}" filterMatchMode="contains" >   -->
+<!-- 	             	<h:outputText value="#{_pag.contrato.cliente.nombre}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Medio de Pago" filterBy="#{_pag.medioPago.nombre}" filterMatchMode="contains" >   -->
+<!-- 	             	<h:outputText value="#{_pag.medioPago.nombre}" /> -->
+<!-- 	           	 </p:column>   -->
+	           	 
+<!-- 	           	 <p:column headerText="Fecha" filterBy="#{_pag.fecha}" filterMatchMode="contains" >   -->
+<!-- 	             	<h:outputText value="#{_pag.fecha}" > -->
+<!-- 	             		<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+<!-- 	             	</h:outputText> -->
+<!-- 	             </p:column>   -->
+	             
+<!-- 	        	 <p:column headerText="Monto" filterBy="#{_pag.monto}" filterMatchMode="contains" >   -->
+<!-- 	             	<h:outputText value="#{_pag.monto}" /> -->
+<!-- 	           	 </p:column>  	      -->
+			           	 
+<!-- 			</p:dataTable>	 -->
+<!-- 			</div> -->
+<!-- 			<div id="resumenCliente" class="collapse">	 -->
+<!-- 			<hr color="blue" style="height: 0px" />		 -->
+			
+<!-- 				<h4 class="text-muted">Resumen de Movimientos del Cliente</h4> -->
+<!-- 				<ul class="list-group "> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"><kbd>Total créditos pendientes de pago: #{transaccionBean.totalCreditosPendientesCliente} </kbd></h4> -->
+<!-- 					</li> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"><kbd>Total intereses pendientes de pago: #{transaccionBean.totalInteresesPendientesCiente} </kbd></h4> -->
+<!-- 					</li> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"><kbd>Total de impuestos pendientes: #{transaccionBean.totalImpuestosPendientesCliente} </kbd></h4> -->
+<!-- 					</li> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"><kbd>Histórico de créditos ralizados: #{transaccionBean.totalCreditosCerradosCliente}  </kbd></h4> -->
+<!-- 					</li>					 -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"><kbd>Histórico de pagos realizados: #{transaccionBean.totalPagosRealizadosCliente}</kbd></h4> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div id="resumenTotales" class="collapse">	 -->
+<!-- 			<hr color="blue" style="height: 0px" />		 -->
+			
+<!-- 				<h4 class="text-muted">Resumen de Movimientos generales</h4> -->
+<!-- 				<ul class="list-group "> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"> -->
+<!-- 							<kbd>Total créditos pendientes de pago: -->
+<!-- 								<h:outputText value="#{transaccionBean.totalCreditosPendientes} " > -->
+<!-- 	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/> -->
+<!-- 	             				</h:outputText>	 -->
+<!-- 							</kbd> -->
+<!-- 						</h4> -->
+<!-- 					</li> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"> -->
+<!-- 							<kbd>Total intereses pendientes de pago: -->
+<!-- 								<h:outputText value="#{transaccionBean.totalInteresesPendientes}" > -->
+<!-- 	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/> -->
+<!-- 	             				</h:outputText>	 -->
+<!-- 							</kbd> -->
+<!-- 						</h4> -->
+<!-- 					</li> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"> -->
+<!-- 							<kbd>Total de impuestos pendientes: -->
+<!-- 								<h:outputText value="#{transaccionBean.totalImpuestosPendientes}" > -->
+<!-- 	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/> -->
+<!-- 	             				</h:outputText>	 -->
+<!-- 							</kbd> -->
+<!-- 						</h4> -->
+<!-- 					</li> -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"> -->
+<!-- 							<kbd>Histórico de créditos ralizados: -->
+<!-- 								<h:outputText value="#{transaccionBean.totalCreditosCerrados}" > -->
+<!-- 	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/> -->
+<!-- 	             				</h:outputText>	 -->
+<!-- 							</kbd> -->
+<!-- 						</h4> -->
+<!-- 					</li>					 -->
+<!-- 					<li class="list-group-item" style="border: none"> -->
+<!-- 						<h4 class="text-left"> -->
+<!-- 							<kbd>Histórico de pagos realizados: -->
+<!-- 								<h:outputText value="#{transaccionBean.totalPagosRealizados}" > -->
+<!-- 	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/> -->
+<!-- 	             				</h:outputText>	 -->
+<!-- 							</kbd> -->
+<!-- 						</h4> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
 			
 		</h:form>
 	

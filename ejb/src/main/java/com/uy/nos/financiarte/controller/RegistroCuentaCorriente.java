@@ -11,7 +11,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import com.uy.nos.financiarte.data.UsuarioListProducer;
 import com.uy.nos.financiarte.model.CuentaCorriente;
+import com.uy.nos.financiarte.model.Usuario;
 
 
 
@@ -24,6 +26,9 @@ public class RegistroCuentaCorriente {
 
 	   @Inject
 	   private EntityManager em;
+	   
+	   @Inject
+	   private UsuarioListProducer ulp;
 
 	   @Inject
 	   private Event<CuentaCorriente> cuentaCorrienteEventSrc;
@@ -64,5 +69,9 @@ public class RegistroCuentaCorriente {
 	   @PostConstruct
 	   public void initNewCuentaCorriente() {
 		   newCuentaCorriente = new CuentaCorriente();
+	   }
+	   
+	   public Usuario buscarUsuarioPorNombre(String usuario){
+		   return ulp.buscarUsuarioPorNombre(usuario);
 	   }
 }

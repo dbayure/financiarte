@@ -57,7 +57,7 @@ public class RegistroSolicitudCredito {
 	      return newSolicitudCredito;
 	   }
 
-	   public void registro(List<Factura> facturas, Contrato contrato, List<NotaCredito> notas, long monto) throws Exception {
+	   public void registro(List<Factura> facturas, Contrato contrato, List<NotaCredito> notas, float monto) throws Exception {
 	      log.info("Registro " + monto);
 	      Estado estado = em.find(Estado.class, 3L);
 	      for (Factura factura : facturas) {

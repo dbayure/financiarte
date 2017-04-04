@@ -40,6 +40,15 @@ public class SolicitudCredito implements Serializable {
 	@Transient
 	private float total;
 	
+	@Transient
+	private float interesAmortizado;
+	
+	@Transient
+	private float ivaAmortizado;
+	
+	@Transient
+	private float montoAmortizado;
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="estado")
 	private Estado estados;
@@ -104,6 +113,30 @@ public class SolicitudCredito implements Serializable {
 		this.total = total;
 	}
 
+	public float getInteresAmortizado() {
+		return interesAmortizado;
+	}
+
+	public void setInteresAmortizado(float interesAmortizado) {
+		this.interesAmortizado = interesAmortizado;
+	}
+
+	public float getIvaAmortizado() {
+		return ivaAmortizado;
+	}
+
+	public void setIvaAmortizado(float ivaAmortizado) {
+		this.ivaAmortizado = ivaAmortizado;
+	}
+
+	public float getMontoAmortizado() {
+		return montoAmortizado;
+	}
+
+	public void setMontoAmortizado(float montoAmortizado) {
+		this.montoAmortizado = montoAmortizado;
+	}
+
 	public Estado getEstados() {
 		return estados;
 	}
@@ -131,8 +164,11 @@ public class SolicitudCredito implements Serializable {
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + Float.floatToIntBits(interes);
+		result = prime * result + Float.floatToIntBits(interesAmortizado);
 		result = prime * result + Float.floatToIntBits(iva);
+		result = prime * result + Float.floatToIntBits(ivaAmortizado);
 		result = prime * result + Float.floatToIntBits(monto);
+		result = prime * result + Float.floatToIntBits(montoAmortizado);
 		result = prime * result + Float.floatToIntBits(total);
 		result = prime * result + ((vencimiento == null) ? 0 : vencimiento.hashCode());
 		return result;
@@ -159,9 +195,15 @@ public class SolicitudCredito implements Serializable {
 			return false;
 		if (Float.floatToIntBits(interes) != Float.floatToIntBits(other.interes))
 			return false;
+		if (Float.floatToIntBits(interesAmortizado) != Float.floatToIntBits(other.interesAmortizado))
+			return false;
 		if (Float.floatToIntBits(iva) != Float.floatToIntBits(other.iva))
 			return false;
+		if (Float.floatToIntBits(ivaAmortizado) != Float.floatToIntBits(other.ivaAmortizado))
+			return false;
 		if (Float.floatToIntBits(monto) != Float.floatToIntBits(other.monto))
+			return false;
+		if (Float.floatToIntBits(montoAmortizado) != Float.floatToIntBits(other.montoAmortizado))
 			return false;
 		if (Float.floatToIntBits(total) != Float.floatToIntBits(other.total))
 			return false;
@@ -173,4 +215,5 @@ public class SolicitudCredito implements Serializable {
 		return true;
 	}
 
+	
 }

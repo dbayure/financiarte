@@ -7,7 +7,7 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h:form id="form" prependId="false">
-			<h3 class="text-muted">Cuenta Corriente</h3>
+			<h3 class="text-muted">Transacciones</h3>
 			<hr color="blue" style="height: 0px" />
 			
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -32,13 +32,13 @@
 	             	<h:outputText value="#{_sol.contrato.cliente.nombre}" />
 	           	 </p:column>  
 	           	 
-	           	 <p:column headerText="Fecha" filterBy="#{_sol.fecha}" filterMatchMode="contains" >  
+	           	 <p:column headerText="Fecha" filterBy="#{_sol.fecha}" filterMatchMode="contains" sortBy="#{_fac.fecha}">  
 	             	<h:outputText value="#{_sol.fecha}" >
 	             		<f:convertDateTime pattern="dd-MM-yyyy" />
 	             	</h:outputText>
 	             </p:column>  
 	             
-	             <p:column headerText="Vencimiento" filterBy="#{_sol.vencimiento}" filterMatchMode="contains" >  
+	             <p:column headerText="Vencimiento" filterBy="#{_sol.vencimiento}" filterMatchMode="contains" sortBy="#{_sol.vencimiento}">  
 	             	<h:outputText value="#{_sol.vencimiento}" >
 	             		<f:convertDateTime pattern="dd-MM-yyyy" />
 	             	</h:outputText>
@@ -111,8 +111,8 @@
 	             	</h:outputText>
 	             </p:column>  
 	             
-	             <p:column headerText="Vencimiento" >  
-	             	<h:outputText value="#{_fac.fecha}" >
+	             <p:column headerText="Vencimiento"  >  
+	             	<h:outputText value="#{_fac.vencimiento}" >
 	             		<f:convertDateTime pattern="dd-MM-yyyy" />
 	             	</h:outputText>
 	             </p:column>  
@@ -176,8 +176,7 @@
 			<h4 class="text-muted">Pagos realizados</h4>
 			<p:dataTable id="pagos" var="_pag" value="#{transaccionBean.pagosCliente}" editable="false" 
 						 style="text-align:center; text-transform: capitalize;" 
-			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_pag.contrato.cliente.nombre}" rowKey="#{_pag.id}" 
-			  			 rowIndexVar="#{_pag.id}" selectionMode="single" selection="#{transaccionBean.pagoSeleccionado}">
+			 			 reflow="true" emptyMessage="No existen pagos a mostrar ." sortBy="#{_pag.contrato.cliente.nombre}" rowKey="#{_pag.id}">
 			  	
 			  	<p:ajax event="rowSelect" listener="#{transaccionBean.onRowSelect}" update="@form" />
 		
@@ -201,7 +200,11 @@
 	             
 	        	 <p:column headerText="Monto" filterBy="#{_pag.monto}" filterMatchMode="contains" >  
 	             	<h:outputText value="#{_pag.monto}" />
-	           	 </p:column>  	     
+	           	 </p:column>  	
+	           	 
+	        	 <p:column headerText="Solicitud" filterBy="#{_pag.solicitud.id}" filterMatchMode="contains" >  
+	             	<h:outputText value="#{_pag.solicitud.id}" />
+	           	 </p:column>  	           	      
 			           	 
 			</p:dataTable>	
 			</div>
@@ -233,19 +236,49 @@
 				<h4 class="text-muted">Resumen de Movimientos generales</h4>
 				<ul class="list-group ">
 					<li class="list-group-item" style="border: none">
-						<h4 class="text-left"><kbd>Total créditos pendientes de pago: #{transaccionBean.totalCreditosPendientes} </kbd></h4>
+						<h4 class="text-left">
+							<kbd>Total créditos pendientes de pago:
+								<h:outputText value="#{transaccionBean.totalCreditosPendientes} " >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
 					</li>
 					<li class="list-group-item" style="border: none">
-						<h4 class="text-left"><kbd>Total intereses pendientes de pago: #{transaccionBean.totalInteresesPendientes} </kbd></h4>
+						<h4 class="text-left">
+							<kbd>Total intereses pendientes de pago:
+								<h:outputText value="#{transaccionBean.totalInteresesPendientes}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
 					</li>
 					<li class="list-group-item" style="border: none">
-						<h4 class="text-left"><kbd>Total de impuestos pendientes de pago: #{transaccionBean.totalImpuestosPendientes} </kbd></h4>
+						<h4 class="text-left">
+							<kbd>Total de impuestos pendientes:
+								<h:outputText value="#{transaccionBean.totalImpuestosPendientes}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
 					</li>
 					<li class="list-group-item" style="border: none">
-						<h4 class="text-left"><kbd>Histŕico de créditos ralizados: #{transaccionBean.totalCreditosCerrados}  </kbd></h4>
+						<h4 class="text-left">
+							<kbd>Histórico de créditos ralizados:
+								<h:outputText value="#{transaccionBean.totalCreditosCerrados}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
 					</li>					
 					<li class="list-group-item" style="border: none">
-						<h4 class="text-left"><kbd>Histŕico de pagos realizados: #{transaccionBean.totalPagosRealizados}</kbd></h4>
+						<h4 class="text-left">
+							<kbd>Histórico de pagos realizados:
+								<h:outputText value="#{transaccionBean.totalPagosRealizados}" >
+	             					<f:convertNumber type="currency" currencySymbol="$" locale="es_UY"/>
+	             				</h:outputText>	
+							</kbd>
+						</h4>
 					</li>
 				</ul>
 			</div>

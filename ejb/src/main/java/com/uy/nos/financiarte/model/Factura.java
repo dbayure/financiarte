@@ -35,7 +35,7 @@ public class Factura implements Serializable {
 	
 	private String descripcion;
 	
-	private long monto;
+	private float monto;
 	
 	private int cantidadArticulos;
 	
@@ -87,11 +87,11 @@ public class Factura implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public long getMonto() {
+	public float getMonto() {
 		return monto;
 	}
 
-	public void setMonto(long monto) {
+	public void setMonto(float monto) {
 		this.monto = monto;
 	}
 
@@ -131,7 +131,7 @@ public class Factura implements Serializable {
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (int) (monto ^ (monto >>> 32));
+		result = prime * result + Float.floatToIntBits(monto);
 		result = prime * result + (int) (numeroSerie ^ (numeroSerie >>> 32));
 		result = prime * result + ((vencimiento == null) ? 0 : vencimiento.hashCode());
 		return result;
@@ -163,7 +163,7 @@ public class Factura implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (monto != other.monto)
+		if (Float.floatToIntBits(monto) != Float.floatToIntBits(other.monto))
 			return false;
 		if (numeroSerie != other.numeroSerie)
 			return false;
