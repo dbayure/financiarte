@@ -21,6 +21,7 @@ import org.primefaces.event.SelectEvent;
 import com.uy.nos.financiarte.controller.RegistroTransaccion;
 import com.uy.nos.financiarte.model.Cliente;
 import com.uy.nos.financiarte.model.Contrato;
+import com.uy.nos.financiarte.model.Estado;
 import com.uy.nos.financiarte.model.Factura;
 import com.uy.nos.financiarte.model.NotaCredito;
 import com.uy.nos.financiarte.model.PagoMedioPago;
@@ -233,7 +234,14 @@ public class TransaccionBean {
 	
 	@PostConstruct
 	public void init() {
-		generarListaTransaccionesCliente();
+		String cli = SecurityContextAssociation.getPrincipal().getName();
+		Usuario usuario = registroTransaccion.buscarUsuarioPorNombre(cli);
+		if (usuario instanceof Cliente){
+			generarListaTransaccionesCliente(usuario);
+		}
+		if (usuario instanceof Proveedor){
+			generarListaTransaccionesProveedor(usuario);
+		}
 	}
 	
 	public void registrar() {
@@ -327,15 +335,16 @@ public class TransaccionBean {
 			}
 		}
 		pagosCliente.addAll(solicitudSeleccionada.getContrato().getPagos());
-		calcularSaldosContrato();
+		Contrato contrato = solicitudSeleccionada.getContrato();
+		List<SolicitudCredito> solicitudes = new ArrayList<SolicitudCredito>();
+		solicitudes.addAll(contrato.getSolicitudes());
+		calcularSaldosContrato(solicitudes);
     }
 	
 	
-	public void generarListaTransaccionesCliente(){
-		String cli = SecurityContextAssociation.getPrincipal().getName();
-		Usuario usuario = registroTransaccion.buscarUsuarioPorNombre(cli);
+	public void generarListaTransaccionesCliente(Usuario usuario){
 		Cliente cliente = new Cliente();
-		Proveedor proveedor = new Proveedor();
+		cliente = (Cliente) usuario;
 		List<SolicitudCredito> solicitudes = new ArrayList<SolicitudCredito>();
 		Long estado = 0L;
 		float interes = 0;
@@ -343,19 +352,10 @@ public class TransaccionBean {
 		float total = 0;
 		int dias;
 		Date hoy = new Date();
-		if (usuario instanceof Cliente){
-			cliente = (Cliente) usuario;
-			contratos.addAll(cliente.getContratos());
-			for (Contrato contrato : contratos) {
-				solicitudes.addAll(contrato.getSolicitudes());
-			}
-		}
-		if (usuario instanceof Proveedor){
-			proveedor = (Proveedor) usuario;
-			contratos.addAll(proveedor.getContratos());
-			for (Contrato contrato : contratos) {
-				solicitudes.addAll(contrato.getSolicitudes());
-			}
+		cliente = (Cliente) usuario;
+		contratos.addAll(cliente.getContratos());
+		for (Contrato contrato : contratos) {
+			solicitudes.addAll(contrato.getSolicitudes());
 		}
 		for (SolicitudCredito solicitudCredito : solicitudes) {
 			estado = solicitudCredito.getEstados().getId();
@@ -379,8 +379,79 @@ public class TransaccionBean {
 		}
 	}
 		
+	public void generarListaTransaccionesProveedor(Usuario usuario){
+		Proveedor proveedor = new Proveedor();
+		proveedor = (Proveedor) usuario;
+		List<SolicitudCredito> solicitudes = new ArrayList<SolicitudCredito>();
+		Long estado = 0L;
+		float intContrato = 0;
+		float interes = 0;
+		float impuesto = 0;
+		float capital = 0;
+		float interesAm = 0;
+		float impuestoAm = 0;
+		float capAm = 0;
+		float capitalAm = 0;
+		float p = 0;
+		int dias;
+		proveedor = (Proveedor) usuario;
+		contratos.addAll(proveedor.getContratos());
+		for (Contrato contrato : contratos) {
+			solicitudes.addAll(contrato.getSolicitudes());
+			for (SolicitudCredito solicitudCredito : solicitudes) {
+				estado = solicitudCredito.getEstados().getId();
+				capital = solicitudCredito.getMonto();
+				if (estado == 3L){
+					intContrato = solicitudCredito.getContrato().getInteres().getMonto();
+					intContrato = intContrato/10000;
+					interes = intContrato * solicitudCredito.getMonto();
+					for (PagoMedioPago pago : solicitudCredito.getPagos()) {
+						p = pago.getMonto();
+						dias = (int) ((pago.getFecha().getTime() - solicitudCredito.getFecha().getTime())/86400000);
+						System.out.println("cantidad de dias a calcular " + dias);
+						interes = interes * dias;
+						impuesto = interes * iva;
+						if (p >= impuesto){
+							p = p - impuesto;
+							impuestoAm = impuestoAm + impuesto;
+							impuesto = 0;
+						}else{
+							impuestoAm = impuestoAm + p;
+							impuesto = impuesto - p;
+							p = 0;
+						}
+						if (p >= interes){
+							p = p - interes;
+							interesAm = interesAm + interes;
+							interes = 0;
+						}else{
+							interesAm = interesAm + p;
+							interes = interes - p;
+							p = 0;
+						}
+						if (p >= capital){
+							p = p - capital;
+							capitalAm = capitalAm + capital;
+							capital = 0;
+						}else{
+							capitalAm = capitalAm + p;
+							capital = capital - p;
+							p = 0;
+						}
+					}
+					solicitudCredito.setInteres(interes);
+					solicitudCredito.setIva(impuesto);
+					solicitudCredito.setIvaAmortizado(impuestoAm);
+					solicitudCredito.setInteresAmortizado(interesAm);
+					solicitudCredito.setMontoAmortizado(capitalAm);
+					solicitudCredito.setTotal(solicitudCredito.getMonto() - capAm);
+				}
+			}
+			
+		}
+	}
 	
-	public void calcularSaldosContrato(){
+	public void calcularSaldosContrato(List<SolicitudCredito> solicitudes){
 		float creditos = 0L;
 		float pagos = 0L;
 		Long estado = 0L;
@@ -390,7 +461,7 @@ public class TransaccionBean {
 		int dias;
 		Date hoy = new Date();
 		Contrato contrato = solicitudSeleccionada.getContrato();
-		for (SolicitudCredito solicitud : contrato.getSolicitudes()) {
+		for (SolicitudCredito solicitud : solicitudes) {
 			estado = solicitud.getEstados().getId();
 			dias = (int) ((hoy.getTime() - solicitud.getFecha().getTime())/86400000);
 			if (estado == 3L){

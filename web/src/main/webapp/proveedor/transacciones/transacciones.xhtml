@@ -72,6 +72,23 @@
 	             	</h:outputText>	
 	           	 </p:column> 
 	    
+	    	     <p:column headerText="Intereses Amortizado" >  
+	             	<h:outputText value="#{_sol.interesAmortizado}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column>         
+	           	 
+	           	 <p:column headerText="IVA Amortizado" >  
+	             	<h:outputText value="#{_sol.ivaAmortizado}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column> 
+	           	 
+	           	 <p:column headerText="Capital Amortizado" >  
+	             	<h:outputText value="#{_sol.montoAmortizado}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column> 
 	            	               
 			</p:dataTable>	
 			<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#facAsociada">
