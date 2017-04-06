@@ -21,57 +21,45 @@
 
 
 			<h4 class="text-muted">Solicitudes de créditos pendientes de pago</h4>
-			<p:dataTable id="sol" var="_sol" value="#{transaccionBean.solicitudesPendientesCliente}" editable="false" 
+			<p:dataTable id="sol" var="_sol" value="#{transaccionBean.solicitudesAgrupadas}" editable="false" 
 						 style="text-align:center; text-transform: capitalize;" 
-			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_sol.contrato.cliente.nombre}" rowKey="#{_sol.id}" 
-			  			 rowIndexVar="#{_sol.id}" selectionMode="single" selection="#{transaccionBean.solicitudSeleccionada}">
+			 			 reflow="true" emptyMessage="No existen transacciones ." sortBy="#{_sol.contrato.cliente.nombre}"  >
 			  	
-			  	<p:ajax event="rowSelect" listener="#{transaccionBean.onRowSelect}" update="@form" />
 		           	 
 	           	 <p:column headerText="Cliente" filterBy="#{_sol.contrato.cliente.nombre}" filterMatchMode="contains" >  
 	             	<h:outputText value="#{_sol.contrato.cliente.nombre}" />
 	           	 </p:column>  
 	           	 
-	           	 <p:column headerText="Fecha" filterBy="#{_sol.fecha}" filterMatchMode="contains" sortBy="#{_fac.fecha}">  
-	             	<h:outputText value="#{_sol.fecha}" >
-	             		<f:convertDateTime pattern="dd-MM-yyyy" />
-	             	</h:outputText>
-	             </p:column>  
-	             
-	             <p:column headerText="Vencimiento" filterBy="#{_sol.vencimiento}" filterMatchMode="contains" sortBy="#{_sol.vencimiento}">  
-	             	<h:outputText value="#{_sol.vencimiento}" >
-	             		<f:convertDateTime pattern="dd-MM-yyyy" />
-	             	</h:outputText>
-	             </p:column>  
-	             
-	             <p:column headerText="Estado" >  
-	             	<h:outputText value="#{_sol.estados.nombre}" />
-	           	 </p:column> 
-	           	 
-	        	 <p:column headerText="Monto"  >  
+	        	 <p:column headerText="Monto Solicitado"  >  
 	             	<h:outputText value="#{_sol.monto}" >
 	             		<f:convertNumber pattern="#0.00" />
 	             	</h:outputText>
 	           	 </p:column>  
 	           	 
-	           	 <p:column headerText="Intereses" >  
+	           	 <p:column headerText="Intereses Generados" >  
 	             	<h:outputText value="#{_sol.interes}" >
 	             		<f:convertNumber pattern="#0.00" />
 	             	</h:outputText>	
 	           	 </p:column>         
 	           	 
-	           	 <p:column headerText="IVA" >  
+	           	 <p:column headerText="IVA   Generado" >  
 	             	<h:outputText value="#{_sol.iva}" >
 	             		<f:convertNumber pattern="#0.00" />
 	             	</h:outputText>	
 	           	 </p:column> 
 	           	 
-	           	 <p:column headerText="Total" >  
+	           	 <p:column headerText="Total Solicitado" >  
 	             	<h:outputText value="#{_sol.total}" >
 	             		<f:convertNumber pattern="#0.00" />
 	             	</h:outputText>	
 	           	 </p:column> 
-	    
+	           	 
+	           	 <p:column headerText="Saldo Actual" >  
+	             	<h:outputText value="#{_sol.saldoActual}" >
+	             		<f:convertNumber pattern="#0.00" />
+	             	</h:outputText>	
+	           	 </p:column> 
+	           	 
 	    	     <p:column headerText="Intereses Amortizado" >  
 	             	<h:outputText value="#{_sol.interesAmortizado}" >
 	             		<f:convertNumber pattern="#0.00" />

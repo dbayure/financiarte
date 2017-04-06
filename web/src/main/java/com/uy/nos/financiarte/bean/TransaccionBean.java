@@ -41,6 +41,7 @@ public class TransaccionBean {
 	private List<Factura> factruasPendientesCliente = new ArrayList<Factura>();
 	private List<NotaCredito> notasCreditoCliente = new ArrayList<NotaCredito>();
 	private List<SolicitudCredito> solicitudesPendientesCliente = new ArrayList<SolicitudCredito>();
+	List<SolicitudCredito> solicitudesAgrupadas = new ArrayList<SolicitudCredito>();
 	private List<Contrato> contratos = new ArrayList<Contrato>();
 	private List<PagoMedioPago> pagosCliente = new ArrayList<PagoMedioPago>();
 	private Transaccion transaccionSeleccionada;
@@ -99,6 +100,14 @@ public class TransaccionBean {
 
 	public void setSolicitudesPendientesCliente(List<SolicitudCredito> solicitudesPendientesCliente) {
 		this.solicitudesPendientesCliente = solicitudesPendientesCliente;
+	}
+
+	public List<SolicitudCredito> getSolicitudesAgrupadas() {
+		return solicitudesAgrupadas;
+	}
+
+	public void setSolicitudesAgrupadas(List<SolicitudCredito> solicitudesAgrupadas) {
+		this.solicitudesAgrupadas = solicitudesAgrupadas;
 	}
 
 	public List<Contrato> getContratos() {
@@ -382,72 +391,102 @@ public class TransaccionBean {
 	public void generarListaTransaccionesProveedor(Usuario usuario){
 		Proveedor proveedor = new Proveedor();
 		proveedor = (Proveedor) usuario;
-		List<SolicitudCredito> solicitudes = new ArrayList<SolicitudCredito>();
 		Long estado = 0L;
-		float intContrato = 0;
-		float interes = 0;
-		float impuesto = 0;
-		float capital = 0;
-		float interesAm = 0;
-		float impuestoAm = 0;
-		float capAm = 0;
-		float capitalAm = 0;
-		float p = 0;
 		int dias;
 		proveedor = (Proveedor) usuario;
 		contratos.addAll(proveedor.getContratos());
 		for (Contrato contrato : contratos) {
-			solicitudes.addAll(contrato.getSolicitudes());
-			for (SolicitudCredito solicitudCredito : solicitudes) {
+			SolicitudCredito solicitudTmp = new SolicitudCredito();
+			System.out.println("comienzo con  el contrato " + contrato.getId());
+			for (SolicitudCredito solicitudCredito : contrato.getSolicitudes()) {
+				float intContrato = 0;
+				float interes = 0;
+				float impuesto = 0;
+				float capital = 0;
+				float interesAm = 0;
+				float impuestoAm = 0;
+				float capitalAm = 0;
+				float p = 0;
+				System.out.println("Analizo estado de solicitud " + solicitudCredito.getId());
 				estado = solicitudCredito.getEstados().getId();
-				capital = solicitudCredito.getMonto();
 				if (estado == 3L){
+					System.out.println("pido monto de solicitud " + solicitudCredito.getMonto());
+					capital = solicitudCredito.getMonto();
 					intContrato = solicitudCredito.getContrato().getInteres().getMonto();
 					intContrato = intContrato/10000;
-					interes = intContrato * solicitudCredito.getMonto();
-					for (PagoMedioPago pago : solicitudCredito.getPagos()) {
-						p = pago.getMonto();
-						dias = (int) ((pago.getFecha().getTime() - solicitudCredito.getFecha().getTime())/86400000);
-						System.out.println("cantidad de dias a calcular " + dias);
-						interes = interes * dias;
-						impuesto = interes * iva;
-						if (p >= impuesto){
-							p = p - impuesto;
-							impuestoAm = impuestoAm + impuesto;
-							impuesto = 0;
-						}else{
-							impuestoAm = impuestoAm + p;
-							impuesto = impuesto - p;
-							p = 0;
-						}
-						if (p >= interes){
-							p = p - interes;
-							interesAm = interesAm + interes;
-							interes = 0;
-						}else{
-							interesAm = interesAm + p;
-							interes = interes - p;
-							p = 0;
-						}
-						if (p >= capital){
-							p = p - capital;
-							capitalAm = capitalAm + capital;
-							capital = 0;
-						}else{
-							capitalAm = capitalAm + p;
-							capital = capital - p;
-							p = 0;
+					if (solicitudCredito.getPagos().size() > 0){
+						System.out.println("cantidad de pagos de la solicitud " + solicitudCredito.getPagos().size());
+						
+						for (PagoMedioPago pago : solicitudCredito.getPagos()) {
+							System.out.println("comienzo a ver el pago " + pago.getId() + " con monto " + pago.getMonto());
+							p = pago.getMonto();
+							dias = (int) ((pago.getFecha().getTime() - solicitudCredito.getFecha().getTime())/86400000);
+							System.out.println("cantidad de dias a calcular " + dias);
+							interes = intContrato * capital;
+							interes = interes * dias;
+							impuesto = interes * iva;
+							System.out.println("impuesto e interes antes de pagar" + impuesto + " - " + interes);
+							if (p >= impuesto){
+								p = p - impuesto;
+								impuestoAm = impuestoAm + impuesto;
+								impuesto = 0;
+								System.out.println("impuesto amortizado y plata " + impuestoAm + " - " + p);
+							}else{
+								impuestoAm = impuestoAm + p;
+								impuesto = impuesto - p;
+								p = 0;
+								System.out.println("impuesto " + impuesto);
+							}
+							if (p >= interes){
+								p = p - interes;
+								interesAm = interesAm + interes;
+								interes = 0;
+								System.out.println("interes amortizado y plata " + interesAm+ " - " + p);
+							}else{
+								interesAm = interesAm + p;
+								interes = interes - p;
+								p = 0;
+								System.out.println("interes " + interes);
+							}
+							if (p >= capital){
+								p = p - capital;
+								capitalAm = capitalAm + capital;
+								capital = 0;
+								System.out.println("capital amortizado y plata " + capitalAm+ " - " + p);
+							}else{
+								capitalAm = capitalAm + p;
+								capital = capital - (p - interes - impuesto);
+								p = 0;
+								System.out.println("capital y capital amortizado" + capital+ " - " + capitalAm);
+							}
 						}
 					}
-					solicitudCredito.setInteres(interes);
-					solicitudCredito.setIva(impuesto);
-					solicitudCredito.setIvaAmortizado(impuestoAm);
-					solicitudCredito.setInteresAmortizado(interesAm);
-					solicitudCredito.setMontoAmortizado(capitalAm);
-					solicitudCredito.setTotal(solicitudCredito.getMonto() - capAm);
+					else{
+						Date hoy = new Date();
+						dias = (int) ((hoy.getTime() - solicitudCredito.getFecha().getTime())/86400000);
+						System.out.println("cantidad de dias a calcular si pagos" + dias);
+						interes = intContrato * capital;
+						interes = interes * dias;
+						impuesto = interes * iva;
+					}
 				}
+				solicitudTmp.setInteres(solicitudTmp.getInteres() + interes);
+				solicitudTmp.setIva(solicitudTmp.getIva() + impuesto);
+				solicitudTmp.setIvaAmortizado(solicitudTmp.getIvaAmortizado() + impuestoAm);
+				solicitudTmp.setInteresAmortizado(solicitudTmp.getInteresAmortizado() + interesAm);
+				solicitudTmp.setMontoAmortizado(solicitudTmp.getMontoAmortizado() + capitalAm);
+				solicitudTmp.setMonto(solicitudTmp.getMonto() + solicitudCredito.getMonto());
+				solicitudTmp.setTotal(solicitudTmp.getTotal() + solicitudCredito.getMonto() + interes + impuesto);
+				System.out.println("monto total parcial " + solicitudTmp.getTotal());
+				solicitudTmp.setSaldoActual(solicitudTmp.getSaldoActual() + capital);
+				solicitudTmp.setEstados(solicitudCredito.getEstados());
+				System.out.println("guarido interes, impusto, imp am, int am, cap am, monto total " + solicitudTmp.getInteres() + " - " +
+						solicitudTmp.getIva() + " - " + solicitudTmp.getIvaAmortizado() + " - " + solicitudTmp.getInteresAmortizado()
+						+ " - " + solicitudTmp.getMontoAmortizado()+ " - " +solicitudTmp.getMonto() );
+				
 			}
-			
+			solicitudTmp.setContrato(contrato);
+			solicitudesAgrupadas.add(solicitudTmp);
 		}
 	}
 	

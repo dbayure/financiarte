@@ -45,6 +45,9 @@ public class SolicitudCredito implements Serializable {
 	private float total;
 	
 	@Transient
+	private float saldoActual;
+	
+	@Transient
 	private float interesAmortizado;
 	
 	@Transient
@@ -130,6 +133,14 @@ public class SolicitudCredito implements Serializable {
 
 	public void setTotal(float total) {
 		this.total = total;
+	}
+
+	public float getSaldoActual() {
+		return saldoActual;
+	}
+
+	public void setSaldoActual(float saldoActual) {
+		this.saldoActual = saldoActual;
 	}
 
 	public float getInteresAmortizado() {
